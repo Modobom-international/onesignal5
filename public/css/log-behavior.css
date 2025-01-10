@@ -1,0 +1,256 @@
+table td {
+    overflow-wrap: anywhere;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+.show {
+    display: block;
+}
+
+#back-to-top {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 99;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.choose-area-modal .select2 {
+    width: 100% !important;
+}
+
+.choose-area-modal {
+    width: 100%;
+    margin-left: 15px;
+}
+
+.error-message-modal {
+    display: none;
+    margin-left: 20px;
+}
+
+.error-message-modal p {
+    color: red !important;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 0 !important;
+}
+
+#tbody-modal {
+    max-height: 500px;
+    overflow: scroll;
+}
+
+.lock-app-in-list-check {
+    margin-left: 10px;
+}
+
+.show-content {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    background-color: greenyellow;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.ul-list-app-in-modal {
+    height: 600px;
+    overflow: auto;
+}
+
+.ul-in-modal {
+    list-style: none;
+    padding-left: 0;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.total-title {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.Btn {
+    width: 100px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.164);
+    cursor: pointer;
+    padding: 0;
+}
+
+.text {
+    width: 65%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: rgb(2, 153, 153);
+    padding: 5px;
+    font-size: 12px;
+}
+
+.svgIcon {
+    width: 35%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: teal;
+}
+
+.Btn:hover .text {
+    background-color: rgb(0, 133, 133);
+}
+
+.Btn:hover .svgIcon {
+    background-color: rgb(0, 105, 105);
+}
+
+.compare-date {
+    display: none !important;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+#area-compare-date {
+    display: none;
+}
+
+#btn-turn-off-compare {
+    background: none;
+}
+
+.mb-10px {
+    margin-bottom: 10px;
+}
+
+.loader-previous {
+    margin-top: 0 !important;
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.border-none {
+    border: none !important;
+}
+
+#table-list-check-install td {
+    vertical-align: baseline;
+}
+
+#modalChangeSelectionLabel {
+    display: flex;
+    align-items: center;
+}
+
+#group-btn-filter {
+    height: 70px;
+    align-items: center;
+}
+
+.list-style-disc {
+    list-style: disc !important;
+}
+
+#modalListAppCheckInstall .modal-dialog {
+    max-width: 1200px !important;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 100px;
+    height: 100px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media only screen and (min-width: 1080px) {
+    #container-fixed {
+        margin-left: 10%;
+    }
+
+    .modal-lg {
+        max-width: 1400px !important;
+    }
+
+    .loader {
+        margin-top: 13%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    #group-btn-filter {
+        height: inherit;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #group-btn-filter div {
+        margin-left: 0px;
+        margin-top: 10px;
+    }
+
+    #area-total-all {
+        flex-direction: column;
+    }
+
+    #area-total-all div {
+        margin-left: 0px;
+        margin-top: 10px;
+    }
+
+    .list-style-disc {
+        width: 350px;
+        word-break: normal;
+    }
+
+    table tr td {
+        word-wrap: break-word;
+    }
+}

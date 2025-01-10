@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Maps",
+        "link": "http://onesignal5.modobomco.com/apk-config/minecraft/maps.json",
+        "link_top": "http://onesignal5.modobomco.com/apk-config/minecraft/maps-top.json"
+    },
+    {
+        "name": "Mods",
+        "link": "http://onesignal5.modobomco.com/apk-config/minecraft/mods.json",
+        "link_top": "http://onesignal5.modobomco.com/apk-config/minecraft/mods-top.json"
+    }
+]

@@ -1,0 +1,25 @@
+[
+{
+  "type": "sms",
+  "truemove": [
+    {
+      "keyword": " C",
+      "shortcode": "+4510085"
+    }
+  ],
+  "ais": [
+    {
+      "keyword": " C",
+      "shortcode": "+4510085"
+    }
+  ],
+  "dtac": [
+    {
+      "keyword": " C",
+      "shortcode": "4510085"
+    }
+  ]
+}
+
+
+]

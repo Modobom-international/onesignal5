@@ -1,0 +1,155 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LogBehaviorController;
+use App\Http\Controllers\PushSystemController;
+use App\Http\Controllers\ApiPlayerPhoneController;
+use App\Http\Controllers\StorageSimController;
+use App\Http\Controllers\PushSystemGlobalController;
+use App\Http\Controllers\ApiStorageFileController;
+use App\Http\Controllers\ManagerUserSocialController;
+use App\Http\Controllers\LoadWebCountController;
+use App\Http\Controllers\HtmlSourceController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\RolesController;
+use App\Http\Controllers\Admin\PermissionsController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\IsAdmin;
+
+require __DIR__ . '/auth.php';
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
+
+Route::prefix('push-system-global')->group(function () {
+    Route::get('/get-push-system-config-global', [PushSystemGlobalController::class, 'getSettingsGlobal'])->name('pushSystemGlobalGetSettings');
+    Route::post('/save', [PushSystemGlobalController::class, 'saveSystemGlobal'])->name('saveSystemGlobal');
+    Route::get('/list-data-global', [PushSystemGlobalController::class, 'listPushSystemGlobal'])->name('listPushSystemGlobal');
+    Route::get('/list-user-active-global', [PushSystemGlobalController::class, 'listUserActiveGlobalAjax'])->name('listUserActiveGlobalAjax');
+    Route::get('/show-config-push-system-global', [PushSystemGlobalController::class, 'showConfigGlobal'])->name('showConfigGlobal');
+    Route::post('/save-system-config', [PushSystemGlobalController::class, 'saveSystemConfigGlobal'])->name('saveSystemConfigGlobal');
+    Route::get('/add-link-system-global', [PushSystemGlobalController::class, 'addLinkSystemGlobal'])->name('addLinkSystemGlobal');
+    Route::post('/add-user-active-push-system-global', [PushSystemGlobalController::class, 'addUserActiveGlobal'])->name('addUserActivePushSystemGlobal');
+});
+
+Route::prefix('config-link')->group(function () {
+    Route::post('/save', [PushSystemController::class, 'saveConfigSystemLink'])->name('saveConfigSystemLink');
+    Route::post('/update/{id}', [PushSystemController::class, 'updateConfigSystemLinkItem'])->name('updateConfigSystemLink');
+    Route::get('/get-current-push-count-ajax', [PushSystemController::class, 'getCurrentPushCountAjax'])->name('getCurrentPushCountAjax');
+});
+
+Route::post('/push-system', [PushSystemController::class, 'saveData'])->name('saveData');
+Route::get('/get-push-system-config', [PushSystemController::class, 'getSettings'])->name('pushSystemGetSettings');
+Route::get('/list-user-active', [PushSystemController::class, 'listUserActiveAjax'])->name('listUserActiveAjax');
+Route::get('/push-system/show-config-links', [PushSystemController::class, 'showConfigLinksPush'])->name('PushSystemShowConfigLinksPush');
+Route::get('/push-system/config-links', [PushSystemController::class, 'configLinksPush'])->name('PushSystemConfigLinksPush');
+Route::post('/push-system/save-config-links', [PushSystemController::class, 'saveConfigLinksPush'])->name('PushSystemSaveConfigLinksPush');
+Route::post('/add-user-active-push-system', [PushSystemController::class, 'addUserActive'])->name('addUserActivePushSystem');
+Route::post('/save-status-link', [PushSystemController::class, 'saveStatusLink'])->name('saveStatusLink');
+
+Route::get('/apk/load-web', [HomeController::class, 'apkLoadWeb'])->name('apkLoadWeb');
+Route::get('/apk/load-web-count', [HomeController::class, 'apkLoadWebCount'])->name('apkLoadWebCount');
+Route::get('/apk/load-web-count-diff', [HomeController::class, 'apkLoadWebCountDiff'])->name('apkLoadWebCountDiff');
+
+Route::get('/get-player-phone', [ApiPlayerPhoneController::class, 'getPlayerPhone']);
+Route::get('/get-sms-otp', [ApiPlayerPhoneController::class, 'getSmsOtp']);
+Route::get('/get-device-status', [ApiPlayerPhoneController::class, 'getDeviceStatus']);
+Route::post('/create-sms-otp', [ApiPlayerPhoneController::class, 'createSmsOtp']);
+Route::post('/create-user-social', [ApiPlayerPhoneController::class, 'createUserSocial']);
+Route::post('/update-user-social', [ApiPlayerPhoneController::class, 'updateUserSocial']);
+
+Route::post('/store-storage-sim', [StorageSimController::class, 'storeStorageSim']);
+Route::get('/get-phone-in-storage-sim', [StorageSimController::class, 'getPhoneInStorageSim']);
+Route::get('/get-message-in-sim/{id}', [StorageSimController::class, 'getMessageSim'])->name('getMessageSim');
+Route::post('/create-sms-otp-storage-sim', [StorageSimController::class, 'createSmsOtpStorageSim']);
+Route::get('/get-otp-storage-sim', [StorageSimController::class, 'updateHistorySim']);
+Route::post('/update-history-sim', [StorageSimController::class, 'updateHistorySim']);
+
+Route::get('/create-file', [ApiStorageFileController::class, 'createFile']);
+Route::post('/store-file', [ApiStorageFileController::class, 'storeFile'])->name('storeFile');
+Route::get('/list-file', [ApiStorageFileController::class, 'listFile'])->name('listFile');
+Route::get('/edit-file/{id}', [ApiStorageFileController::class, 'editFile'])->name('editFile');
+Route::get('/show-file/{id}', [ApiStorageFileController::class, 'showFile'])->name('showFile');
+Route::post('/update-file/{id}', [ApiStorageFileController::class, 'updateFile'])->name('updateFile');
+Route::get('/profile_manager_update/{app}', [ApiStorageFileController::class, 'getFileXML'])->name('getFileXML');
+Route::get('/get_update', [ApiStorageFileController::class, 'showFileXML'])->name('showFileXML');
+Route::get('/delete-file/{id}', [ApiStorageFileController::class, 'deleteFile'])->name('deleteFile');
+
+Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'])->name('logBehavior');
+
+Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
+
+Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(function () {
+    Route::group(['middleware' => ['auth', 'role_or_permission:super-admin|check-log-count-data|manager-file']], function () {
+        Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+
+        Route::get('/log-behavior', [LogBehaviorController::class, 'viewLogBehavior'])->name('viewLogBehavior');
+        Route::get('/get-data-chart-log-behavior', [LogBehaviorController::class, 'getDataChartLogBehavior'])->name('getDataChartLogBehavior');
+        Route::get('/store-config-filter-log-behavior', [LogBehaviorController::class, 'storeConfigFilterLogBehavior']);
+        Route::get('/reset-config-filter-log-behavior', [LogBehaviorController::class, 'resetConfigFilterLogBehavior']);
+        Route::get('/compare-date', [LogBehaviorController::class, 'compareDate'])->name('compareDate');
+        Route::get('/save-list-app-for-check', [LogBehaviorController::class, 'saveListAppForCheck'])->name('saveListAppForCheck');
+        Route::get('/delete-app-in-list-for-check', [LogBehaviorController::class, 'deleteAppInListForCheck'])->name('deleteAppInListForCheck');
+        Route::get('/get-activity-uid', [LogBehaviorController::class, 'getActivityUid'])->name('getActivityUid');
+
+        Route::get('/push-system', [PushSystemController::class, 'listPushSystem'])->name('listPushSystem');
+        Route::get('/config-link/add', [PushSystemController::class, 'addConfigSystemLink'])->name('addConfigSystemLink');
+    });
+
+    Route::group(['middleware' => ['role:super-admin']], function () {
+        Route::resource('users', UsersController::class)->name('index', 'list.users');
+        Route::get('/change-password-user/{id}', [UsersController::class, 'changePasswordUser'])->name('changePasswordUser');
+        Route::post('/update-password-user/{id}', [UsersController::class, 'updatePasswordUser'])->name('updatePasswordUser');
+        Route::get('/change-password', [UsersController::class, 'changePassword'])->name('changePassword');
+        Route::post('/update-password', [UsersController::class, 'updatePassword'])->name('updatePassword');
+    });
+
+    Route::get('/fetch-horizon-dashboard', [AdminController::class, 'fetchHorizonDashboard'])->name('fetchHorizonDashboard');
+    Route::resource('roles', RolesController::class);
+    Route::resource('permissions', PermissionsController::class);
+
+    Route::get('/list-devices-status', [ApiPlayerPhoneController::class, 'listDeviceStatus'])->name('list-devices-status');
+    Route::get('/active-device-status/{id}', [ApiPlayerPhoneController::class, 'activeDeviceStatus'])->name('active.device.status');
+    Route::get('/lock-device-status/{id}', [ApiPlayerPhoneController::class, 'lockDeviceStatus'])->name('lock.device.status');
+    Route::get('/delete-device-status/{id}', [ApiPlayerPhoneController::class, 'deleteDeviceStatus'])->name('delete.device.status');
+    Route::get('/save-note-device-status/{id}', [ApiPlayerPhoneController::class, 'saveNoteDeviceStatus'])->name('save.note.device.status');
+
+    Route::get('/manager-user-social', [ManagerUserSocialController::class, 'managerUserSocial'])->name('manager.user.social');
+    Route::get('/create-manager-user-social', [ManagerUserSocialController::class, 'createManagerUserSocial'])->name('create.manager.user.social');
+    Route::post('/store-manager-user-social', [ManagerUserSocialController::class, 'storeManagerUserSocial'])->name('store.manager.user.social');
+    Route::get('/edit-manager-user-social/{id}', [ManagerUserSocialController::class, 'editManagerUserSocial'])->name('edit.manager.user.social');
+    Route::post('/update-manager-user-social/{id}', [ManagerUserSocialController::class, 'updateManagerUserSocial'])->name('update.manager.user.social');
+    Route::get('/delete-manager-user-social/{id}', [ManagerUserSocialController::class, 'deleteManagerUserSocial'])->name('delete.manager.user.social');
+
+    Route::get('/list-storage-sim', [StorageSimController::class, 'listStorageSim'])->name('list.storage.sim');
+    Route::get('/list-storage-check-sim', [StorageSimController::class, 'listStorageCheckSim'])->name('list.storage.check.sim');
+    Route::get('/list-service-otp', [StorageSimController::class, 'listOTP'])->name('list.service.otp');
+    Route::get('/get-history-sim', [StorageSimController::class, 'getListHistorySim'])->name('list.history.sim');
+    Route::get('/delete-storage-sim/{id}', [StorageSimController::class, 'deleteStorageSim'])->name('delete.storage.sim');
+    Route::delete('/delete-multi-storage-sim', [StorageSimController::class, 'deleteAll'])->name('delete.all');
+
+    Route::get('/html-source', [HtmlSourceController::class, 'listHtmlSource'])->name('listHtmlSource');
+    Route::get('/html-source/{id}', [HtmlSourceController::class, 'showHtmlSource'])->name('showHtmlSource');
+});
+
+Route::resource('loadWebCounts', LoadWebCountController::class);
