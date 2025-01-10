@@ -133,7 +133,8 @@ function recordEvent(eventName, eventData) {
         eventName: eventName,
         eventData: eventData,
         timestamp: new Date().toISOString(),
-        user: getUserInfo()
+        user: getUserInfo(),
+        domain: window.location.hostname
     };
     userEvents.push(event);
     isBot = isBot();
@@ -146,9 +147,9 @@ function checkURL() {
     const hostname = window.location.hostname;
     let url = '';
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        url = 'http://127.0.0.1:8000';
+        url = 'http://127.0.0.1:8000/api';
     } else {
-        url = 'https://apkhype.com';
+        url = 'https://apkhype.com/api';
     }
 
     url += '/users-tracking';

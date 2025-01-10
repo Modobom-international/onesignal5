@@ -10,3 +10,7 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::middleware('throttle:60,1')->group(function () {
+    Route::post('/users-tracking', [UserBehaviorController::class, 'store']);
+});
