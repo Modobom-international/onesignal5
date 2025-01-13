@@ -5,7 +5,6 @@
   */
 
 const userEvents = [];
-var isBot = false;
 var mouseMovements = 0;
 var keyPresses = 0;
 var lastInteractionTime = Date.now();
@@ -116,7 +115,6 @@ function isBot() {
 
 function sendDataToServer(data) {
     let url = checkURL();
-    console.log(url);
     fetch(url, {
         method: 'POST',
         headers: {
@@ -138,8 +136,7 @@ function recordEvent(eventName, eventData) {
         domain: window.location.hostname
     };
     userEvents.push(event);
-    isBot = isBot();
-    if (!isBot) {
+    if (!isBot()) {
         sendDataToServer(event);
     }
 }
