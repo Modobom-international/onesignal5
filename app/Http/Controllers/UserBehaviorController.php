@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\DomainAllow;
 use App\Jobs\StoreUsersTracking;
 use Illuminate\Http\Request;
+use App\Helper\Common;
 
 class UserBehaviorController extends Controller
 {
@@ -29,9 +30,11 @@ class UserBehaviorController extends Controller
             'timestamp' => 'required',
             'domain' => 'required',
             'uuid' => 'required',
+            'path' => 'required',
         ]);
 
         $validatedData['user']['ip'] = $ip;
+        $validatedData['timestamp'] = Common::covertDateTimeToMongoBSONDateGMT7($validatedData['timestamp']);
         StoreUsersTracking::dispatch($validatedData)->onQueue('store_users_tracking');
 
         return response()->json(['message' => 'User behavior recorded successfully.']);

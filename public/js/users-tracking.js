@@ -7,7 +7,6 @@
 !function (e) {
     "use strict";
 
-    const userEvents = [];
     const throttleDelay = 1000;
     const userUUID = getUserUUID();
 
@@ -17,6 +16,22 @@
     var userStartTime = new Date().getTime();
     var throttleTimeout = null;
     var heatmapData = {};
+    var totalTimeOnsite = 0;
+    var startTime = Date.now();
+
+    function updateTimeOnsite() {
+        const currentTime = Date.now();
+        totalTimeOnsite += currentTime - startTime;
+        startTime = currentTime;
+    }
+
+    window.addEventListener('focus', throttle(() => {
+        startTime = Date.now();
+    }, throttleDelay));
+
+    window.addEventListener('blur', throttle(() => {
+        updateTimeOnsite();
+    }, throttleDelay));
 
     document.addEventListener('click', throttle((event) => {
         const target = event.target;
@@ -90,12 +105,14 @@
     window.addEventListener('beforeunload', function () {
         let userEndTime = new Date().getTime();
         let userTotalTime = userEndTime - userStartTime;
+        updateTimeOnsite();
 
         recordEvent('beforeunload', {
             start: userStartTime,
             end: userEndTime,
             total: userTotalTime,
             heatmapData: heatmapData,
+            totalOnSite: totalTimeOnsite,
         });
     }, throttleDelay);
 
@@ -157,15 +174,18 @@
     }
 
     function recordEvent(eventName, eventData) {
+        const path = window.location.pathname + window.location.search;
+        const timestamp = formatDate(new Date());
         const event = {
             eventName: eventName,
             eventData: eventData,
-            timestamp: new Date().toISOString(),
+            timestamp: timestamp,
             user: getUserInfo(),
             domain: window.location.hostname,
-            uuid: userUUID
+            uuid: userUUID,
+            path: path
         };
-        userEvents.push(event);
+
         if (!isBot()) {
             sendDataToServer(event);
         }
@@ -212,6 +232,16 @@
             localStorage.setItem('userUUID', uuid);
         }
         return uuid;
+    }
+
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 }(this);
 
