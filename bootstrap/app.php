@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'roles' => \App\Http\Middleware\CheckRole::class,
             'can' => \Illuminate\Auth\Middleware\Authorize::class,
             'Html' => Spatie\Html\Facades\Html::class,
+            'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [

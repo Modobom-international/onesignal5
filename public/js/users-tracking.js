@@ -10,13 +10,27 @@ var keyPresses = 0;
 var lastInteractionTime = Date.now();
 var userStartTime = new Date().getTime();
 
+let throttleTimeout = null;
+const throttleDelay = 1000;
+
+function throttle(func, delay) {
+    return function (...args) {
+        if (!throttleTimeout) {
+            throttleTimeout = setTimeout(() => {
+                func(...args);
+                throttleTimeout = null;
+            }, delay);
+        }
+    };
+}
+
 document.addEventListener('click', (event) => {
     recordEvent('click', {
         x: event.clientX,
         y: event.clientY,
         target: event.target.tagName
     });
-});
+}, throttleDelay);
 
 document.addEventListener('mousemove', (event) => {
     recordEvent('mousemove', {
@@ -25,21 +39,21 @@ document.addEventListener('mousemove', (event) => {
     });
 
     mouseMovements++;
-});
+}, throttleDelay);
 
 document.addEventListener('scroll', () => {
     recordEvent('scroll', {
         scrollTop: window.scrollY,
         scrollLeft: window.scrollX
     });
-});
+}, throttleDelay);
 
 document.addEventListener('input', (event) => {
     recordEvent('input', {
         target: event.target.tagName,
         value: event.target.value
     });
-});
+}, throttleDelay);
 
 document.addEventListener('keydown', (event) => {
     recordEvent('keydown', {
@@ -47,14 +61,14 @@ document.addEventListener('keydown', (event) => {
         value: event.target.value
     });
     keyPresses++;
-});
+}, throttleDelay);
 
 window.addEventListener('resize', function () {
     recordEvent('resize', {
         width: window.innerWidth,
         height: window.innerHeight,
     });
-});
+}, throttleDelay);
 
 window.addEventListener('beforeunload', function () {
     let userEndTime = new Date().getTime();
@@ -65,7 +79,7 @@ window.addEventListener('beforeunload', function () {
         end: userEndTime,
         total: userTotalTime,
     });
-});
+}, throttleDelay);
 
 function getUserInfo() {
     const userInfo = {
@@ -120,7 +134,6 @@ function sendDataToServer(data) {
         headers: {
             'Content-Type': 'application/json',
         },
-        mode: 'no-cors',
         body: JSON.stringify(data),
     })
         .then(response => console.log(response.json()))
