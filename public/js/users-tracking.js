@@ -149,7 +149,6 @@
         let url = checkURL();
         fetch(url, {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
