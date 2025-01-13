@@ -18,13 +18,13 @@ use App\Http\Controllers\ApiPlayerPhoneController;
 use App\Http\Controllers\StorageSimController;
 use App\Http\Controllers\PushSystemGlobalController;
 use App\Http\Controllers\HtmlSourceController;
+use App\Http\Controllers\UsersTrackingController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\PermissionsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UsersTrackingController;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\IsAdmin;
