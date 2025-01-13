@@ -5,81 +5,97 @@
   */
 
 const userEvents = [];
+const throttleDelay = 1000;
+
 var mouseMovements = 0;
 var keyPresses = 0;
 var lastInteractionTime = Date.now();
 var userStartTime = new Date().getTime();
+var throttleTimeout = null;
+var heatmapData = {};
 
-let throttleTimeout = null;
-const throttleDelay = 1000;
+!function (e) {
+    "use strict";
+    document.addEventListener('click', throttle((event) => {
+        const target = event.target;
+        let eventData = {
+            x: event.clientX,
+            y: event.clientY,
+            target: target.tagName,
+            href: '',
+            isInternalLink: false,
+            isLassoButton: false,
+            lassoButtonLink: ''
+        };
 
-function throttle(func, delay) {
-    return function (...args) {
-        if (!throttleTimeout) {
-            throttleTimeout = setTimeout(() => {
-                func(...args);
-                throttleTimeout = null;
-            }, delay);
+        if (target.tagName === 'A' && target.href.includes(window.location.hostname)) {
+            eventData.href = target.href;
+            eventData.isInternalLink = true;
+            recordEvent('internal_link_click', eventData);
+        } else if (target.tagName === 'A' && target.classList.contains('lasso-button')) {
+            eventData.href = target.href;
+            eventData.isLassoButton = true;
+            recordEvent('lasso_button_click', eventData);
+        } else {
+            recordEvent('click', eventData);
         }
-    };
-}
+    }, throttleDelay));
 
-document.addEventListener('click', (event) => {
-    recordEvent('click', {
-        x: event.clientX,
-        y: event.clientY,
-        target: event.target.tagName
-    });
-}, throttleDelay);
+    document.addEventListener('mousemove', throttle((event) => {
+        const x = event.clientX;
+        const y = event.clientY;
+        const key = `${x},${y}`;
 
-document.addEventListener('mousemove', (event) => {
-    recordEvent('mousemove', {
-        x: event.clientX,
-        y: event.clientY
-    });
+        if (!heatmapData[key]) {
+            heatmapData[key] = 0;
+        }
 
-    mouseMovements++;
-}, throttleDelay);
+        heatmapData[key]++;
 
-document.addEventListener('scroll', () => {
-    recordEvent('scroll', {
-        scrollTop: window.scrollY,
-        scrollLeft: window.scrollX
-    });
-}, throttleDelay);
+        recordEvent('mousemove', { x, y });
+    }, throttleDelay));
 
-document.addEventListener('input', (event) => {
-    recordEvent('input', {
-        target: event.target.tagName,
-        value: event.target.value
-    });
-}, throttleDelay);
+    document.addEventListener('scroll', throttle(() => {
+        const scrollTop = window.scrollY;
+        const scrollLeft = window.scrollX;
 
-document.addEventListener('keydown', (event) => {
-    recordEvent('keydown', {
-        target: event.target.tagName,
-        value: event.target.value
-    });
-    keyPresses++;
-}, throttleDelay);
+        recordEvent('scroll', { scrollTop, scrollLeft });
+    }, throttleDelay));
 
-window.addEventListener('resize', function () {
-    recordEvent('resize', {
-        width: window.innerWidth,
-        height: window.innerHeight,
-    });
-}, throttleDelay);
+    document.addEventListener('input', (event) => {
+        recordEvent('input', {
+            target: event.target.tagName,
+            value: event.target.value
+        });
+    }, throttleDelay);
 
-window.addEventListener('beforeunload', function () {
-    let userEndTime = new Date().getTime();
-    let userTotalTime = userEndTime - userStartTime;
+    document.addEventListener('keydown', throttle((event) => {
+        recordEvent('keydown', {
+            target: event.target.tagName,
+            value: event.target.value
+        });
+        keyPresses++;
+    }, throttleDelay));
 
-    recordEvent('beforeunload', {
-        start: userStartTime,
-        end: userEndTime,
-        total: userTotalTime,
-    });
-}, throttleDelay);
+    window.addEventListener('resize', function () {
+        recordEvent('resize', {
+            width: window.innerWidth,
+            height: window.innerHeight,
+        });
+    }, throttleDelay);
+
+    window.addEventListener('beforeunload', function () {
+        let userEndTime = new Date().getTime();
+        let userTotalTime = userEndTime - userStartTime;
+
+        recordEvent('beforeunload', {
+            start: userStartTime,
+            end: userEndTime,
+            total: userTotalTime,
+            heatmapData: heatmapData,
+        });
+    }, throttleDelay);
+}(this);
 
 function getUserInfo() {
     const userInfo = {
@@ -165,4 +181,15 @@ function checkURL() {
     url += '/users-tracking';
 
     return url;
+}
+
+function throttle(func, delay) {
+    return function (...args) {
+        if (!throttleTimeout) {
+            throttleTimeout = setTimeout(() => {
+                func(...args);
+                throttleTimeout = null;
+            }, delay);
+        }
+    };
 }
