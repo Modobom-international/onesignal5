@@ -6,6 +6,7 @@
 
 const userEvents = [];
 const throttleDelay = 1000;
+const userUUID = getUserUUID();
 
 var mouseMovements = 0;
 var keyPresses = 0;
@@ -97,7 +98,7 @@ var heatmapData = {};
     }, throttleDelay);
 }(this);
 
-function getUserInfo() {
+async function getUserInfo() {
     const userInfo = {
         userAgent: navigator.userAgent,
         platform: navigator.platform,
@@ -105,7 +106,8 @@ function getUserInfo() {
         cookiesEnabled: navigator.cookieEnabled,
         screenWidth: window.screen.width,
         screenHeight: window.screen.height,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        ip: await getUserIP()
     };
 
     return userInfo;
@@ -155,13 +157,14 @@ function sendDataToServer(data) {
     }).catch(error => console.error('Error:', error));
 }
 
-function recordEvent(eventName, eventData) {
+async function recordEvent(eventName, eventData) {
     const event = {
         eventName: eventName,
         eventData: eventData,
         timestamp: new Date().toISOString(),
         user: getUserInfo(),
-        domain: window.location.hostname
+        domain: window.location.hostname,
+        uuid: userUUID
     };
     userEvents.push(event);
     if (!isBot()) {
@@ -192,4 +195,32 @@ function throttle(func, delay) {
             }, delay);
         }
     };
+}
+
+function generateUUID() {
+    const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+    return template.replace(/[xy]/g, function (c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function getUserUUID() {
+    let uuid = localStorage.getItem('userUUID');
+    if (!uuid) {
+        uuid = generateUUID();
+        localStorage.setItem('userUUID', uuid);
+    }
+    return uuid;
+}
+
+function getUserIP() {
+    return fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => data.ip)
+        .catch(error => {
+            console.error('Error fetching IP:', error);
+            return 'unknown';
+        });
 }

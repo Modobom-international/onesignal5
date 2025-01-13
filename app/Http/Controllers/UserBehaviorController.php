@@ -26,8 +26,10 @@ class UserBehaviorController extends Controller
             'user.screenWidth' => 'required|integer',
             'user.screenHeight' => 'required|integer',
             'user.timezone' => 'required|string',
+            'user.ip' => 'required',
             'timestamp' => 'required|date_format:Y-m-d\TH:i:s.v\Z',
             'domain' => 'required',
+            'uuid' => 'required',
         ]);
 
         StoreUsersTracking::dispatch($validatedData)->onQueue('store_users_tracking');

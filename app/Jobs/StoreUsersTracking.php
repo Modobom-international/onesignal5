@@ -29,6 +29,7 @@ class StoreUsersTracking implements ShouldQueue
             'event_name' => $this->data['eventName'],
             'event_data' => $this->data['eventData'],
             'user_agent' => $this->data['user']['userAgent'],
+            'ip' => $this->data['user']['ip'],
             'platform' => $this->data['user']['platform'],
             'language' => $this->data['user']['language'],
             'cookies_enabled' => $this->data['user']['cookiesEnabled'],
@@ -37,6 +38,7 @@ class StoreUsersTracking implements ShouldQueue
             'timezone' => $this->data['user']['timezone'],
             'timestamp' => $this->data['timestamp'],
             'domain' => $this->data['domain'],
+            'uuid' => $this->data['uuid'],
         ]);
     }
 }
