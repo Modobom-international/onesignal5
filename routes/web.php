@@ -17,7 +17,6 @@ use App\Http\Controllers\PushSystemController;
 use App\Http\Controllers\ApiPlayerPhoneController;
 use App\Http\Controllers\StorageSimController;
 use App\Http\Controllers\PushSystemGlobalController;
-use App\Http\Controllers\ApiStorageFileController;
 use App\Http\Controllers\ManagerUserSocialController;
 use App\Http\Controllers\LoadWebCountController;
 use App\Http\Controllers\HtmlSourceController;
@@ -84,16 +83,6 @@ Route::get('/get-message-in-sim/{id}', [StorageSimController::class, 'getMessage
 Route::post('/create-sms-otp-storage-sim', [StorageSimController::class, 'createSmsOtpStorageSim']);
 Route::get('/get-otp-storage-sim', [StorageSimController::class, 'updateHistorySim']);
 Route::post('/update-history-sim', [StorageSimController::class, 'updateHistorySim']);
-
-Route::get('/create-file', [ApiStorageFileController::class, 'createFile']);
-Route::post('/store-file', [ApiStorageFileController::class, 'storeFile'])->name('storeFile');
-Route::get('/list-file', [ApiStorageFileController::class, 'listFile'])->name('listFile');
-Route::get('/edit-file/{id}', [ApiStorageFileController::class, 'editFile'])->name('editFile');
-Route::get('/show-file/{id}', [ApiStorageFileController::class, 'showFile'])->name('showFile');
-Route::post('/update-file/{id}', [ApiStorageFileController::class, 'updateFile'])->name('updateFile');
-Route::get('/profile_manager_update/{app}', [ApiStorageFileController::class, 'getFileXML'])->name('getFileXML');
-Route::get('/get_update', [ApiStorageFileController::class, 'showFileXML'])->name('showFileXML');
-Route::get('/delete-file/{id}', [ApiStorageFileController::class, 'deleteFile'])->name('deleteFile');
 
 Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'])->name('logBehavior');
 
