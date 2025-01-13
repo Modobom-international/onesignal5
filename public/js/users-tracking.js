@@ -99,7 +99,7 @@
         });
     }, throttleDelay);
 
-    async function getUserInfo() {
+    function getUserInfo() {
         const userInfo = {
             userAgent: navigator.userAgent,
             platform: navigator.platform,
@@ -107,8 +107,7 @@
             cookiesEnabled: navigator.cookieEnabled,
             screenWidth: window.screen.width,
             screenHeight: window.screen.height,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            ip: await getUserIP()
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         };
 
         return userInfo;
@@ -158,7 +157,7 @@
         }).catch(error => console.error('Error:', error));
     }
 
-    async function recordEvent(eventName, eventData) {
+    function recordEvent(eventName, eventData) {
         const event = {
             eventName: eventName,
             eventData: eventData,
@@ -214,17 +213,6 @@
             localStorage.setItem('userUUID', uuid);
         }
         return uuid;
-    }
-
-    async function getUserIP() {
-        try {
-            const response = await fetch('https://api.ipify.org?format=json', { mode: 'no-cors' });
-            const data = await response.json();
-            return data.ip;
-        } catch (error) {
-            console.error('Error fetching IP:', error);
-            return 'unknown';
-        }
     }
 }(this);
 
