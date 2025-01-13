@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\UserBehaviorController;
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,7 +10,3 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware(['exclude_domains', 'throttle:60,1'])->group(function () {
-    Route::post('/users-tracking', [UserBehaviorController::class, 'store']);
-});

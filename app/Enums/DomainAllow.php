@@ -9,6 +9,7 @@ final class DomainAllow
         'https://betonamuryori.com',
         'https://vnifood.com',
         'https://vnitourist.com',
-        'https://lifecompass365.com'
+        'https://lifecompass365.com',
+        'http://localhost/lifecompass'
     ];
 }

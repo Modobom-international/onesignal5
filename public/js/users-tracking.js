@@ -149,10 +149,8 @@
         let url = checkURL();
         fetch(url, {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
             },
             body: JSON.stringify(data),
         }).catch(error => console.error('Error:', error));
@@ -177,12 +175,12 @@
         const hostname = window.location.hostname;
         let url = '';
         if (hostname === 'localhost' || hostname === '127.0.0.1') {
-            url = 'http://127.0.0.1:8000/api';
+            url = 'http://127.0.0.1:8000';
         } else {
-            url = 'https://apkhype.com/api';
+            url = 'https://apkhype.com';
         }
 
-        url += '/users-tracking';
+        url += '/create-users-tracking';
 
         return url;
     }

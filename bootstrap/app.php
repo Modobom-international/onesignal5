@@ -8,8 +8,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
         commands: __DIR__ . '/../routes/console.php',
-        health: '/up',
-        api: __DIR__ . '/../routes/api.php',
+        health: '/up'
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->use([
@@ -28,7 +27,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'can' => \Illuminate\Auth\Middleware\Authorize::class,
             'Html' => Spatie\Html\Facades\Html::class,
             'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-            'exclude_domains' => \App\Http\Middleware\ExcludeDomains::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
@@ -67,6 +65,7 @@ return Application::configure(basePath: dirname(__DIR__))
             '/wap-url/save-wap-info',
             '/create-log-behavior',
             'horizon/*',
+            '/create-users-tracking'
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

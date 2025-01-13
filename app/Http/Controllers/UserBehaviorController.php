@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\DomainAllow;
 use App\Jobs\StoreUsersTracking;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class UserBehaviorController extends Controller
 {
