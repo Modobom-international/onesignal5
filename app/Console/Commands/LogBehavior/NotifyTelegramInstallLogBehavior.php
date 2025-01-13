@@ -94,7 +94,7 @@ class NotifyTelegramInstallLogBehavior extends Command
         $timeQueue = $dateEstimateBefore . ' - ' . $dateEstimateAfter;
         if (count($data) > 0) {
             dump('----Báo notification');
-            NotifyTelegramInstallApp::dispatch($data, $timeQueue)->onQueue(\App\Helper\AmazonS3::getQueueDefault());
+            NotifyTelegramInstallApp::dispatch($data, $timeQueue)->onQueue('notify_telegram_install_log_behavior');
         } else {
             dump('----Không báo notification');
         }
