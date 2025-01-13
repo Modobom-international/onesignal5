@@ -236,7 +236,7 @@ return [
 
             'supervisor-onesignal5-13' => [
                 'connection' => 'redis',
-                'queue' => ['store_users_tracking'],
+                'queue' => ['create_users_tracking'],
                 'balance' => 'auto',
                 'minProcesses' => 1,
                 'maxProcesses' => 5,

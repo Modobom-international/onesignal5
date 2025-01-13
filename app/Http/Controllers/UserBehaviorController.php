@@ -7,7 +7,7 @@ use App\Jobs\StoreUsersTracking;
 use Illuminate\Http\Request;
 use App\Helper\Common;
 
-class UserBehaviorController extends Controller
+class UsersTrackingController extends Controller
 {
     public function store(Request $request)
     {
@@ -35,8 +35,13 @@ class UserBehaviorController extends Controller
 
         $validatedData['user']['ip'] = $ip;
         $validatedData['timestamp'] = Common::covertDateTimeToMongoBSONDateGMT7($validatedData['timestamp']);
-        StoreUsersTracking::dispatch($validatedData)->onQueue('store_users_tracking');
+        StoreUsersTracking::dispatch($validatedData)->onQueue('create_users_tracking');
 
         return response()->json(['message' => 'User behavior recorded successfully.']);
+    }
+
+    public function viewUsersTracking()
+    {
+        return view('users_tracking');
     }
 }

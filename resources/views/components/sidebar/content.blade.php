@@ -6,13 +6,19 @@
         </x-slot>
     </x-sidebar.link>
 
+    <x-sidebar.link title="Users Tracking" href="{{ url('/admin/users-tracking') }}" :isActive="request()->routeIs('viewUsersTracking')">
+        <x-slot name="icon">
+            <x-icons.walk class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+        </x-slot>
+    </x-sidebar.link>
+
     @if(auth()->user()->hasRole('super-admin|user-ads|manager-file'))
     <x-sidebar.link title="Log behavior" href="{{ url('/admin/log-behavior') }}" :isActive="request()->routeIs('viewLogBehavior')">
         <x-slot name="icon">
             <x-icons.peid class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
         </x-slot>
     </x-sidebar.link>
-    
+
     <x-sidebar.link title="HTML Source" href="{{ url('/admin/html-source') }}" :isActive="request()->routeIs('listHtmlSource')">
         <x-slot name="icon">
             <x-icons.html5 class="flex-shrink-0 w-6 h-6" aria-hidden="true" />

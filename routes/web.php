@@ -24,7 +24,7 @@ use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\PermissionsController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserBehaviorController;
+use App\Http\Controllers\UsersTrackingController;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\IsAdmin;
@@ -88,7 +88,7 @@ Route::get('/get-otp-storage-sim', [StorageSimController::class, 'updateHistoryS
 Route::post('/update-history-sim', [StorageSimController::class, 'updateHistorySim']);
 
 Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'])->name('logBehavior');
-Route::post('/create-users-tracking', [UserBehaviorController::class, 'store']);
+Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
 
 Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(function () {
@@ -135,4 +135,6 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
 
     Route::get('/html-source', [HtmlSourceController::class, 'listHtmlSource'])->name('listHtmlSource');
     Route::get('/html-source/{id}', [HtmlSourceController::class, 'showHtmlSource'])->name('showHtmlSource');
+
+    Route::get('/users-tracking', [UsersTrackingController::class, 'viewUsersTracking'])->name('viewUsersTracking');
 });
