@@ -4,19 +4,20 @@
   * Licensed under MIT
   */
 
-const userEvents = [];
-const throttleDelay = 1000;
-const userUUID = getUserUUID();
-
-var mouseMovements = 0;
-var keyPresses = 0;
-var lastInteractionTime = Date.now();
-var userStartTime = new Date().getTime();
-var throttleTimeout = null;
-var heatmapData = {};
-
 !function (e) {
     "use strict";
+
+    const userEvents = [];
+    const throttleDelay = 1000;
+    const userUUID = getUserUUID();
+
+    var mouseMovements = 0;
+    var keyPresses = 0;
+    var lastInteractionTime = Date.now();
+    var userStartTime = new Date().getTime();
+    var throttleTimeout = null;
+    var heatmapData = {};
+
     document.addEventListener('click', throttle((event) => {
         const target = event.target;
         let eventData = {
@@ -52,8 +53,9 @@ var heatmapData = {};
         }
 
         heatmapData[key]++;
+        mouseMovements++;
 
-        recordEvent('mousemove', { x, y });
+        recordEvent('mousemove', { x, y, mouseMovements });
     }, throttleDelay));
 
     document.addEventListener('scroll', throttle(() => {
@@ -96,131 +98,133 @@ var heatmapData = {};
             heatmapData: heatmapData,
         });
     }, throttleDelay);
-}(this);
 
-async function getUserInfo() {
-    const userInfo = {
-        userAgent: navigator.userAgent,
-        platform: navigator.platform,
-        language: navigator.language,
-        cookiesEnabled: navigator.cookieEnabled,
-        screenWidth: window.screen.width,
-        screenHeight: window.screen.height,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        ip: await getUserIP()
-    };
+    async function getUserInfo() {
+        const userInfo = {
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            language: navigator.language,
+            cookiesEnabled: navigator.cookieEnabled,
+            screenWidth: window.screen.width,
+            screenHeight: window.screen.height,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            ip: await getUserIP()
+        };
 
-    return userInfo;
-}
+        return userInfo;
+    }
 
-function isBot() {
-    const currentTime = Date.now();
-    const timeSinceLastInteraction = currentTime - lastInteractionTime;
-    const userAgent = navigator.userAgent.toLowerCase();
-    const botPatterns = [
-        /bot/i,
-        /spider/i,
-        /crawler/i,
-        /slurp/i,
-        /googlebot/i,
-        /bingbot/i,
-        /yandexbot/i,
-        /duckduckbot/i,
-        /baiduspider/i,
-        /facebot/i,
-        /ia_archiver/i
-    ];
+    function isBot() {
+        const currentTime = Date.now();
+        const timeSinceLastInteraction = currentTime - lastInteractionTime;
+        const userAgent = navigator.userAgent.toLowerCase();
+        const botPatterns = [
+            /bot/i,
+            /spider/i,
+            /crawler/i,
+            /slurp/i,
+            /googlebot/i,
+            /bingbot/i,
+            /yandexbot/i,
+            /duckduckbot/i,
+            /baiduspider/i,
+            /facebot/i,
+            /ia_archiver/i
+        ];
 
-    for (const pattern of botPatterns) {
-        if (pattern.test(userAgent)) {
+        for (const pattern of botPatterns) {
+            if (pattern.test(userAgent)) {
+                return true;
+            }
+        }
+
+        if (timeSinceLastInteraction < 100) {
             return true;
         }
+
+        lastInteractionTime = currentTime;
+        return false;
     }
 
-    if (timeSinceLastInteraction < 100) {
-        return true;
+    function sendDataToServer(data) {
+        let url = checkURL();
+        fetch(url, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        }).catch(error => console.error('Error:', error));
     }
 
-    lastInteractionTime = currentTime;
-    return false;
-}
-
-function sendDataToServer(data) {
-    let url = checkURL();
-    fetch(url, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    }).catch(error => console.error('Error:', error));
-}
-
-async function recordEvent(eventName, eventData) {
-    const event = {
-        eventName: eventName,
-        eventData: eventData,
-        timestamp: new Date().toISOString(),
-        user: getUserInfo(),
-        domain: window.location.hostname,
-        uuid: userUUID
-    };
-    userEvents.push(event);
-    if (!isBot()) {
-        sendDataToServer(event);
-    }
-}
-
-function checkURL() {
-    const hostname = window.location.hostname;
-    let url = '';
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        url = 'http://127.0.0.1:8000/api';
-    } else {
-        url = 'https://apkhype.com/api';
-    }
-
-    url += '/users-tracking';
-
-    return url;
-}
-
-function throttle(func, delay) {
-    return function (...args) {
-        if (!throttleTimeout) {
-            throttleTimeout = setTimeout(() => {
-                func(...args);
-                throttleTimeout = null;
-            }, delay);
+    async function recordEvent(eventName, eventData) {
+        const event = {
+            eventName: eventName,
+            eventData: eventData,
+            timestamp: new Date().toISOString(),
+            user: getUserInfo(),
+            domain: window.location.hostname,
+            uuid: userUUID
+        };
+        userEvents.push(event);
+        if (!isBot()) {
+            sendDataToServer(event);
         }
-    };
-}
-
-function generateUUID() {
-    const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
-    return template.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0;
-        const v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-
-function getUserUUID() {
-    let uuid = localStorage.getItem('userUUID');
-    if (!uuid) {
-        uuid = generateUUID();
-        localStorage.setItem('userUUID', uuid);
     }
-    return uuid;
-}
 
-function getUserIP() {
-    return fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(data => data.ip)
-        .catch(error => {
+    function checkURL() {
+        const hostname = window.location.hostname;
+        let url = '';
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            url = 'http://127.0.0.1:8000/api';
+        } else {
+            url = 'https://apkhype.com/api';
+        }
+
+        url += '/users-tracking';
+
+        return url;
+    }
+
+    function throttle(func, delay) {
+        return function (...args) {
+            if (!throttleTimeout) {
+                throttleTimeout = setTimeout(() => {
+                    func(...args);
+                    throttleTimeout = null;
+                }, delay);
+            }
+        };
+    }
+
+    function generateUUID() {
+        const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+        return template.replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    function getUserUUID() {
+        let uuid = localStorage.getItem('userUUID');
+        if (!uuid) {
+            uuid = generateUUID();
+            localStorage.setItem('userUUID', uuid);
+        }
+        return uuid;
+    }
+
+    async function getUserIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json', { mode: 'no-cors' });
+            const data = await response.json();
+            return data.ip;
+        } catch (error) {
             console.error('Error fetching IP:', error);
             return 'unknown';
-        });
-}
+        }
+    }
+}(this);
+
