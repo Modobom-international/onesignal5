@@ -19,7 +19,7 @@ class UserBehaviorController extends Controller
 
         $validatedData = $request->validate([
             'eventName' => 'required|string',
-            'eventData' => 'required|array',
+            'eventData' => 'required',
             'user.userAgent' => 'required|string',
             'user.platform' => 'required|string',
             'user.language' => 'required|string',
@@ -27,7 +27,7 @@ class UserBehaviorController extends Controller
             'user.screenWidth' => 'required|integer',
             'user.screenHeight' => 'required|integer',
             'user.timezone' => 'required|string',
-            'timestamp' => 'required|date_format:Y-m-d\TH:i:s.v\Z',
+            'timestamp' => 'required',
             'domain' => 'required',
             'uuid' => 'required',
         ]);
