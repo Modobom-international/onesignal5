@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'can' => \Illuminate\Auth\Middleware\Authorize::class,
             'Html' => Spatie\Html\Facades\Html::class,
             'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+            'exclude-domains' => \App\Http\Middleware\ExcludeDomains::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [
