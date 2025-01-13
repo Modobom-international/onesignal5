@@ -116,6 +116,7 @@ function isBot() {
 
 function sendDataToServer(data) {
     let url = checkURL();
+    console.log(url);
     fetch(url, {
         method: 'POST',
         headers: {
@@ -123,7 +124,7 @@ function sendDataToServer(data) {
         },
         body: JSON.stringify(data),
     })
-        .then(response => response.json())
+        .then(response => console.log(response.json()))
         .then(data => console.log('Success:', data))
         .catch(error => console.error('Error:', error));
 }

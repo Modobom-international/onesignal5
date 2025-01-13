@@ -233,6 +233,15 @@ return [
                 'maxProcesses' => 5,
                 'tries' => 0,
             ],
+
+            'supervisor-onesignal5-13' => [
+                'connection' => 'redis',
+                'queue' => ['store_users_tracking'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 5,
+                'tries' => 0,
+            ],
         ],
     ],
 ];

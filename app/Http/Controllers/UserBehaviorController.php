@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DomainAllow;
+use App\Jobs\StoreUsersTracking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use DB;
 
 class UserBehaviorController extends Controller
 {
@@ -30,19 +30,7 @@ class UserBehaviorController extends Controller
             'domain' => 'required',
         ]);
 
-        DB::connection('mongodb')->table('users_tracking')->insert([
-            'event_name' => $validatedData['eventName'],
-            'event_data' => $validatedData['eventData'],
-            'user_agent' => $validatedData['user']['userAgent'],
-            'platform' => $validatedData['user']['platform'],
-            'language' => $validatedData['user']['language'],
-            'cookies_enabled' => $validatedData['user']['cookiesEnabled'],
-            'screen_width' => $validatedData['user']['screenWidth'],
-            'screen_height' => $validatedData['user']['screenHeight'],
-            'timezone' => $validatedData['user']['timezone'],
-            'timestamp' => $validatedData['timestamp'],
-            'domain' => $validatedData['domain'],
-        ]);
+        StoreUsersTracking::dispatch($validatedData)->onQueue('store_users_tracking');
 
         return response()->json(['message' => 'User behavior recorded successfully.']);
     }
