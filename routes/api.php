@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserBehaviorController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
