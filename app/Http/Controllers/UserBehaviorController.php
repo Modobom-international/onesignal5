@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\DomainAllow;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use DB;
 
 class UserBehaviorController extends Controller
@@ -44,5 +45,10 @@ class UserBehaviorController extends Controller
         ]);
 
         return response()->json(['message' => 'User behavior recorded successfully.']);
+    }
+
+    public function getUUID()
+    {
+        return (string) Str::uuid();
     }
 }

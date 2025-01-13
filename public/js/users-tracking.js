@@ -9,7 +9,7 @@ var isBot = false;
 var mouseMovements = 0;
 var keyPresses = 0;
 var lastInteractionTime = Date.now();
-var userStartTime = Date().getTime();
+var userStartTime = new Date().getTime();
 
 document.addEventListener('click', (event) => {
     recordEvent('click', {
