@@ -17,7 +17,6 @@ use App\Http\Controllers\PushSystemController;
 use App\Http\Controllers\ApiPlayerPhoneController;
 use App\Http\Controllers\StorageSimController;
 use App\Http\Controllers\PushSystemGlobalController;
-use App\Http\Controllers\LoadWebCountController;
 use App\Http\Controllers\HtmlSourceController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UsersController;
@@ -132,5 +131,3 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/html-source', [HtmlSourceController::class, 'listHtmlSource'])->name('listHtmlSource');
     Route::get('/html-source/{id}', [HtmlSourceController::class, 'showHtmlSource'])->name('showHtmlSource');
 });
-
-Route::resource('loadWebCounts', LoadWebCountController::class);
