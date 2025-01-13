@@ -71,4 +71,15 @@ class Common
 
         return $uuid;
     }
+
+    public static function getDomainFromUrl($url)
+    {
+        $arr = parse_url($url);
+
+        if (!empty($arr['host'])) {
+            return $arr['host'];
+        }
+
+        return null;
+    }
 }
