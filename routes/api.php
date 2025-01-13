@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\UserBehaviorController;
 
 /*
@@ -12,6 +13,6 @@ use App\Http\Controllers\UserBehaviorController;
 |
 */
 
-Route::middleware(['throttle:60,1', 'exclude-domains'])->group(function () {
+Route::middleware(['throttle:60,1'])->group(function () {
     Route::post('/users-tracking', [UserBehaviorController::class, 'store']);
 });
