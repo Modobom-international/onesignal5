@@ -120,6 +120,7 @@ function sendDataToServer(data) {
         headers: {
             'Content-Type': 'application/json',
         },
+        mode: 'no-cors',
         body: JSON.stringify(data),
     })
         .then(response => console.log(response.json()))
