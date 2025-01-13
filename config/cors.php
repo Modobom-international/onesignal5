@@ -1,7 +1,5 @@
 <?php
 
-use App\Enums\DomainAllow;
-
 return [
 
     /*
@@ -21,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => DomainAllow::LIST_DOMAIN,
+    'allowed_origins' => ['https://vnifood.com', 'https://vnitourist.com', 'https://apkafe.com', 'https://betonamuryori.com', 'https://lifecompass365.com'],
 
     'allowed_origins_patterns' => [],
 
