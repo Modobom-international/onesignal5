@@ -136,10 +136,7 @@ function sendDataToServer(data) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-    })
-        .then(response => console.log(response.json()))
-        .then(data => console.log('Success:', data))
-        .catch(error => console.error('Error:', error));
+    }).catch(error => console.error('Error:', error));
 }
 
 function recordEvent(eventName, eventData) {
