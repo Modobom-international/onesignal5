@@ -17,7 +17,6 @@ use App\Http\Controllers\PushSystemController;
 use App\Http\Controllers\ApiPlayerPhoneController;
 use App\Http\Controllers\StorageSimController;
 use App\Http\Controllers\PushSystemGlobalController;
-use App\Http\Controllers\ManagerUserSocialController;
 use App\Http\Controllers\LoadWebCountController;
 use App\Http\Controllers\HtmlSourceController;
 use App\Http\Controllers\Admin\AdminController;
@@ -122,13 +121,6 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/lock-device-status/{id}', [ApiPlayerPhoneController::class, 'lockDeviceStatus'])->name('lock.device.status');
     Route::get('/delete-device-status/{id}', [ApiPlayerPhoneController::class, 'deleteDeviceStatus'])->name('delete.device.status');
     Route::get('/save-note-device-status/{id}', [ApiPlayerPhoneController::class, 'saveNoteDeviceStatus'])->name('save.note.device.status');
-
-    Route::get('/manager-user-social', [ManagerUserSocialController::class, 'managerUserSocial'])->name('manager.user.social');
-    Route::get('/create-manager-user-social', [ManagerUserSocialController::class, 'createManagerUserSocial'])->name('create.manager.user.social');
-    Route::post('/store-manager-user-social', [ManagerUserSocialController::class, 'storeManagerUserSocial'])->name('store.manager.user.social');
-    Route::get('/edit-manager-user-social/{id}', [ManagerUserSocialController::class, 'editManagerUserSocial'])->name('edit.manager.user.social');
-    Route::post('/update-manager-user-social/{id}', [ManagerUserSocialController::class, 'updateManagerUserSocial'])->name('update.manager.user.social');
-    Route::get('/delete-manager-user-social/{id}', [ManagerUserSocialController::class, 'deleteManagerUserSocial'])->name('delete.manager.user.social');
 
     Route::get('/list-storage-sim', [StorageSimController::class, 'listStorageSim'])->name('list.storage.sim');
     Route::get('/list-storage-check-sim', [StorageSimController::class, 'listStorageCheckSim'])->name('list.storage.check.sim');
