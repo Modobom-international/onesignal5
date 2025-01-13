@@ -31,6 +31,10 @@ use App\Http\Middleware\IsAdmin;
 
 require __DIR__ . '/auth.php';
 
+Route::options('{any}', function () {
+    return response()->json([], 204);
+})->where('any', '.*');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
