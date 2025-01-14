@@ -89,6 +89,7 @@ class UsersTrackingController extends Controller
         ];
 
         foreach ($getTracking as $tracking) {
+            $event_data = [];
             $data['heat_map'] = [];
             $data['is_internal_link'] = false;
             $data['is_lasso_button'] = false;
