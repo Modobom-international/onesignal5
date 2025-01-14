@@ -137,4 +137,5 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/html-source/{id}', [HtmlSourceController::class, 'showHtmlSource'])->name('showHtmlSource');
 
     Route::get('/users-tracking', [UsersTrackingController::class, 'viewUsersTracking'])->name('viewUsersTracking');
+    Route::get('/get-detail-tracking', [UsersTrackingController::class, 'getDetailTracking'])->name('getDetailTracking');
 });

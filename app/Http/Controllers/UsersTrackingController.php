@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\DomainAllow;
+use App\Enums\UsersTracking;
 use App\Jobs\StoreUsersTracking;
 use Illuminate\Http\Request;
 use App\Helper\Common;
+use UAParser\Parser;
+use DB;
 
 class UsersTrackingController extends Controller
 {
@@ -13,7 +15,7 @@ class UsersTrackingController extends Controller
     {
         $origin = $request->header('Origin');
         $ip = request()->ip();
-        if (!in_array($origin, DomainAllow::LIST_DOMAIN)) {
+        if (!in_array($origin, UsersTracking::LIST_DOMAIN)) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
@@ -40,8 +42,102 @@ class UsersTrackingController extends Controller
         return response()->json(['message' => 'User behavior recorded successfully.']);
     }
 
-    public function viewUsersTracking()
+    public function viewUsersTracking(Request $request)
     {
-        return view('users_tracking');
+        $domain = $request->get('domain');
+        $date = $request->get('date');
+
+        if (!isset($domain)) {
+            $domain = UsersTracking::DEFAULT_DOMAIN;
+        }
+
+        if (!isset($date)) {
+            $date = Common::getCurrentVNTime('Y-m-d');
+        }
+
+        $query = DB::connection('mongodb')
+            ->table('users_tracking')
+            ->where('domain', $domain)
+            ->where('timestamp', '>=', Common::covertDateTimeToMongoBSONDateGMT7($date . ' 00:00:00'))
+            ->where('timestamp', '<=', Common::covertDateTimeToMongoBSONDateGMT7($date . ' 23:59:59'))
+            ->orderBy('timestamp', 'desc')
+            ->get();
+
+        $data = Common::paginate($query->groupBy('uuid'));
+
+
+        return view('users_tracking.index', compact('data'));
+    }
+
+    public function getDetailTracking(Request $request)
+    {
+        $uuid = $request->get('uuid');
+        $getTracking = DB::connection('mongodb')
+            ->table('users_tracking')
+            ->where('uuid', $uuid)
+            ->orderBy('timestamp', 'asc')
+            ->get();
+
+        $userAgent = $getTracking[0]->user_agent;
+        $parser = Parser::create();
+        $result = $parser->parse($userAgent);
+
+        $data = [
+            'browser' => $result->ua->family,
+            'os' => $result->os->family,
+            'device' => $result->device->family
+        ];
+
+        foreach ($getTracking as $tracking) {
+            $data['heat_map'] = [];
+            $data['is_internal_link'] = false;
+            $data['is_lasso_button'] = false;
+            $data['ip'] = $tracking->ip;
+
+            if ($tracking->event_name == 'scroll') {
+                $event_data[] = 'Cuộn khoảng ' . $tracking->event_data['scrollTop'] . 'px';
+            }
+
+            if ($tracking->event_name == 'beforeunload') {
+                $event_data[] = 'Thời gian vào page : ' . date('Y-m-d H:i:s', $tracking->event_data['start'] / 1000);
+                $event_data[] = 'Thời gian ra khỏi page : ' . date('Y-m-d H:i:s', $tracking->event_data['end'] / 1000);
+                $event_data[] = 'Thời gian onpage : ' . date('H:i:s', $tracking->event_data['totalOnSite'] / 1000);
+
+                $data['heat_map'][$tracking->path] = $tracking->event_data['heatmapData'];
+            }
+
+            if ($tracking->event_name == 'click') {
+                $event_data[] = 'Click vào ' . $tracking->event_data['target'];
+            }
+
+            if ($tracking->event_name == 'internal_link_click') {
+                $event_data[] = 'Click vào ' . $tracking->event_data['target'];
+                $data['is_internal_link'] = true;
+            }
+
+            if ($tracking->event_name == 'lasso_button_click') {
+                $event_data[] = 'Click vào ' . $tracking->event_data['target'];
+                $data['is_lasso_button'] = true;
+            }
+
+            if ($tracking->event_name == 'keydown') {
+                $event_data[] = 'Ấn nút ' . $tracking->event_data['target'] . ' với giá trị ' . $tracking->event_data['value'];
+                $data['is_lasso_button'] = true;
+            }
+
+            if ($tracking->event_name == 'input') {
+                $event_data[] = 'Nhập ' . $tracking->event_data['target'] . ' với giá trị ' . $tracking->event_data['value'];
+                $data['is_lasso_button'] = true;
+            }
+
+            if ($tracking->event_name == 'mousemove') {
+                $event_data[] = 'Di chuột đến vị trí x là ' . $tracking->event_data['x'] . ' và y là ' . $tracking->event_data['y'];
+                $data['is_lasso_button'] = true;
+            }
+
+            $data['activity'][$tracking->path] = $event_data;
+        }
+
+        return response()->json($data);
     }
 }

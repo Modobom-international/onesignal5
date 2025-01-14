@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-final class DomainAllow
+final class UsersTracking
 {
     const LIST_DOMAIN = [
         'https://apkafe.com',
@@ -12,4 +12,6 @@ final class DomainAllow
         'https://lifecompass365.com',
         'http://localhost/lifecompass'
     ];
+
+    const DEFAULT_DOMAIN = 'apkafe.com';
 }
