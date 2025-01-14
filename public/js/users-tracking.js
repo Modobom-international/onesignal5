@@ -10,8 +10,9 @@
 
     var mouseMovements = 0;
     var keyPresses = 0;
-    var lastInteractionTime = Date.now();
-    var userStartTime = new Date().getTime();
+    const offset = 7 * 60 * 60 * 1000;
+    var lastInteractionTime = Date.now() + offset;
+    var userStartTime = new Date().getTime() + offset;
     var totalTimeOnsite = 0;
     var startTime = Date.now();
 
@@ -117,7 +118,7 @@
     }
 
     function isBot() {
-        const currentTime = Date.now();
+        const currentTime = Date.now() + offset;
         const timeSinceLastInteraction = currentTime - lastInteractionTime;
         const userAgent = navigator.userAgent.toLowerCase();
         const botPatterns = [
