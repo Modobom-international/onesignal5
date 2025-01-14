@@ -25,15 +25,15 @@
         startTime = currentTime;
     }
 
-    window.addEventListener('focus', throttle(() => {
+    window.addEventListener('focus', () => {
         startTime = Date.now();
-    }, throttleDelay));
+    });
 
-    window.addEventListener('blur', throttle(() => {
+    window.addEventListener('blur', () => {
         updateTimeOnsite();
-    }, throttleDelay));
+    });
 
-    document.addEventListener('click', throttle((event) => {
+    document.addEventListener('click', (event) => {
         const target = event.target;
         let eventData = {
             x: event.clientX,
@@ -56,9 +56,9 @@
         } else {
             recordEvent('click', eventData);
         }
-    }, throttleDelay));
+    });
 
-    document.addEventListener('mousemove', throttle((event) => {
+    document.addEventListener('mousemove', (event) => {
         const x = event.clientX;
         const y = event.clientY;
         const key = `${x},${y}`;
@@ -71,7 +71,7 @@
         mouseMovements++;
 
         recordEvent('mousemove', { x, y, mouseMovements });
-    }, throttleDelay));
+    });
 
     document.addEventListener('scroll', throttle(() => {
         const scrollTop = window.scrollY;
@@ -100,7 +100,7 @@
             width: window.innerWidth,
             height: window.innerHeight,
         });
-    }, throttleDelay);
+    });
 
     window.addEventListener('beforeunload', function () {
         let userEndTime = new Date().getTime();
@@ -114,7 +114,7 @@
             heatmapData: heatmapData,
             totalOnSite: totalTimeOnsite,
         });
-    }, throttleDelay);
+    });
 
     function getUserInfo() {
         const userInfo = {

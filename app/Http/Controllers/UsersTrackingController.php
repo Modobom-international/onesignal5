@@ -102,7 +102,7 @@ class UsersTrackingController extends Controller
             if ($tracking->event_name == 'beforeunload') {
                 $event_data[] = 'Thời gian vào page : ' . date('Y-m-d H:i:s', $tracking->event_data['start'] / 1000);
                 $event_data[] = 'Thời gian ra khỏi page : ' . date('Y-m-d H:i:s', $tracking->event_data['end'] / 1000);
-                $event_data[] = 'Thời gian onpage : ' . date('H:i:s', $tracking->event_data['totalOnSite'] / 1000);
+                $event_data[] = 'Thời gian onpage : ' . date('H:i:s', $tracking->event_data['total'] / 1000);
 
                 $data['heat_map'][$tracking->path] = $tracking->event_data['heatmapData'];
             }
