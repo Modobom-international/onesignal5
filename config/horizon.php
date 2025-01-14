@@ -169,7 +169,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-6' => [
+            'supervisor-onesignal5-4' => [
                 'connection' => 'redis',
                 'queue' => ['save_request_get_system_setting'],
                 'balance' => 'auto',
@@ -178,7 +178,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-7' => [
+            'supervisor-onesignal5-5' => [
                 'connection' => 'redis',
                 'queue' => ['save_user_active_push_system'],
                 'balance' => 'auto',
@@ -188,16 +188,7 @@ return [
                 'timeout' => 300,
             ],
 
-            'supervisor-onesignal5-8' => [
-                'connection' => 'redis',
-                'queue' => ['save_push_system_global'],
-                'balance' => 'auto',
-                'minProcesses' => 1,
-                'maxProcesses' => 2,
-                'tries' => 0,
-            ],
-
-            'supervisor-onesignal5-9' => [
+            'supervisor-onesignal5-6' => [
                 'connection' => 'redis',
                 'queue' => ['save_request_get_system_global_setting'],
                 'balance' => 'auto',
@@ -206,17 +197,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-10' => [
-                'connection' => 'redis',
-                'queue' => ['save_user_active_push_system_global'],
-                'balance' => 'auto',
-                'minProcesses' => 1,
-                'maxProcesses' => 3,
-                'tries' => 0,
-                'timeout' => 300,
-            ],
-
-            'supervisor-onesignal5-11' => [
+            'supervisor-onesignal5-7' => [
                 'connection' => 'redis',
                 'queue' => ['create_html_source'],
                 'balance' => 'auto',
@@ -225,7 +206,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-12' => [
+            'supervisor-onesignal5-8' => [
                 'connection' => 'redis',
                 'queue' => ['notify_telegram_install_log_behavior'],
                 'balance' => 'auto',
@@ -234,7 +215,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-13' => [
+            'supervisor-onesignal5-8' => [
                 'connection' => 'redis',
                 'queue' => ['create_users_tracking'],
                 'balance' => 'auto',
@@ -243,7 +224,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-14' => [
+            'supervisor-onesignal5-9' => [
                 'connection' => 'redis',
                 'queue' => ['create_heat_map'],
                 'balance' => 'auto',
