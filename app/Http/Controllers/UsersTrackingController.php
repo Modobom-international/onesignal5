@@ -6,6 +6,7 @@ use App\Enums\UsersTracking;
 use App\Jobs\StoreUsersTracking;
 use Illuminate\Http\Request;
 use App\Helper\Common;
+use App\Jobs\StoreHeatMap;
 use UAParser\Parser;
 use DB;
 
@@ -39,6 +40,20 @@ class UsersTrackingController extends Controller
         $validatedData['timestamp'] = Common::covertDateTimeToMongoBSONDateGMT7($validatedData['timestamp']);
         StoreUsersTracking::dispatch($validatedData)->onQueue('create_users_tracking');
 
+        if ($validatedData['eventName'] == 'mousemove') {
+            $dataHeatMap = [
+                'uuid' => $validatedData['uuid'],
+                'path' => $validatedData['path'],
+                'domain' => $validatedData['domain'],
+                'heatmapData' => [
+                    'x' => $validatedData['eventData']['x'],
+                    'y' => $validatedData['eventData']['y'],
+                    'timestamp' => $validatedData['timestamp'],
+                ],
+            ];
+            StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
+        }
+
         return response()->json(['message' => 'User behavior recorded successfully.']);
     }
 
@@ -64,7 +79,6 @@ class UsersTrackingController extends Controller
             ->get();
 
         $data = Common::paginate($query->groupBy('uuid'));
-
 
         return view('users_tracking.index', compact('data'));
     }
@@ -102,7 +116,7 @@ class UsersTrackingController extends Controller
             if ($tracking->event_name == 'beforeunload') {
                 $event_data[] = 'Thời gian vào page : ' . date('Y-m-d H:i:s', $tracking->event_data['start'] / 1000);
                 $event_data[] = 'Thời gian ra khỏi page : ' . date('Y-m-d H:i:s', $tracking->event_data['end'] / 1000);
-                $event_data[] = 'Thời gian onpage : ' . date('H:i:s', $tracking->event_data['total'] / 1000);
+                $event_data[] = 'Thời gian onpage : ' . gmdate('H:i:s.u', $tracking->event_data['total']);
 
                 $data['heat_map'][$tracking->path] = $tracking->event_data['heatmapData'];
             }
@@ -123,17 +137,14 @@ class UsersTrackingController extends Controller
 
             if ($tracking->event_name == 'keydown') {
                 $event_data[] = 'Ấn nút ' . $tracking->event_data['target'] . ' với giá trị ' . $tracking->event_data['value'];
-                $data['is_lasso_button'] = true;
             }
 
             if ($tracking->event_name == 'input') {
                 $event_data[] = 'Nhập ' . $tracking->event_data['target'] . ' với giá trị ' . $tracking->event_data['value'];
-                $data['is_lasso_button'] = true;
             }
 
             if ($tracking->event_name == 'mousemove') {
                 $event_data[] = 'Di chuột đến vị trí x là ' . $tracking->event_data['x'] . ' và y là ' . $tracking->event_data['y'];
-                $data['is_lasso_button'] = true;
             }
 
             $data['activity'][$tracking->path] = $event_data;

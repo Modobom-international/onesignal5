@@ -14,8 +14,6 @@
     var keyPresses = 0;
     var lastInteractionTime = Date.now();
     var userStartTime = new Date().getTime();
-    var throttleTimeout = null;
-    var heatmapData = {};
     var totalTimeOnsite = 0;
     var startTime = Date.now();
 
@@ -61,13 +59,6 @@
     document.addEventListener('mousemove', (event) => {
         const x = event.clientX;
         const y = event.clientY;
-        const key = `${x},${y}`;
-
-        if (!heatmapData[key]) {
-            heatmapData[key] = 0;
-        }
-
-        heatmapData[key]++;
         mouseMovements++;
 
         recordEvent('mousemove', { x, y, mouseMovements });
@@ -87,13 +78,13 @@
         });
     }, throttleDelay);
 
-    document.addEventListener('keydown', throttle((event) => {
+    document.addEventListener('keydown', (event) => {
         recordEvent('keydown', {
             target: event.target.tagName,
             value: event.target.value
         });
         keyPresses++;
-    }, throttleDelay));
+    });
 
     window.addEventListener('resize', function () {
         recordEvent('resize', {
@@ -104,15 +95,12 @@
 
     window.addEventListener('beforeunload', function () {
         let userEndTime = new Date().getTime();
-        let userTotalTime = userEndTime - userStartTime;
         updateTimeOnsite();
 
         recordEvent('beforeunload', {
             start: userStartTime,
             end: userEndTime,
-            total: userTotalTime,
-            heatmapData: heatmapData,
-            totalOnSite: totalTimeOnsite,
+            total: totalTimeOnsite,
         });
     });
 
@@ -203,17 +191,6 @@
         url += '/create-users-tracking';
 
         return url;
-    }
-
-    function throttle(func, delay) {
-        return function (...args) {
-            if (!throttleTimeout) {
-                throttleTimeout = setTimeout(() => {
-                    func(...args);
-                    throttleTimeout = null;
-                }, delay);
-            }
-        };
     }
 
     function generateUUID() {
