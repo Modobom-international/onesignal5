@@ -141,15 +141,14 @@ Users tracking
                 }
 
                 for (let path in response.activity) {
-
+                    let heat_map = '';
                     let activity = response.activity[path];
                     let get_heat_map = response.heat_map[path];
                     if (get_heat_map == undefined) {
-                        let heat_map = 'Không có dữ liệu';
+                        heat_map = 'Không có dữ liệu';
                     } else if (get_heat_map.length == 0) {
-                        let heat_map = 'Không có dữ liệu';
+                        heat_map = 'Không có dữ liệu';
                     } else {
-                        let heat_map = '';
                         for (let i = 0; i < get_heat_map.length; i++) {
                             heat_map += get_heat_map[i] + ', ';
                         }
