@@ -6,8 +6,6 @@
 
 !function (e) {
     "use strict";
-
-    const throttleDelay = 1000;
     const userUUID = getUserUUID();
 
     var mouseMovements = 0;
@@ -64,19 +62,19 @@
         recordEvent('mousemove', { x, y, mouseMovements });
     });
 
-    document.addEventListener('scroll', throttle(() => {
+    document.addEventListener('scroll', () => {
         const scrollTop = window.scrollY;
         const scrollLeft = window.scrollX;
 
         recordEvent('scroll', { scrollTop, scrollLeft });
-    }, throttleDelay));
+    });
 
     document.addEventListener('input', (event) => {
         recordEvent('input', {
             target: event.target.tagName,
             value: event.target.value
         });
-    }, throttleDelay);
+    });
 
     document.addEventListener('keydown', (event) => {
         recordEvent('keydown', {

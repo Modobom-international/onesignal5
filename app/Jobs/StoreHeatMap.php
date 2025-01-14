@@ -9,12 +9,14 @@ class StoreHeatMap implements ShouldQueue
 {
     use Queueable;
 
+    protected $data;
+
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -22,6 +24,6 @@ class StoreHeatMap implements ShouldQueue
      */
     public function handle(): void
     {
-        //
+        DB::connection('mongodb')->table('heat_map')->insert($this->data);
     }
 }
