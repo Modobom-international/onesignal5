@@ -143,11 +143,18 @@ Users tracking
                 for (let path in response.activity) {
 
                     let activity = response.activity[path];
-                    let heat_map = response.heat_map[path];
-                    console.log(heat_map);
-                    if (heat_map.length == 0) {
-                        heat_map = 'Không có dữ liệu';
+                    let get_heat_map = response.heat_map[path];
+                    if (get_heat_map == undefined) {
+                        let heat_map = 'Không có dữ liệu';
+                    } else if (get_heat_map.length == 0) {
+                        let heat_map = 'Không có dữ liệu';
+                    } else {
+                        let heat_map = '';
+                        for (let i = 0; i < get_heat_map.length; i++) {
+                            heat_map += get_heat_map[i] + ', ';
+                        }
                     }
+
                     let html = '<div class="card mt-3"><div class="card-body"><h5 class="mb-3">' + path + '</h5><hr><ul>';
                     for (let i = 0; i < activity.length; i++) {
                         html += '<li><p>' + activity[i] + '</p></li>';
