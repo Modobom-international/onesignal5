@@ -49,7 +49,7 @@ class UsersTrackingController extends Controller
                     'x' => $validatedData['eventData']['x'],
                     'y' => $validatedData['eventData']['y'],
                     'timestamp' => $validatedData['timestamp'],
-                    'device' => $validatedData['device'],
+                    'device' => $validatedData['eventData']['device'],
                     'event' => $validatedData['eventName'],
                 ],
             ];
