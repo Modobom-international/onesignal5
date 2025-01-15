@@ -16,6 +16,7 @@ use App\Helper\Common;
 use Auth;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
+use DateTimeZone;
 
 class LogBehaviorController extends Controller
 {
