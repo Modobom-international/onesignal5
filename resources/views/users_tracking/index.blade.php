@@ -193,6 +193,14 @@ Users tracking
     const iframe = document.getElementById('heatmapiframe');
     const container = document.getElementById('heatmap');
 
+    window.addEventListener('message', function(event) {
+        if (event.origin !== 'https://' + domainGernal) {
+            return;
+        }
+
+        container.style.height = event.data + 'px';
+    });
+
     $('#detailModal').on('show.bs.modal', function(e) {
         if (isFetching) return
         isFetching = true;
@@ -293,17 +301,28 @@ Users tracking
                 }
 
                 initializeHeatmap(data, url);
-
-                $(".loading").hide();
-                $('.area-heat-map').show();
             }
         });
     });
 
     function initializeHeatmap(data, url) {
         iframe.src = url;
-        sendMessage();
 
+        iframe.onload = function() {
+            sendMessage();
+            createHeatmap(data);
+        };
+
+        $(".loading").hide();
+        $('.area-heat-map').show();
+    }
+
+    function sendMessage() {
+        const iframe = document.getElementById('heatmapiframe');
+        iframe.contentWindow.postMessage('getHeight', '*');
+    }
+
+    function createHeatmap(data) {
         if (heatmapInstance) {
             container.innerHTML = '';
         }
@@ -327,18 +346,5 @@ Users tracking
             data: data
         });
     }
-
-    function sendMessage() {
-        const iframe = document.getElementById('heatmapiframe');
-        iframe.contentWindow.postMessage('getHeight', '*');
-    }
-
-    window.addEventListener('message', function(event) {
-        if (event.origin !== 'https://' + domainGernal) {
-            return;
-        }
-
-        container.style.height = event.data + 'px';
-    });
 </script>
 @endsection
