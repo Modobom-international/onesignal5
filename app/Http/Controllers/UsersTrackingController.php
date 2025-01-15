@@ -92,6 +92,14 @@ class UsersTrackingController extends Controller
             ->orderBy('timestamp', 'asc')
             ->get();
 
+        $getHeatMap = DB::connection('mongodb')
+            ->table('heat_map')
+            ->where('uuid', $uuid)
+            ->orderBy('timestamp', 'asc')
+            ->get();
+
+        dd($getHeatMap);
+
         $userAgent = $getTracking[0]->user_agent;
         $parser = Parser::create();
         $result = $parser->parse($userAgent);
@@ -116,9 +124,7 @@ class UsersTrackingController extends Controller
             if ($tracking->event_name == 'beforeunload') {
                 $event_data[] = 'Thời gian vào page : ' . date('Y-m-d H:i:s', $tracking->event_data['start'] / 1000);
                 $event_data[] = 'Thời gian ra khỏi page : ' . date('Y-m-d H:i:s', $tracking->event_data['end'] / 1000);
-                $event_data[] = 'Thời gian onpage : ' . gmdate('H:i:s.u', $tracking->event_data['total']);
-
-                $data['heat_map'][$tracking->path] = $tracking->event_data['heatmapData'];
+                $event_data[] = 'Thời gian onpage : ' . gmdate('H:i:s', $tracking->event_data['total']);
             }
 
             if ($tracking->event_name == 'click') {
@@ -148,6 +154,14 @@ class UsersTrackingController extends Controller
             }
 
             $data['activity'][$tracking->path] = $event_data;
+        }
+
+        foreach ($getHeatMap as $heat) {
+            $dataHeatMap = $heat->heatmapData;
+            $data['heat_map'][$heat->path] = $heat->event_data['heatmapData'];
+            foreach ($dataHeatMap as $value) {
+                $data['heat_map'][$heat->path][$key] = $value;
+            }
         }
 
         return response()->json($data);

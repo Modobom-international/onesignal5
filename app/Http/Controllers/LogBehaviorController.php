@@ -1463,7 +1463,9 @@ class LogBehaviorController extends Controller
             ->get();
 
         foreach ($getActivity as $activity) {
-            $activity->date = $activity->date->toDateTime()->format('Y-m-d H:i:s', 'Asia/Ho_Chi_Minh');
+            $phpDate = $activity->date->toDateTime();
+            $phpDate->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
+            $activity->date = $phpDate->format('Y-m-d H:i:s');
         }
 
         return \response()->json($getActivity);
