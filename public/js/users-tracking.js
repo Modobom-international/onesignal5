@@ -111,11 +111,13 @@
         });
     });
 
-    window.addEventListener('message', function (event) {
-        if (event.data === 'getHeight') {
-            var height = document.body.scrollHeight;
-            event.source.postMessage(height, event.origin);
-        }
+    window.addEventListener('load', function () {
+        window.addEventListener('message', function (event) {
+            if (event.data === 'getHeight') {
+                const height = document.body.scrollHeight || document.documentElement.scrollHeight;
+                event.source.postMessage(height, event.origin);
+            }
+        });
     });
 
     function getUserInfo() {

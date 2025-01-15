@@ -161,11 +161,7 @@ class UsersTrackingController extends Controller
         }
 
         foreach ($getHeatMap as $heat) {
-            $dataHeatMap = $heat->heatmapData;
-            $data['heat_map'][$heat->path] = $heat->event_data['heatmapData'];
-            foreach ($dataHeatMap as $value) {
-                $data['heat_map'][$heat->path][$key] = $value;
-            }
+            $data['heat_map'][$heat->path] = $heat->heatmapData;
         }
 
         return response()->json($data);

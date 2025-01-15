@@ -190,6 +190,7 @@ Users tracking
     var heatmapInstance = null;
     var isFetching = false;
     var domainGernal = '';
+    var data = [];
     const iframe = document.getElementById('heatmapiframe');
     const container = document.getElementById('heatmap');
 
@@ -199,6 +200,7 @@ Users tracking
         }
 
         container.style.height = event.data + 'px';
+        createHeatmap(data);
     });
 
     $('#detailModal').on('show.bs.modal', function(e) {
@@ -279,6 +281,7 @@ Users tracking
         var event = $('#event-heat-map-modal').val();
 
         domainGernal = domain;
+        data = [];
         $.ajax({
             url: '{{ route("getHeatMap") }}',
             type: 'GET',
@@ -289,7 +292,6 @@ Users tracking
                 event: event
             },
             success: function(response) {
-                var data = [];
                 var url = 'https://' + domain + path;
 
                 for (let i in response) {
@@ -300,26 +302,17 @@ Users tracking
                     });
                 }
 
-                initializeHeatmap(data, url);
+                handleIframe(url);
             }
         });
     });
 
-    function initializeHeatmap(data, url) {
+    function handleIframe(url) {
         iframe.src = url;
 
         iframe.onload = function() {
-            sendMessage();
-            createHeatmap(data);
+            iframe.contentWindow.postMessage('getHeight', '*');
         };
-
-        $(".loading").hide();
-        $('.area-heat-map').show();
-    }
-
-    function sendMessage() {
-        const iframe = document.getElementById('heatmapiframe');
-        iframe.contentWindow.postMessage('getHeight', '*');
     }
 
     function createHeatmap(data) {
@@ -345,6 +338,9 @@ Users tracking
             max: 10,
             data: data
         });
+
+        $(".loading").hide();
+        $('.area-heat-map').show();
     }
 </script>
 @endsection
