@@ -107,6 +107,7 @@
             start: userStartTime,
             end: userEndTime,
             total: totalTimeOnsite,
+            device: isMobile ? 'mobile' : 'desktop'
         });
     });
 
