@@ -99,7 +99,7 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
         Route::get('/get-data-chart-log-behavior', [LogBehaviorController::class, 'getDataChartLogBehavior'])->name('getDataChartLogBehavior');
         Route::get('/store-config-filter-log-behavior', [LogBehaviorController::class, 'storeConfigFilterLogBehavior'])->name('storeConfigFilterLogBehavior');
         Route::get('/reset-config-filter-log-behavior', [LogBehaviorController::class, 'resetConfigFilterLogBehavior'])->name('resetConfigFilterLogBehavior');
-        Route::get('/compare-date', [LogBehaviorController::class, 'compareDate'])->name('compareDate')->name('compareDate');
+        Route::get('/compare-date', [LogBehaviorController::class, 'compareDate'])->name('compareDate');
         Route::get('/save-list-app-for-check', [LogBehaviorController::class, 'saveListAppForCheck'])->name('saveListAppForCheck');
         Route::get('/delete-app-in-list-for-check', [LogBehaviorController::class, 'deleteAppInListForCheck'])->name('deleteAppInListForCheck');
         Route::get('/get-activity-uid', [LogBehaviorController::class, 'getActivityUid'])->name('getActivityUid');
