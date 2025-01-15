@@ -278,7 +278,6 @@ Users tracking
                     });
                 }
 
-                console.log(url);
                 initializeHeatmap(data, url);
 
                 $(".loading").hide();
@@ -331,7 +330,7 @@ Users tracking
     }
 
     function setIframeMode(mode) {
-        const iframe = document.getElementById('contentIframe');
+        const iframe = document.getElementById('heatmapiframe');
         if (mode === 'mobile') {
             iframe.style.width = '375px';
             iframe.style.height = '667px';

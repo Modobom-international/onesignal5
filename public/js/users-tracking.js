@@ -100,7 +100,7 @@
     });
 
     window.addEventListener('beforeunload', function () {
-        let userEndTime = new Date().getTime();
+        let userEndTime = getCurrentTimeInGMT7();
         updateTimeOnsite();
 
         recordEvent('beforeunload', {
@@ -126,7 +126,7 @@
     }
 
     function isBot() {
-        const currentTime = Date.now() + offset;
+        const currentTime = getCurrentTimeInGMT7();
         const timeSinceLastInteraction = currentTime - lastInteractionTime;
         const userAgent = navigator.userAgent.toLowerCase();
         const botPatterns = [
