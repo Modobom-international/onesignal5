@@ -153,6 +153,10 @@ class UsersTrackingController extends Controller
                 $event_data[] = 'Di chuột đến vị trí x là ' . $tracking->event_data['x'] . ' và y là ' . $tracking->event_data['y'];
             }
 
+            if ($tracking->event_name == 'resize') {
+                $event_data[] = 'Thay đổi khung hình từ ' . $tracking->screen_width . 'x' . $tracking->screen_height . ' sang ' . $tracking->event_data['width'] . 'x' . $tracking->event_data['height'];
+            }
+
             $data['activity'][$tracking->path] = $event_data;
         }
 
@@ -172,6 +176,7 @@ class UsersTrackingController extends Controller
         $domain = $request->get('domain');
         $path = $request->get('path');
         $date = $request->get('date');
+        $event = $request->get('event');
         $data = [];
 
         $query = DB::connection('mongodb')
@@ -180,6 +185,8 @@ class UsersTrackingController extends Controller
             ->where('path', $path)
             ->where('heatmapData.timestamp', '>=', Common::covertDateTimeToMongoBSONDateGMT7($date . ' 00:00:00'))
             ->where('heatmapData.timestamp', '<=', Common::covertDateTimeToMongoBSONDateGMT7($date . ' 23:59:59'))
+            ->where('heatmapData.device', 'mobile')
+            ->where('heatmapData.event', $event)
             ->get();
 
         foreach ($query as $record) {
@@ -190,7 +197,8 @@ class UsersTrackingController extends Controller
                 $data[$key] = [
                     'x' => $record->heatmapData['x'],
                     'y' => $record->heatmapData['y'],
-                    'value' => 1
+                    'value' => 1,
+                    'device' => $record->heatmapData['device']
                 ];
             }
         }

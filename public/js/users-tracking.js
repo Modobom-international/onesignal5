@@ -111,6 +111,13 @@
         });
     });
 
+    window.addEventListener('message', function (event) {
+        if (event.data === 'getHeight') {
+            var height = document.body.scrollHeight;
+            event.source.postMessage(height, event.origin);
+        }
+    });
+
     function getUserInfo() {
         const userInfo = {
             userAgent: navigator.userAgent,

@@ -151,11 +151,11 @@ Users tracking
                                 <input type="date" class="form-control" id="date-heat-map-modal" value="{{ date('Y-m-d') }}">
                             </div>
 
-                            <div class="col-3 form-group mt-3 mb-3">
-                                <label class="form-label badge text-bg-primary" for="display-heat-map-modal">Chọn hiển thị</label>
-                                <select class="form-control" id="display-heat-map-modal">
-                                    <option value="apkafe.com">Mobile</option>
-                                    <option value="vnitourist.com">Laptop, Pc hoặc TV</option>
+                            <div class="col-3 form-group mt-3">
+                                <label class="form-label badge text-bg-primary" for="event-heat-map-modal">Chọn sự kiện</label>
+                                <select class="form-control" id="event-heat-map-modal">
+                                    <option value="mousemove">Mouse move</option>
+                                    <option value="click">Click</option>
                                 </select>
                             </div>
 
@@ -171,7 +171,7 @@ Users tracking
                 </div>
 
                 <div class="area-heat-map">
-                    <iframe id="heatmapiframe" src="https://apkafe.com" width="800" height="600" frameborder="0"></iframe>
+                    <iframe id="heatmapiframe" width="800" frameborder="0"></iframe>
                     <div id="heatmap"></div>
                 </div>
 
@@ -188,9 +188,14 @@ Users tracking
 <script src="https://cdn.jsdelivr.net/npm/heatmap.js@2.0.5/build/heatmap.min.js"></script>
 <script>
     var heatmapInstance = null;
-    setIframeMode('mobile');
+    var isFetching = false;
+    var domainGernal = '';
+    const iframe = document.getElementById('heatmapiframe');
+    const container = document.getElementById('heatmap');
 
     $('#detailModal').on('show.bs.modal', function(e) {
+        if (isFetching) return
+        isFetching = true;
         var uuid = $(e.relatedTarget).data('uuid');
         $(".loading").show();
         $('#activity-modal').empty();
@@ -237,6 +242,10 @@ Users tracking
         });
     });
 
+    $('#detailModal').on('hidden.bs.modal', function() {
+        isFetching = false;
+    });
+
     $('#heatMapModal').on('show.bs.modal', function(e) {
         $('#card-in-heat-map-modal').hide();
         $('.area-heat-map').hide();
@@ -259,17 +268,22 @@ Users tracking
         var domain = $('#domain-heat-map-modal').val();
         var path = $('#path-heat-map-modal').val();
         var date = $('#date-heat-map-modal').val();
+        var event = $('#event-heat-map-modal').val();
+
+        domainGernal = domain;
         $.ajax({
             url: '{{ route("getHeatMap") }}',
             type: 'GET',
             data: {
                 domain: domain,
                 path: path,
-                date: date
+                date: date,
+                event: event
             },
             success: function(response) {
                 var data = [];
                 var url = 'https://' + domain + path;
+
                 for (let i in response) {
                     data.push({
                         x: response[i].x,
@@ -286,12 +300,9 @@ Users tracking
         });
     });
 
-    function initializeHeatmap(data, src) {
-        const iframe = document.getElementById('heatmapiframe');
-        iframe.onload = adjustIframeContent;
-        iframe.src = src;
-
-        const container = document.getElementById('heatmap');
+    function initializeHeatmap(data, url) {
+        iframe.src = url;
+        sendMessage();
 
         if (heatmapInstance) {
             container.innerHTML = '';
@@ -317,29 +328,17 @@ Users tracking
         });
     }
 
-    function adjustIframeContent() {
+    function sendMessage() {
         const iframe = document.getElementById('heatmapiframe');
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-        iframeDoc.body.style.margin = '0';
-        iframeDoc.body.style.overflow = 'hidden';
-        iframeDoc.body.style.width = '100%';
-        iframeDoc.body.style.height = '100%';
-        iframeDoc.documentElement.style.width = '100%';
-        iframeDoc.documentElement.style.height = '100%';
+        iframe.contentWindow.postMessage('getHeight', '*');
     }
 
-    function setIframeMode(mode) {
-        const iframe = document.getElementById('heatmapiframe');
-        if (mode === 'mobile') {
-            iframe.style.width = '375px';
-            iframe.style.height = '667px';
-            iframe.style.transform = 'scale(1.5)';
-        } else {
-            iframe.style.width = '1000px';
-            iframe.style.height = '800px';
-            iframe.style.transform = 'scale(0.8)';
+    window.addEventListener('message', function(event) {
+        if (event.origin !== 'https://' + domainGernal) {
+            return;
         }
-    }
+
+        container.style.height = event.data + 'px';
+    });
 </script>
 @endsection
