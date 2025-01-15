@@ -12,19 +12,30 @@ Users tracking
 <div class="container-fluid">
     <div class="card">
         <div class="card-body">
-            <div class="form-group">
-                <label class="form-label badge text-bg-primary" for="domain">Chọn domain</label>
-                <select class="form-control" id="domain">
-                    <option value="apkafe.com">apkafe.com</option>
-                    <option value="vnitourist.com">vnitourist.com</option>
-                    <option value="vnifood.com">vnifood.com</option>
-                    <option value="betonamuryori.com">betonamuryori.com</option>
-                    <option value="lifecompass365.com">lifecompass365.com</option>
-                </select>
+            <div class="row">
+                <div class="col-3 form-group mt-3">
+                    <label class="form-label badge text-bg-primary" for="domain">Chọn domain</label>
+                    <select class="form-control" id="domain">
+                        <option value="apkafe.com">apkafe.com</option>
+                        <option value="vnitourist.com">vnitourist.com</option>
+                        <option value="vnifood.com">vnifood.com</option>
+                        <option value="betonamuryori.com">betonamuryori.com</option>
+                        <option value="lifecompass365.com">lifecompass365.com</option>
+                    </select>
+                </div>
+
+                <div class="col-3 form-group mt-3 mb-3">
+                    <label class="form-label badge text-bg-primary" for="date">Chọn ngày</label>
+                    <input type="date" class="form-control" id="date" value="{{ date('Y-m-d') }}">
+                </div>
+
+                <div class="col-3 form-group d-flex align-items-center margin-top-1-7">
+                    <button class="btn btn-primary" onclick="">Tìm</button>
+                </div>
             </div>
 
             <div class="form-group mt-3 mb-3">
-                <button class="btn btn-primary" onclick="">Chọn</button>
+                <button class="btn btn-success" id="btn-heat-map" data-bs-toggle="modal" data-bs-target="#heatMapModal">Xem heat map</button>
             </div>
 
             <hr>
@@ -77,7 +88,7 @@ Users tracking
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="card">
+                <div class="card" id="basic-info-modal">
                     <div class="card-body">
                         <h5 class="fw-bold">Thông tin cơ bản</h5>
                         <div class="form-group">
@@ -106,23 +117,94 @@ Users tracking
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="heatMapModal" tabindex="-1" aria-labelledby="heatMapModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" id="set-width">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title fw-bold" id="heatMapModalLabel">Heat map</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card" id="card-in-heat-map-modal">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3 form-group mt-3">
+                                <label class="form-label badge text-bg-primary" for="domain-heat-map-modal">Chọn domain</label>
+                                <select class="form-control" id="domain-heat-map-modal">
+                                    <option value="apkafe.com">apkafe.com</option>
+                                    <option value="vnitourist.com">vnitourist.com</option>
+                                    <option value="vnifood.com">vnifood.com</option>
+                                    <option value="betonamuryori.com">betonamuryori.com</option>
+                                    <option value="lifecompass365.com">lifecompass365.com</option>
+                                </select>
+                            </div>
+
+                            <div class="col-3 form-group mt-3">
+                                <label class="form-label badge text-bg-primary" for="path-heat-map-modal">Chọn path</label>
+                                <select class="form-control" id="path-heat-map-modal">
+                                </select>
+                            </div>
+
+                            <div class="col-3 form-group mt-3 mb-3">
+                                <label class="form-label badge text-bg-primary" for="date-heat-map-modal">Chọn ngày</label>
+                                <input type="date" class="form-control" id="date-heat-map-modal" value="{{ date('Y-m-d') }}">
+                            </div>
+
+                            <div class="col-3 form-group mt-3 mb-3">
+                                <label class="form-label badge text-bg-primary" for="display-heat-map-modal">Chọn hiển thị</label>
+                                <select class="form-control" id="display-heat-map-modal">
+                                    <option value="apkafe.com">Mobile</option>
+                                    <option value="vnitourist.com">Laptop, Pc hoặc TV</option>
+                                </select>
+                            </div>
+
+                            <div class="col-3 form-group d-flex align-items-center margin-top-1-7">
+                                <button class="btn btn-primary" id="choose-heat-map">Chọn</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading">
+                    @include('components.pre-loader')
+                </div>
+
+                <div class="area-heat-map">
+                    <iframe id="heatmapiframe" src="https://apkafe.com" width="800" height="600" frameborder="0"></iframe>
+                    <div id="heatmap"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/heatmap.js@2.0.5/build/heatmap.min.js"></script>
 <script>
+    var heatmapInstance = null;
+    setIframeMode('mobile');
+
     $('#detailModal').on('show.bs.modal', function(e) {
         var uuid = $(e.relatedTarget).data('uuid');
         $(".loading").show();
+        $('#activity-modal').empty();
+        $('#basic-info-modal').hide();
 
         $.ajax({
-            url: '/admin/get-detail-tracking',
+            url: '{{ route("getDetailTracking") }}',
             type: 'GET',
             data: {
                 uuid: uuid
             },
             success: function(response) {
                 $(".loading").hide();
-                $('#activity-modal').empty();
+                $('#basic-info-modal').show();
                 $('#uuid-modal').text(uuid);
                 $('#ip-modal').text(response.ip);
                 $('#browser-modal').text(response.browser);
@@ -141,30 +223,124 @@ Users tracking
                 }
 
                 for (let path in response.activity) {
-                    let heat_map = '';
                     let activity = response.activity[path];
-                    let get_heat_map = response.heat_map[path];
-                    if (get_heat_map == undefined) {
-                        heat_map = 'Không có dữ liệu';
-                    } else if (get_heat_map.length == 0) {
-                        heat_map = 'Không có dữ liệu';
-                    } else {
-                        for (let i = 0; i < get_heat_map.length; i++) {
-                            heat_map += get_heat_map[i] + ', ';
-                        }
-                    }
 
                     let html = '<div class="card mt-3"><div class="card-body"><h5 class="mb-3">' + path + '</h5><hr><ul>';
                     for (let i = 0; i < activity.length; i++) {
                         html += '<li><p>' + activity[i] + '</p></li>';
                     }
                     html += '</ul>';
-                    html += '<div><p>Heat map - ' + heat_map + '</p></div>';
                     html += '</div></div>';
                     $('#activity-modal').append(html);
                 }
             }
         });
     });
+
+    $('#heatMapModal').on('show.bs.modal', function(e) {
+        $('#card-in-heat-map-modal').hide();
+        $('.area-heat-map').hide();
+        $.ajax({
+            url: '{{ route("getLinkForHeatMap") }}',
+            type: 'GET',
+            success: function(response) {
+                for (let i = 0; i < response.length; i++) {
+                    $('#path-heat-map-modal').append('<option value="' + response[i] + '">' + response[i] + '</option>');
+                }
+                $(".loading").hide();
+                $('#card-in-heat-map-modal').show();
+            }
+        });
+    });
+
+    $('#choose-heat-map').on('click', function() {
+        $(".loading").show();
+        $('.area-heat-map').hide();
+        var domain = $('#domain-heat-map-modal').val();
+        var path = $('#path-heat-map-modal').val();
+        var date = $('#date-heat-map-modal').val();
+        $.ajax({
+            url: '{{ route("getHeatMap") }}',
+            type: 'GET',
+            data: {
+                domain: domain,
+                path: path,
+                date: date
+            },
+            success: function(response) {
+                var data = [];
+                var url = 'https://' + domain + path;
+                for (let i in response) {
+                    data.push({
+                        x: response[i].x,
+                        y: response[i].y,
+                        value: response[i].value
+                    });
+                }
+
+                console.log(url);
+                initializeHeatmap(data, url);
+
+                $(".loading").hide();
+                $('.area-heat-map').show();
+            }
+        });
+    });
+
+    function initializeHeatmap(data, src) {
+        const iframe = document.getElementById('heatmapiframe');
+        iframe.onload = adjustIframeContent;
+        iframe.src = src;
+
+        const container = document.getElementById('heatmap');
+
+        if (heatmapInstance) {
+            container.innerHTML = '';
+        }
+
+        heatmapInstance = h337.create({
+            container: container,
+            radius: 30,
+            maxOpacity: 0.2,
+            minOpacity: 0,
+            blur: 0.2,
+            gradient: {
+                0.4: "blue",
+                0.6: "green",
+                0.8: "yellow",
+                1.0: "red"
+            }
+        });
+
+        heatmapInstance.setData({
+            max: 10,
+            data: data
+        });
+    }
+
+    function adjustIframeContent() {
+        const iframe = document.getElementById('heatmapiframe');
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+        iframeDoc.body.style.margin = '0';
+        iframeDoc.body.style.overflow = 'hidden';
+        iframeDoc.body.style.width = '100%';
+        iframeDoc.body.style.height = '100%';
+        iframeDoc.documentElement.style.width = '100%';
+        iframeDoc.documentElement.style.height = '100%';
+    }
+
+    function setIframeMode(mode) {
+        const iframe = document.getElementById('contentIframe');
+        if (mode === 'mobile') {
+            iframe.style.width = '375px';
+            iframe.style.height = '667px';
+            iframe.style.transform = 'scale(1.5)';
+        } else {
+            iframe.style.width = '1000px';
+            iframe.style.height = '800px';
+            iframe.style.transform = 'scale(0.8)';
+        }
+    }
 </script>
 @endsection

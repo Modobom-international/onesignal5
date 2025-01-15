@@ -4,20 +4,20 @@
   * Licensed under MIT
   */
 
-!function (e) {
+(function () {
     "use strict";
     const userUUID = getUserUUID();
+    const isMobile = window.innerWidth <= 768;
 
-    var mouseMovements = 0;
-    var keyPresses = 0;
-    const offset = 7 * 60 * 60 * 1000;
-    var lastInteractionTime = Date.now() + offset;
-    var userStartTime = new Date().getTime() + offset;
-    var totalTimeOnsite = 0;
-    var startTime = Date.now();
+    let mouseMovements = 0;
+    let keyPresses = 0;
+    let lastInteractionTime = getCurrentTimeInGMT7();
+    let userStartTime = getCurrentTimeInGMT7();
+    let totalTimeOnsite = 0;
+    let startTime = getCurrentTimeInGMT7();
 
     function updateTimeOnsite() {
-        const currentTime = Date.now();
+        const currentTime = getCurrentTimeInGMT7();
         totalTimeOnsite += currentTime - startTime;
         startTime = currentTime;
     }
@@ -33,13 +33,14 @@
     document.addEventListener('click', (event) => {
         const target = event.target;
         let eventData = {
-            x: event.clientX,
-            y: event.clientY,
+            x: event.pageX,
+            y: event.pageY,
             target: target.tagName,
-            href: '',
-            isInternalLink: false,
-            isLassoButton: false,
-            lassoButtonLink: ''
+            href: target.href || '',
+            isInternalLink: target.href && target.href.includes(window.location.origin),
+            isLassoButton: target.classList.contains('lasso-button'),
+            lassoButtonLink: target.dataset.lassoLink || '',
+            device: isMobile ? 'mobile' : 'desktop'
         };
 
         if (target.tagName === 'A' && target.href.includes(window.location.hostname)) {
@@ -49,6 +50,7 @@
         } else if (target.tagName === 'A' && target.classList.contains('lasso-button')) {
             eventData.href = target.href;
             eventData.isLassoButton = true;
+            eventData.lassoButtonLink = true;
             recordEvent('lasso_button_click', eventData);
         } else {
             recordEvent('click', eventData);
@@ -56,31 +58,35 @@
     });
 
     document.addEventListener('mousemove', (event) => {
-        const x = event.clientX;
-        const y = event.clientY;
+        const x = event.pageX;
+        const y = event.pageY;
+        const device = isMobile ? 'mobile' : 'desktop';
         mouseMovements++;
 
-        recordEvent('mousemove', { x, y, mouseMovements });
+        recordEvent('mousemove', { x, y, mouseMovements, device });
     });
 
     document.addEventListener('scroll', () => {
         const scrollTop = window.scrollY;
         const scrollLeft = window.scrollX;
+        const device = isMobile ? 'mobile' : 'desktop';
 
-        recordEvent('scroll', { scrollTop, scrollLeft });
+        recordEvent('scroll', { scrollTop, scrollLeft, device });
     });
 
     document.addEventListener('input', (event) => {
         recordEvent('input', {
             target: event.target.tagName,
-            value: event.target.value
+            value: event.target.value,
+            device: isMobile ? 'mobile' : 'desktop'
         });
     });
 
     document.addEventListener('keydown', (event) => {
         recordEvent('keydown', {
             target: event.target.tagName,
-            value: event.target.value
+            value: event.target.value,
+            device: isMobile ? 'mobile' : 'desktop'
         });
         keyPresses++;
     });
@@ -89,6 +95,7 @@
         recordEvent('resize', {
             width: window.innerWidth,
             height: window.innerHeight,
+            device: isMobile ? 'mobile' : 'desktop'
         });
     });
 
@@ -162,7 +169,7 @@
 
     function recordEvent(eventName, eventData) {
         const path = window.location.pathname + window.location.search;
-        const timestamp = formatDate(new Date());
+        const timestamp = formatDate();
         const event = {
             eventName: eventName,
             eventData: eventData,
@@ -210,14 +217,24 @@
         return uuid;
     }
 
-    function formatDate(date) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const seconds = String(date.getSeconds()).padStart(2, '0');
+    function formatDate() {
+        const now = new Date();
+        const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const gmt7Time = new Date(utcTime + (7 * 60 * 60 * 1000));
+        const year = gmt7Time.getFullYear();
+        const month = String(gmt7Time.getMonth() + 1).padStart(2, '0');
+        const day = String(gmt7Time.getDate()).padStart(2, '0');
+        const hours = String(gmt7Time.getHours()).padStart(2, '0');
+        const minutes = String(gmt7Time.getMinutes()).padStart(2, '0');
+        const seconds = String(gmt7Time.getSeconds()).padStart(2, '0');
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
-}(this);
+
+    function getCurrentTimeInGMT7() {
+        const now = new Date();
+        const utcTime = now.getTime() + (now.getTimezoneOffset() * 6000);
+        const gmt7Time = new Date(utcTime + (7 * 60 * 60 * 1000));
+        return gmt7Time.getTime();
+    }
+})();
 

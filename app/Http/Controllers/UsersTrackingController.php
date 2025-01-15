@@ -33,14 +33,14 @@ class UsersTrackingController extends Controller
             'timestamp' => 'required',
             'domain' => 'required',
             'uuid' => 'required',
-            'path' => 'required',
+            'path' => 'required'
         ]);
 
         $validatedData['user']['ip'] = $ip;
         $validatedData['timestamp'] = Common::covertDateTimeToMongoBSONDateGMT7($validatedData['timestamp']);
         StoreUsersTracking::dispatch($validatedData)->onQueue('create_users_tracking');
 
-        if ($validatedData['eventName'] == 'mousemove') {
+        if ($validatedData['eventName'] == 'mousemove' or $validatedData['eventName'] == 'click') {
             $dataHeatMap = [
                 'uuid' => $validatedData['uuid'],
                 'path' => $validatedData['path'],
@@ -49,6 +49,8 @@ class UsersTrackingController extends Controller
                     'x' => $validatedData['eventData']['x'],
                     'y' => $validatedData['eventData']['y'],
                     'timestamp' => $validatedData['timestamp'],
+                    'device' => $validatedData['device'],
+                    'event' => $validatedData['eventName'],
                 ],
             ];
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
@@ -97,8 +99,6 @@ class UsersTrackingController extends Controller
             ->where('uuid', $uuid)
             ->orderBy('timestamp', 'asc')
             ->get();
-
-        dd($getHeatMap);
 
         $userAgent = $getTracking[0]->user_agent;
         $parser = Parser::create();
@@ -162,6 +162,60 @@ class UsersTrackingController extends Controller
             foreach ($dataHeatMap as $value) {
                 $data['heat_map'][$heat->path][$key] = $value;
             }
+        }
+
+        return response()->json($data);
+    }
+
+    public function getHeatMap(Request $request)
+    {
+        $domain = $request->get('domain');
+        $path = $request->get('path');
+        $date = $request->get('date');
+        $data = [];
+
+        $query = DB::connection('mongodb')
+            ->table('heat_map')
+            ->where('domain', $domain)
+            ->where('path', $path)
+            ->where('heatmapData.timestamp', '>=', Common::covertDateTimeToMongoBSONDateGMT7($date . ' 00:00:00'))
+            ->where('heatmapData.timestamp', '<=', Common::covertDateTimeToMongoBSONDateGMT7($date . ' 23:59:59'))
+            ->get();
+
+        foreach ($query as $record) {
+            $key = $record->heatmapData['x'] . '-' . $record->heatmapData['y'];
+            if (array_key_exists($key, $data)) {
+                $data[$key]['value'] += 1;
+            } else {
+                $data[$key] = [
+                    'x' => $record->heatmapData['x'],
+                    'y' => $record->heatmapData['y'],
+                    'value' => 1
+                ];
+            }
+        }
+
+        return response()->json($data);
+    }
+
+    public function getLinkForHeatMap(Request $request)
+    {
+        $domain = $request->get('domain');
+        $data = [];
+
+        if (!isset($domain)) {
+            $domain = UsersTracking::DEFAULT_DOMAIN;
+        }
+
+        $getUrl = DB::connection('mongodb')
+            ->table('heat_map')
+            ->select('path')
+            ->where('domain', $domain)
+            ->distinct('path')
+            ->get();
+
+        foreach ($getUrl as $url) {
+            $data[] = urldecode($url);
         }
 
         return response()->json($data);

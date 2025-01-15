@@ -39,7 +39,7 @@ class StoreUsersTracking implements ShouldQueue
             'timestamp' => $this->data['timestamp'],
             'domain' => $this->data['domain'],
             'uuid' => $this->data['uuid'],
-            'path' => $this->data['path'],
+            'path' => $this->data['path']
         ]);
     }
 }

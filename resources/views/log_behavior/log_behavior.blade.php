@@ -872,7 +872,7 @@ Log behavior
             e.preventDefault();
             $(this).prop('disabled', true);
             let id = $(this).attr('data-id');
-            let url = '/admin/delete-app-in-list-for-check';
+            let url = '{{ route("deleteAppInListForCheck") }}';
             let idLoader = '#loader-' + id;
             $(idLoader).removeClass('hide');
 
@@ -945,7 +945,7 @@ Log behavior
         });
 
         $('#save-change-option').on('click', function() {
-            let url = '/admin/store-config-filter-log-behavior';
+            let url = '{{ route("storeConfigFilterLogBehavior") }}';
             let checkedCountry = $('.check-box-country:checkbox:checked');
             let checkedPlatform = $('.check-box-platform:checkbox:checked');
             let checkedApp = $('.check-box-app:checkbox:checked');
@@ -979,7 +979,7 @@ Log behavior
         });
 
         $('#reset-btn').on('click', function() {
-            let url = '/admin/reset-config-filter-log-behavior';
+            let url = '{{ route("resetConfigFilterLogBehavior") }}';
 
             window.location.href = url;
         });
@@ -1052,7 +1052,7 @@ Log behavior
                 return;
             }
 
-            let url = '/admin/compare-date';
+            let url = '{{ route("compareDate") }}';
             let app = $('#app-name').val();
             let country = $('#country').val();
             let platform = $('#platform').val();
@@ -1118,7 +1118,7 @@ Log behavior
         let platform = $('#platform-modal').val();
         let app = $('#app-name-modal').val();
         let assigned = $('#assigned-modal').val();
-        let url = '/admin/save-list-app-for-check';
+        let url = '{{ route("saveListAppForCheck") }}';
         $.ajax({
             url: url,
             type: 'GET',
@@ -1241,7 +1241,7 @@ Log behavior
     }
 
     function getDataChart() {
-        let url = '/admin/get-data-chart-log-behavior';
+        let url = '{{ route("getDataChartLogBehavior") }}';
         let app = $('#app-name-report').val();
         let country = $('#country-report').val();
         let platform = $('#platform-report').val();
@@ -1292,7 +1292,7 @@ Log behavior
     }
 
     function searchActivity() {
-        let url = '/admin/get-activity-uid';
+        let url = '{{ route("getActivityUid") }}';
         let uid = $('#uid-activity').val();
         $("#pre-loader-activity").attr("style", "display: block !important");
         $("#empty-result").attr("style", "display: none !important");
