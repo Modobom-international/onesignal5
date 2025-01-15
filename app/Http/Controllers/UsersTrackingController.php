@@ -157,7 +157,7 @@ class UsersTrackingController extends Controller
                 $event_data[] = 'Thay đổi khung hình từ ' . $tracking->screen_width . 'x' . $tracking->screen_height . ' sang ' . $tracking->event_data['width'] . 'x' . $tracking->event_data['height'];
             }
 
-            $data['activity'][$tracking->path] = $event_data;
+            $data['activity'][$tracking->path][] = $event_data;
         }
 
         foreach ($getHeatMap as $heat) {
