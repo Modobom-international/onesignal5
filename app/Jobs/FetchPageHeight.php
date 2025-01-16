@@ -34,7 +34,7 @@ class FetchPageHeight implements ShouldQueue
         try {
             $getPagesHeight = DB::connection('mongodb')->table('pages_height')->where('url', $this->url)->first();
 
-            if (empty($getPagesHeight)) {
+            if (!$getPagesHeight) {
                 $height = Browsershot::url($this->url)
                     ->setNodeBinary('/usr/bin/node')
                     ->setNpmBinary('/usr/bin/npm')
