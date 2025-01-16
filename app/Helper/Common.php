@@ -96,4 +96,41 @@ class Common
 
         return substr(bin2hex($bytes), 0, $length);
     }
+
+    public static function exportURLAndPinFromMSGMalaysia($message)
+    {
+        $export = [
+            'pin' => '',
+            'url' => ''
+        ];
+
+        $explodeForPin = explode('Your TAC is ', $message);
+        $explodeForPin2 = explode('.', $explodeForPin[1]);
+        $regex = '/^[0-9]{4}$/';
+        $pre_match = preg_match($regex, $explodeForPin2[0], $matchesPin);
+        if ($pre_match > 0) {
+            $export['pin'] = $matchesPin[0];
+        }
+
+        $explodeForURL = explode('go to ', $message);
+        $explodeForURL2 = explode(' in your', $explodeForURL[1]);
+        $export['url'] = $explodeForURL2[0];
+
+        return $export;
+    }
+
+    public static function exportURLAndPinFromDenmark($url)
+    {
+        $export = [
+            'pin' => '',
+            'url' => ''
+        ];
+
+        preg_match("/&?otp=([^&]+)/", $url, $matches);
+
+        $export['url'] = $url;
+        $export['pin'] = $matches[1];
+
+        return $export;
+    }
 }
