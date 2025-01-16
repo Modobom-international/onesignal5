@@ -34,7 +34,7 @@ class FetchPageHeight extends Command
                 ->setNodeBinary('/usr/bin/node')
                 ->setNpmBinary('/usr/bin/npm')
                 ->setChromePath('/usr/bin/google-chrome')
-                ->addChromiumArguments(['--no-sandbox'])
+                ->addChromiumArguments(['no-sandbox'])
                 ->waitUntilNetworkIdle()
                 ->setDelay(3000)
                 ->evaluate('document.body.scrollHeight');
