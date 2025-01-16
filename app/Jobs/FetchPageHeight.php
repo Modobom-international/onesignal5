@@ -51,7 +51,7 @@ class FetchPageHeight implements ShouldQueue
                 dump('Inserted height with url ' . $this->url);
             }
         } catch (\Exception $e) {
-            $this->error("Lỗi khi lấy chiều cao: " . $e->getMessage());
+            dump($e->getMessage());
         }
     }
 }
