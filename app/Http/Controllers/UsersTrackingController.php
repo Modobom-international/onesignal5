@@ -51,6 +51,7 @@ class UsersTrackingController extends Controller
                     'timestamp' => $validatedData['timestamp'],
                     'device' => $validatedData['eventData']['device'],
                     'event' => $validatedData['eventName'],
+                    'height' => $validatedData['eventData']['height'],
                 ],
             ];
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
