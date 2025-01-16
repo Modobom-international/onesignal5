@@ -31,8 +31,8 @@ class FetchPageHeight extends Command
             $url = 'https://apkafe.com';
 
             $height = Browsershot::url($url)
-                ->setNodeBinary('/usr/local/bin/node')
-                ->setNpmBinary('/usr/local/bin/npm')
+                ->setNodeBinary('/usr/bin/node')
+                ->setNpmBinary('/usr/bin/npm')
                 ->setChromePath('/usr/bin/google-chrome')
                 ->waitUntilNetworkIdle()
                 ->setDelay(3000)
