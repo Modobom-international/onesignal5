@@ -35,6 +35,7 @@
         "nesbot/carbon": "^3.8",
         "php-webdriver/webdriver": "^1.15",
         "predis/predis": "^2.3",
+        "spatie/browsershot": "^5.0",
         "spatie/laravel-html": "^3.11",
         "spatie/laravel-permission": "^6.10",
         "symfony/filesystem": "^7.2",

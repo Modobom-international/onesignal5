@@ -25,6 +25,7 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
+        "puppeteer": "^24.1.0",
         "toastr": "^2.1.4"
     }
 }

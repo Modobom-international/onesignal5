@@ -302,7 +302,6 @@ Users tracking
         iframe.src = url;
 
         iframe.onload = function() {
-            iframe.contentWindow.postMessage('getHeight', '*');
             createHeatmap(data);
         };
     }
