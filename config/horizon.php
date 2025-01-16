@@ -232,6 +232,15 @@ return [
                 'maxProcesses' => 5,
                 'tries' => 0,
             ],
+
+            'supervisor-onesignal5-10' => [
+                'connection' => 'redis',
+                'queue' => ['fetch_page_height'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 3,
+                'tries' => 0,
+            ],
         ],
     ],
 ];

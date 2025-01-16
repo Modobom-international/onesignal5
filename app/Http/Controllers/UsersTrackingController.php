@@ -6,6 +6,7 @@ use App\Enums\UsersTracking;
 use App\Jobs\StoreUsersTracking;
 use Illuminate\Http\Request;
 use App\Helper\Common;
+use App\Jobs\FetchPageHeight;
 use App\Jobs\StoreHeatMap;
 use UAParser\Parser;
 use DB;
@@ -55,6 +56,7 @@ class UsersTrackingController extends Controller
                 ],
             ];
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
+            FetchPageHeight::dispatch($url)->onQueue('fetch_page_height');
         }
 
         return response()->json(['message' => 'User behavior recorded successfully.']);
