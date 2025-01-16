@@ -57,6 +57,8 @@ class UsersTrackingController extends Controller
             ];
 
             $url = 'https://' . $validatedData['domain'] . $validatedData['path'];
+            $path = $validatedData['path'];
+            $domain = $validatedData['domain'];
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
             FetchPageHeight::dispatch($url, $path, $domain)->onQueue('fetch_page_height');
         }
