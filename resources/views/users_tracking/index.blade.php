@@ -194,15 +194,6 @@ Users tracking
     const iframe = document.getElementById('heatmapiframe');
     const container = document.getElementById('heatmap');
 
-    window.addEventListener('message', function(event) {
-        if (event.origin !== 'https://' + domainGernal) {
-            return;
-        }
-
-        container.style.height = event.data + 'px';
-        createHeatmap(data);
-    });
-
     $('#detailModal').on('show.bs.modal', function(e) {
         if (isFetching) return
         isFetching = true;
@@ -312,6 +303,7 @@ Users tracking
 
         iframe.onload = function() {
             iframe.contentWindow.postMessage('getHeight', '*');
+            createHeatmap(data);
         };
     }
 

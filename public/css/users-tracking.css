@@ -5,6 +5,7 @@
 #heatmap {
     position: absolute;
     width: 800px;
+    height: 12000px;
     pointer-events: none;
 }
 

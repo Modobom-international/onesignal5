@@ -32,6 +32,7 @@
 
     document.addEventListener('click', (event) => {
         const target = event.target;
+        const height = document.body.scrollHeight || document.documentElement.scrollHeight;
         let eventData = {
             x: event.pageX,
             y: event.pageY,
@@ -40,7 +41,8 @@
             isInternalLink: target.href && target.href.includes(window.location.origin),
             isLassoButton: target.classList.contains('lasso-button'),
             lassoButtonLink: target.dataset.lassoLink || '',
-            device: isMobile ? 'mobile' : 'desktop'
+            device: isMobile ? 'mobile' : 'desktop',
+            height: height
         };
 
         if (target.tagName === 'A' && target.href.includes(window.location.hostname)) {
@@ -61,9 +63,10 @@
         const x = event.pageX;
         const y = event.pageY;
         const device = isMobile ? 'mobile' : 'desktop';
+        const height = document.body.scrollHeight || document.documentElement.scrollHeight;
         mouseMovements++;
 
-        recordEvent('mousemove', { x, y, mouseMovements, device });
+        recordEvent('mousemove', { x, y, mouseMovements, device, height });
     });
 
     document.addEventListener('scroll', () => {
