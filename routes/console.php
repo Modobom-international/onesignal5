@@ -4,6 +4,7 @@ use App\Console\Commands\LogBehavior\NotifyTelegramInstallLogBehavior;
 use App\Console\Commands\LogBehavior\SyncOldData;
 use App\Console\Commands\LogBehavior\CacheDataPerDate;
 use App\Console\Commands\LogBehavior\TransDataForOldYear;
+use App\Console\Commands\FillUrlForPushSystem;
 
 Schedule::command('horizon:snapshot')->everyFiveMinutes();
 Schedule::command(NotifyTelegramInstallLogBehavior::class)->everyMinute();
