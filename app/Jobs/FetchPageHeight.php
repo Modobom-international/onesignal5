@@ -13,13 +13,17 @@ class FetchPageHeight implements ShouldQueue
     use Queueable;
 
     protected $url;
+    protected $path;
+    protected $domain;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($url)
+    public function __construct($url, $path, $domain)
     {
         $this->url = $url;
+        $this->path = $path;
+        $this->domain = $domain;
     }
 
     /**
@@ -41,8 +45,8 @@ class FetchPageHeight implements ShouldQueue
                     ->evaluate('document.body.scrollHeight');
 
                 DB::connection('mongodb')->table('pages_height')->insert([
-                    'domain' => $domain,
-                    'path' => $item->path,
+                    'domain' => $this->domain,
+                    'path' => $this->path,
                     'url' => $this->url,
                     'height' => $height,
                     'fetched_at' => Common::covertDateTimeToMongoBSONDateGMT7(date('Y-m-d H:i:s')),

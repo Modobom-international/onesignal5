@@ -59,8 +59,7 @@ class SaveRequestGetSystemSetting implements ShouldQueue
             }
         }
 
-        //get_push_system_setting_requests
-        $result = \DB::table('get_push_system_setting_requests')->insert([
+        \DB::table('get_push_system_setting_requests')->insert([
             'ip' => $this->params['ip'] ?? null,
             'user_agent' => $this->params['user_agent'] ?? null,
             'created_at' => $this->params['created_at'] ?? null,
@@ -72,7 +71,5 @@ class SaveRequestGetSystemSetting implements ShouldQueue
             'domain' => $domainWeb,
             'data' => json_encode($data),
         ]);
-
-        dump('-> Inserted request info get push system setting, result: '.$result.', data: '.json_encode($this->params));
     }
 }

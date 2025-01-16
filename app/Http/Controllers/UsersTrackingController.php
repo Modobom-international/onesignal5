@@ -58,7 +58,7 @@ class UsersTrackingController extends Controller
 
             $url = 'https://' . $validatedData['domain'] . $validatedData['path'];
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
-            FetchPageHeight::dispatch($url)->onQueue('fetch_page_height');
+            FetchPageHeight::dispatch($url, $path, $domain)->onQueue('fetch_page_height');
         }
 
         return response()->json(['message' => 'User behavior recorded successfully.']);
