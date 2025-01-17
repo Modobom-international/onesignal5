@@ -5,14 +5,12 @@
 #heatmap {
     position: absolute;
     width: 800px;
-    height: 12000px;
     pointer-events: none;
 }
 
 #heatmapiframe {
     position: absolute;
     width: 800px;
-    height: 100%;
     border: none;
 }
 
@@ -22,5 +20,5 @@
     justify-content: center;
     margin-top: 30px;
     height: 100vh;
-    overflow: hidden;
+    overflow: scroll;
 }

@@ -192,6 +192,13 @@ class UsersTrackingController extends Controller
             ->where('heatmapData.event', $event)
             ->get();
 
+        $getHeight = DB::connection('mongodb')
+            ->table('pages_height')
+            ->where('domain', $domain)
+            ->where('path', $path)
+            ->orderBy('height', 'asc')
+            ->first();
+
         foreach ($query as $record) {
             $key = $record->heatmapData['x'] . '-' . $record->heatmapData['y'];
             if (array_key_exists($key, $data)) {
@@ -206,7 +213,12 @@ class UsersTrackingController extends Controller
             }
         }
 
-        return response()->json($data);
+        $response = [
+            'data' => $data,
+            'height' => $getHeight->height
+        ];
+
+        return response()->json($response);
     }
 
     public function getLinkForHeatMap(Request $request)

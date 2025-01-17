@@ -284,12 +284,14 @@ Users tracking
             },
             success: function(response) {
                 var url = 'https://' + domain + path;
+                $('#heatmapiframe').attr('style', 'height: ' + response.height + 'px ' + '!important');
+                $('#heatmap').attr('style', 'height: ' + response.height + 'px ' + '!important');
 
-                for (let i in response) {
+                for (let i in response.data) {
                     data.push({
-                        x: response[i].x,
-                        y: response[i].y,
-                        value: response[i].value
+                        x: response.data[i].x,
+                        y: response.data[i].y,
+                        value: response.data[i].value
                     });
                 }
 
