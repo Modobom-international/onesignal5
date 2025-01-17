@@ -61,8 +61,8 @@ class UsersTrackingController extends Controller
             $dataFetch = [
                 'domain' => $validatedData['domain'],
                 'path' => $validatedData['path'],
-                'width' => $validatedData['screen_width'],
-                'height' => $validatedData['screen_height'],
+                'width' => $validatedData['user']['screenWidth'],
+                'height' => $validatedData['user']['screenHeight'],
             ];
 
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
@@ -77,8 +77,8 @@ class UsersTrackingController extends Controller
                 'uuid' => $validatedData['uuid'],
                 'x' => $validatedData['eventData']['scrollTop'],
                 'y' => $validatedData['eventData']['scrollLeft'],
-                'width' => $validatedData['screen_width'],
-                'height' => $validatedData['screen_height']
+                'width' => $validatedData['user']['screenWidth'],
+                'height' => $validatedData['user']['screenWidth']
             ];
 
             FetchImageViewPort::dispatch($dataScroll)->onQueue('fetch_image_view');
