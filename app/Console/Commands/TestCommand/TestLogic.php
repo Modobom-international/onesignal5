@@ -59,6 +59,8 @@ class TestLogic extends Command
         Browsershot::html($result)
             ->save($tempFilePath);
 
+        Browsershot::closeBrowser();
+
         $disk->put($file, file_get_contents($tempFilePath));
         unlink($tempFilePath);
     }

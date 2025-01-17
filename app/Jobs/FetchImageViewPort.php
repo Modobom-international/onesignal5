@@ -38,6 +38,8 @@ class FetchImageViewPort implements ShouldQueue
             ->clip($this->data['y'], $this->data['x'], $this->data['width'], $this->data['height'])
             ->save($tempFilePath);
 
+        Browsershot::closeBrowser();
+
         $disk->put($file, file_get_contents($tempFilePath));
         unlink($tempFilePath);
     }
