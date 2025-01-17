@@ -171,7 +171,7 @@ Users tracking
                 </div>
 
                 <div class="area-heat-map">
-                    <iframe id="heatmapiframe" width="800" frameborder="0"></iframe>
+                    <iframe id="heatmapiframe" width="800" frameborder="0" scrolling="no"></iframe>
                     <div id="heatmap"></div>
                 </div>
 

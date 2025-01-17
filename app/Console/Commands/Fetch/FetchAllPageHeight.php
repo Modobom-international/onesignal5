@@ -60,6 +60,8 @@ class FetchAllPageHeight extends Command
                         'height' => $height,
                         'fetched_at' => Common::covertDateTimeToMongoBSONDateGMT7(date('Y-m-d H:i:s')),
                     ]);
+
+                    dump('Inserted height of page with url ' . $url);
                 } catch (\Exception $e) {
                     $this->error("Lỗi khi lấy chiều cao: " . $e->getMessage());
                     continue;
