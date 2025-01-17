@@ -250,20 +250,12 @@ Users tracking
     });
 
     $('#heatMapModal').on('show.bs.modal', function(e) {
-        $('#card-in-heat-map-modal').hide();
-        $('.area-heat-map').hide();
-        $.ajax({
-            url: '{{ route("getLinkForHeatMap") }}',
-            type: 'GET',
-            success: function(response) {
-                for (let i = 0; i < response.length; i++) {
-                    $('#path-heat-map-modal').append('<option value="' + response[i] + '">' + response[i] + '</option>');
-                }
-                $(".loading").hide();
-                $('#card-in-heat-map-modal').show();
-            }
-        });
+        getPathByDomain();
     });
+
+    $('#domain-heat-map-modal').on('change', function(e) {
+        getPathByDomain();
+    })
 
     $('#choose-heat-map').on('click', function() {
         $(".loading").show();
@@ -336,6 +328,23 @@ Users tracking
 
         $(".loading").hide();
         $('.area-heat-map').show();
+    }
+
+    function getPathByDomain() {
+        $('#card-in-heat-map-modal').hide();
+        $('.area-heat-map').hide();
+        $('#path-heat-map-modal').empty();
+        $.ajax({
+            url: '{{ route("getLinkForHeatMap") }}',
+            type: 'GET',
+            success: function(response) {
+                for (let i = 0; i < response.length; i++) {
+                    $('#path-heat-map-modal').append('<option value="' + response[i] + '">' + response[i] + '</option>');
+                }
+                $(".loading").hide();
+                $('#card-in-heat-map-modal').show();
+            }
+        });
     }
 </script>
 @endsection

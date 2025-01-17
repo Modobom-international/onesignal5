@@ -234,7 +234,7 @@ class UsersTrackingController extends Controller
             ->table('heat_map')
             ->select('path')
             ->where('domain', $domain)
-            ->distinct('path')
+            ->groupBy('path')
             ->get();
 
         foreach ($getUrl as $url) {
