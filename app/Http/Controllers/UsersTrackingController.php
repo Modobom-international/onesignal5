@@ -75,10 +75,10 @@ class UsersTrackingController extends Controller
                 'domain' => $validatedData['domain'],
                 'path' => $validatedData['path'],
                 'uuid' => $validatedData['uuid'],
-                'x' => $validatedData['eventData']['x'],
-                'y' => $validatedData['eventData']['x'],
-                'width' => 435,
-                'height' => 725
+                'x' => $validatedData['eventData']['scrollTop'],
+                'y' => $validatedData['eventData']['scrollLeft'],
+                'width' => $validatedData['screen_width'],
+                'height' => $validatedData['screen_height']
             ];
 
             FetchImageViewPort::dispatch($dataScroll)->onQueue('fetch_image_view');
