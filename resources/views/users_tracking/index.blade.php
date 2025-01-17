@@ -331,12 +331,17 @@ Users tracking
     }
 
     function getPathByDomain() {
+        var domain = $('#domain-heat-map-modal').val();
+        
         $('#card-in-heat-map-modal').hide();
         $('.area-heat-map').hide();
         $('#path-heat-map-modal').empty();
         $.ajax({
             url: '{{ route("getLinkForHeatMap") }}',
             type: 'GET',
+            data: {
+                domain: domain,
+            },
             success: function(response) {
                 for (let i = 0; i < response.length; i++) {
                     $('#path-heat-map-modal').append('<option value="' + response[i] + '">' + response[i] + '</option>');
