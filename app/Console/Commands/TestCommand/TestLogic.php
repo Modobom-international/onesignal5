@@ -48,18 +48,38 @@ class TestLogic extends Command
             ->setNodeBinary('/usr/bin/node')
             ->setNpmBinary('/usr/bin/npm')
             ->setChromePath('/usr/bin/google-chrome')
+            ->setOption('disable-gpu', true)
+            ->setOption('headless', true)
+            ->setOption('disable-background-networking', true)
+            ->setOption('disable-default-apps', true)
+            ->setOption('disable-dev-shm-usage', true)
+            ->setOption('disable-extensions', true)
+            ->setOption('disable-sync', true)
+            ->setOption('no-default-browser-check', true)
+            ->setOption('single-process', true)
             ->noSandbox()
             ->waitUntilNetworkIdle()
-            ->fullPage()
-            ->mobile()
-            ->paperSize($this->data['width'], $this->data['height'], 'px')
-            ->windowSize($this->data['width'], $this->data['height'])
             ->evaluate("window.scrollTo(0, document.body.scrollHeight);");
 
         Browsershot::html($result)
+            ->setNodeBinary('/usr/bin/node')
+            ->setNpmBinary('/usr/bin/npm')
+            ->setChromePath('/usr/bin/google-chrome')
+            ->setOption('disable-gpu', true)
+            ->setOption('headless', true)
+            ->setOption('disable-background-networking', true)
+            ->setOption('disable-default-apps', true)
+            ->setOption('disable-dev-shm-usage', true)
+            ->setOption('disable-extensions', true)
+            ->setOption('disable-sync', true)
+            ->setOption('no-default-browser-check', true)
+            ->setOption('single-process', true)
+            ->noSandbox()
+            ->waitUntilNetworkIdle()
+            ->windowSize($this->data['width'], $this->data['height'])
+            ->fullPage()
+            ->deviceScaleFactor(3)
             ->save($tempFilePath);
-
-        Browsershot::closeBrowser();
 
         $disk->put($file, file_get_contents($tempFilePath));
         unlink($tempFilePath);
