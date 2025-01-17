@@ -36,6 +36,7 @@
         "php-webdriver/webdriver": "^1.15",
         "predis/predis": "^2.3",
         "spatie/browsershot": "^5.0",
+        "spatie/image": "^3.7",
         "spatie/laravel-html": "^3.11",
         "spatie/laravel-permission": "^6.10",
         "symfony/filesystem": "^7.2",

@@ -171,7 +171,7 @@ Users tracking
                 </div>
 
                 <div class="area-heat-map">
-                    <iframe id="heatmapiframe" width="800" frameborder="0" scrolling="no"></iframe>
+                    <img id="heatmapimage" width="800">
                     <div id="heatmap"></div>
                 </div>
 
@@ -189,12 +189,8 @@ Users tracking
 <script>
     var heatmapInstance = null;
     var isFetching = false;
-    var domainGernal = '';
 
-    const iframe = document.getElementById('heatmapiframe');
     const container = document.getElementById('heatmap');
-    const heatmapLayer = $('#heatmap');
-    const heatmapIframe = $('#heatmapiframe');
 
     $('#detailModal').on('show.bs.modal', function(e) {
         if (isFetching) return
@@ -265,7 +261,6 @@ Users tracking
         var date = $('#date-heat-map-modal').val();
         var event = $('#event-heat-map-modal').val();
 
-        domainGernal = domain;
         $.ajax({
             url: '{{ route("getHeatMap") }}',
             type: 'GET',
@@ -276,10 +271,10 @@ Users tracking
                 event: event
             },
             success: function(response) {
-                var url = 'https://' + domain + path;
                 var data = [];
-                $('#heatmapiframe').attr('style', 'height: ' + response.height + 'px ' + '!important');
-                $('#heatmap').attr('style', 'height: ' + response.height + 'px ' + '!important');
+                $('#heatmapimage').attr('src', response.path_image);
+                var height = $('#heatmapimage').height;
+                $('#heatmap').attr('style', 'height: ' + height + 'px ' + '!important');
 
                 for (let i in response.data) {
                     data.push({
@@ -289,22 +284,14 @@ Users tracking
                     });
                 }
 
-                handleIframe(url, data);
+                createHeatmap(data);
             }
         });
     });
 
-    function handleIframe(url, data) {
-        iframe.src = url;
-
-        iframe.onload = function() {
-            createHeatmap(data);
-        };
-    }
-
     function createHeatmap(data) {
         if (heatmapInstance) {
-            heatmapLayer.empty();
+            $('#heatmap').empty();
         }
 
         heatmapInstance = h337.create({
@@ -353,7 +340,7 @@ Users tracking
     }
 
     function handleListUsers() {
-        
+
     }
 </script>
 @endsection

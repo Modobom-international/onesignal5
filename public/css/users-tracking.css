@@ -8,10 +8,8 @@
     pointer-events: none;
 }
 
-#heatmapiframe {
+#heatmapimage {
     position: absolute;
-    width: 800px;
-    border: none;
 }
 
 .area-heat-map {

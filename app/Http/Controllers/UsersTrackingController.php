@@ -6,7 +6,8 @@ use App\Enums\UsersTracking;
 use App\Jobs\StoreUsersTracking;
 use Illuminate\Http\Request;
 use App\Helper\Common;
-use App\Jobs\FetchPageHeight;
+use App\Jobs\FetchImageViewPort;
+use App\Jobs\FetchFullPage;
 use App\Jobs\StoreHeatMap;
 use UAParser\Parser;
 use DB;
@@ -38,6 +39,7 @@ class UsersTrackingController extends Controller
         ]);
 
         $validatedData['user']['ip'] = $ip;
+        $url = 'https://' . $validatedData['domain'] . $validatedData['path'];
         $validatedData['timestamp'] = Common::covertDateTimeToMongoBSONDateGMT7($validatedData['timestamp']);
         StoreUsersTracking::dispatch($validatedData)->onQueue('create_users_tracking');
 
@@ -56,11 +58,30 @@ class UsersTrackingController extends Controller
                 ],
             ];
 
-            $url = 'https://' . $validatedData['domain'] . $validatedData['path'];
-            $path = $validatedData['path'];
-            $domain = $validatedData['domain'];
+            $dataFetch = [
+                'domain' => $validatedData['domain'],
+                'path' => $validatedData['path'],
+                'width' => $validatedData['width'],
+                'height' => $validatedData['height'],
+            ];
+            
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
-            FetchPageHeight::dispatch($url, $path, $domain)->onQueue('fetch_page_height');
+            FetchFullPage::dispatch($dataFetch)->onQueue('fetch_full_page');
+        }
+
+        if ($validatedData['eventName'] == 'scroll') {
+            $dataScroll = [
+                'url' => $url,
+                'domain' => $validatedData['domain'],
+                'path' => $validatedData['path'],
+                'uuid' => $validatedData['uuid'],
+                'x' => $validatedData['eventData']['x'],
+                'y' => $validatedData['eventData']['x'],
+                'width' => 435,
+                'height' => 725
+            ];
+
+            FetchImageViewPort::dispatch($dataScroll)->onQueue('fetch_image_view');
         }
 
         return response()->json(['message' => 'User behavior recorded successfully.']);
@@ -126,6 +147,7 @@ class UsersTrackingController extends Controller
 
             if ($tracking->event_name == 'scroll') {
                 $event_data[] = 'Cuộn xuống tọa độ x là ' . $tracking->event_data['scrollTop'] . ' và y là ' . $tracking->event_data['scrollLeft'];
+                // $file = 'browsershot_viewport_' . $this->data['x'] . '_' . $this->data['y'] . '_' . $this->data['width'] . '_' . $this->data['height'] . '_' . $this->data['domain'] . '_' . str_replace('/', '_', $this->data['path']) . '.png';
             }
 
             if ($tracking->event_name == 'beforeunload') {
@@ -181,6 +203,7 @@ class UsersTrackingController extends Controller
         $date = $request->get('date');
         $event = $request->get('event');
         $data = [];
+        $file = 'browsershot_fullpage_' . $domain . '_' . str_replace('/', '_', $path) . '.png';
 
         $query = DB::connection('mongodb')
             ->table('heat_map')
@@ -191,13 +214,6 @@ class UsersTrackingController extends Controller
             ->where('heatmapData.device', 'mobile')
             ->where('heatmapData.event', $event)
             ->get();
-
-        $getHeight = DB::connection('mongodb')
-            ->table('pages_height')
-            ->where('domain', $domain)
-            ->where('path', $path)
-            ->orderBy('height', 'desc')
-            ->first();
 
         foreach ($query as $record) {
             $key = $record->heatmapData['x'] . '-' . $record->heatmapData['y'];
@@ -215,7 +231,7 @@ class UsersTrackingController extends Controller
 
         $response = [
             'data' => $data,
-            'height' => $getHeight->height
+            'path_image' => '/uploads/browsershot/' . $file
         ];
 
         return response()->json($response);

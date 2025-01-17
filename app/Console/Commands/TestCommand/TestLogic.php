@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\TestCommand;
 
-use App\Jobs\FetchPageHeight;
 use Illuminate\Console\Command;
-use DB;
+use Spatie\Browsershot\Browsershot;
+use Illuminate\Support\Facades\Storage;
 
 class TestLogic extends Command
 {
@@ -29,32 +29,37 @@ class TestLogic extends Command
      */
     public function handle()
     {
-        $this->url = 'https://apkafe.com/s/';
-        try {
-            $getPagesHeight = DB::connection('mongodb')->table('pages_height')->where('url', $this->url)->first();
+        $this->data = [
+            'url' => 'https://apkafe.com/',
+            'uuid' => '6da8fe2f-70fe-42a5-b2dd-ddf35291b0ba',
+            'x' => 400,
+            'y' => 0,
+            'width' => 435,
+            'height' => 725,
+            'domain' => 'apkafe.com',
+            'path' => '/'
+        ];
 
-            if (empty($getPagesHeight)) {
-                $height = Browsershot::url($this->url)
-                    ->setNodeBinary('/usr/bin/node')
-                    ->setNpmBinary('/usr/bin/npm')
-                    ->setChromePath('/usr/bin/google-chrome')
-                    ->addChromiumArguments(['no-sandbox'])
-                    ->waitUntilNetworkIdle()
-                    ->setDelay(5000)
-                    ->evaluate('document.body.scrollHeight');
+        $tempFilePath = storage_path('app/temp_screenshot.png');
+        $disk = Storage::disk('browsershot');
+        $file = 'browsershot_fullpage_' . $this->data['domain'] . '_' . str_replace('/', '_', $this->data['path']) . '.png';
 
-                DB::connection('mongodb')->table('pages_height')->insert([
-                    'domain' => $this->domain,
-                    'path' => $this->path,
-                    'url' => $this->url,
-                    'height' => $height,
-                    'fetched_at' => Common::covertDateTimeToMongoBSONDateGMT7(date('Y-m-d H:i:s')),
-                ]);
+        $result = Browsershot::url($this->data['url'])
+            ->setNodeBinary('/usr/bin/node')
+            ->setNpmBinary('/usr/bin/npm')
+            ->setChromePath('/usr/bin/google-chrome')
+            ->noSandbox()
+            ->waitUntilNetworkIdle()
+            ->fullPage()
+            ->mobile()
+            ->paperSize($this->data['width'], $this->data['height'], 'px')
+            ->windowSize($this->data['width'], $this->data['height'])
+            ->evaluate("window.scrollTo(0, document.body.scrollHeight);");
 
-                dump('Inserted height with url ' . $this->url);
-            }
-        } catch (\Exception $e) {
-            dump($e->getMessage());
-        }
+        Browsershot::html($result)
+            ->save($tempFilePath);
+
+        $disk->put($file, file_get_contents($tempFilePath));
+        unlink($tempFilePath);
     }
 }

@@ -235,10 +235,19 @@ return [
 
             'supervisor-onesignal5-10' => [
                 'connection' => 'redis',
-                'queue' => ['fetch_page_height'],
+                'queue' => ['fetch_full_page'],
                 'balance' => 'auto',
                 'minProcesses' => 1,
-                'maxProcesses' => 3,
+                'maxProcesses' => 5,
+                'tries' => 0,
+            ],
+
+            'supervisor-onesignal5-11' => [
+                'connection' => 'redis',
+                'queue' => ['fetch_image_view'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 5,
                 'tries' => 0,
             ],
         ],
