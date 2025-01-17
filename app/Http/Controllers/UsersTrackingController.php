@@ -61,10 +61,10 @@ class UsersTrackingController extends Controller
             $dataFetch = [
                 'domain' => $validatedData['domain'],
                 'path' => $validatedData['path'],
-                'width' => $validatedData['width'],
-                'height' => $validatedData['height'],
+                'width' => $validatedData['screen_width'],
+                'height' => $validatedData['screen_height'],
             ];
-            
+
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
             FetchFullPage::dispatch($dataFetch)->onQueue('fetch_full_page');
         }
