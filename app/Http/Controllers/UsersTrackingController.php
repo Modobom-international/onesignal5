@@ -196,7 +196,7 @@ class UsersTrackingController extends Controller
             ->table('pages_height')
             ->where('domain', $domain)
             ->where('path', $path)
-            ->orderBy('height', 'asc')
+            ->orderBy('height', 'desc')
             ->first();
 
         foreach ($query as $record) {
