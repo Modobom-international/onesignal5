@@ -66,7 +66,7 @@ class UsersTrackingController extends Controller
             ];
 
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
-            FetchFullPage::dispatch($dataFetch)->onQueue('fetch_full_page');
+            // FetchFullPage::dispatch($dataFetch)->onQueue('fetch_full_page');
         }
 
         if ($validatedData['eventName'] == 'scroll') {
@@ -81,7 +81,7 @@ class UsersTrackingController extends Controller
                 'height' => $validatedData['user']['screenWidth']
             ];
 
-            FetchImageViewPort::dispatch($dataScroll)->onQueue('fetch_image_view');
+            // FetchImageViewPort::dispatch($dataScroll)->onQueue('fetch_image_view');
         }
 
         return response()->json(['message' => 'User behavior recorded successfully.']);
