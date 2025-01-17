@@ -28,17 +28,16 @@ class FetchAllPageHeight extends Command
      */
     public function handle()
     {
-        try {
-            $getHeatMap = DB::connection('mongodb')
-                ->table('heat_map')
-                ->select('path', 'domain')
-                ->get();
+        $getHeatMap = DB::connection('mongodb')
+            ->table('heat_map')
+            ->select('path', 'domain')
+            ->get();
 
-            $groupBy = $getHeatMap->groupBy('domain');
-            $listAbort = [];
-
-            foreach ($groupBy as $domain => $record) {
-                foreach ($record as $item) {
+        $groupBy = $getHeatMap->groupBy('domain');
+        $listAbort = [];
+        foreach ($groupBy as $domain => $record) {
+            foreach ($record as $item) {
+                try {
                     $url = 'https://' . $domain . $item->path;
                     if (in_array($url, $listAbort)) {
                         continue;
@@ -74,10 +73,11 @@ class FetchAllPageHeight extends Command
 
                         dump('Updated height with url ' . $url);
                     }
+                } catch (\Exception $e) {
+                    $this->error("Lỗi khi lấy chiều cao: " . $e->getMessage());
+                    continue;
                 }
             }
-        } catch (\Exception $e) {
-            $this->error("Lỗi khi lấy chiều cao: " . $e->getMessage());
         }
     }
 }
