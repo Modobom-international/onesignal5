@@ -125,7 +125,7 @@ class UsersTrackingController extends Controller
             $data['ip'] = $tracking->ip;
 
             if ($tracking->event_name == 'scroll') {
-                $event_data[] = 'Cuộn khoảng ' . $tracking->event_data['scrollTop'] . 'px';
+                $event_data[] = 'Cuộn xuống tọa độ x là ' . $tracking->event_data['scrollTop'] . ' và y là ' . $tracking->event_data['scrollLeft'];
             }
 
             if ($tracking->event_name == 'beforeunload') {

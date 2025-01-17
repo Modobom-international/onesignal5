@@ -30,7 +30,7 @@ Users tracking
                 </div>
 
                 <div class="col-3 form-group d-flex align-items-center margin-top-1-7">
-                    <button class="btn btn-primary" onclick="">Tìm</button>
+                    <button class="btn btn-primary" onclick="handleListUsers()">Tìm</button>
                 </div>
             </div>
 
@@ -332,7 +332,7 @@ Users tracking
 
     function getPathByDomain() {
         var domain = $('#domain-heat-map-modal').val();
-        
+
         $('#card-in-heat-map-modal').hide();
         $('.area-heat-map').hide();
         $('#path-heat-map-modal').empty();
@@ -350,6 +350,10 @@ Users tracking
                 $('#card-in-heat-map-modal').show();
             }
         });
+    }
+
+    function handleListUsers() {
+        
     }
 </script>
 @endsection

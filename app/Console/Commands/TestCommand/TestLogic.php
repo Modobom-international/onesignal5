@@ -1,36 +1,35 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Console\Commands\TestCommand;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
-use Spatie\Browsershot\Browsershot;
-use App\Helper\Common;
+use App\Jobs\FetchPageHeight;
+use Illuminate\Console\Command;
 use DB;
 
-class FetchPageHeight implements ShouldQueue
+class TestLogic extends Command
 {
-    use Queueable;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
 
     protected $url;
-    protected $path;
-    protected $domain;
+    protected $signature = 'test:logic';
 
     /**
-     * Create a new job instance.
+     * The console command description.
+     *
+     * @var string
      */
-    public function __construct($url, $path, $domain)
-    {
-        $this->url = $url;
-        $this->path = $path;
-        $this->domain = $domain;
-    }
+    protected $description = 'Test command';
 
     /**
-     * Execute the job.
+     * Execute the console command.
      */
-    public function handle(): void
+    public function handle()
     {
+        $this->url = 'https://apkafe.com/s/';
         try {
             $getPagesHeight = DB::connection('mongodb')->table('pages_height')->where('url', $this->url)->first();
 

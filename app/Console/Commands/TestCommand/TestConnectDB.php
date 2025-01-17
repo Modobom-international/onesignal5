@@ -12,7 +12,7 @@ class TestConnectDB extends Command
      *
      * @var string
      */
-    protected $signature = 'app:test-connect-db';
+    protected $signature = 'test:connect-db';
 
     /**
      * The console command description.
