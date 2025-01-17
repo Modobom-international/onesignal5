@@ -53,26 +53,13 @@ class FetchAllPageHeight extends Command
                         ->setDelay(5000)
                         ->evaluate('document.body.scrollHeight');
 
-                    $getPagesHeight = DB::connection('mongodb')->table('pages_height')->where('url', $url)->first();
-
-                    if (empty($getPagesHeight)) {
-                        DB::connection('mongodb')->table('pages_height')->insert([
-                            'domain' => $domain,
-                            'path' => $item->path,
-                            'url' => $url,
-                            'height' => $height,
-                            'fetched_at' => Common::covertDateTimeToMongoBSONDateGMT7(date('Y-m-d H:i:s')),
-                        ]);
-
-                        dump('Inserted height with url ' . $url);
-                    } else {
-                        DB::connection('mongodb')->table('pages_height')->where('url', $url)->update([
-                            'height' => $height,
-                            'fetched_at' => Common::covertDateTimeToMongoBSONDateGMT7(date('Y-m-d H:i:s')),
-                        ]);
-
-                        dump('Updated height with url ' . $url);
-                    }
+                    DB::connection('mongodb')->table('pages_height')->insert([
+                        'domain' => $domain,
+                        'path' => $item->path,
+                        'url' => $url,
+                        'height' => $height,
+                        'fetched_at' => Common::covertDateTimeToMongoBSONDateGMT7(date('Y-m-d H:i:s')),
+                    ]);
                 } catch (\Exception $e) {
                     $this->error("Lỗi khi lấy chiều cao: " . $e->getMessage());
                     continue;
