@@ -59,10 +59,10 @@ class HtmlSourceController extends Controller
         $listHtmlSource = DB::table('html_sources');
 
         $dateFormat = date('Y-m-d');
-        $apps = \DB::table('html_sources')->select('app_id')->groupBy('app_id')->get();
-        $countries = \DB::table('html_sources')->select('country')->groupBy('country')->get();
-        $devices = \DB::table('html_sources')->select('device_id')->groupBy('device_id')->get();
-        $query = \DB::table('html_sources');
+        $apps = DB::table('html_sources')->select('app_id')->groupBy('app_id')->get();
+        $countries = DB::table('html_sources')->select('country')->groupBy('country')->get();
+        $devices = DB::table('html_sources')->select('device_id')->groupBy('device_id')->get();
+        $query = DB::table('html_sources');
 
         if (!empty($country)) {
             if ($country != 'all') {

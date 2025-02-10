@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
-@section('title')
-Log behavior
-@endsection
+@section('title', 'Log behavior')
 
 @section('styles')
 <link href="{{ asset('css/log-behavior.css') }}" rel="stylesheet">

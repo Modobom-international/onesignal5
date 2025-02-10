@@ -26,6 +26,14 @@
     </x-sidebar.link>
     @endif
 
+    @if(auth()->user()->hasRole('super-admin|user-ads'))
+    <x-sidebar.link title="Domain" href="{{ url('/admin/list-domain') }}" :isActive="request()->routeIs('listDomain')">
+        <x-slot name="icon">
+            <x-icons.server class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+        </x-slot>
+    </x-sidebar.link>
+    @endif
+
     @if(auth()->user()->hasRole('super-admin'))
     <x-sidebar.link title="Push System" href="{{ url('/admin/push-system') }}" :isActive="request()->routeIs('listPushSystem')">
         <x-slot name="icon">

@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name='robots' content='noindex,nofollow' />
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Modobom') }}</title>
 
     <!-- Fonts -->
     <link

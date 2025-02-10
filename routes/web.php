@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\PermissionsController;
+use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -140,4 +141,7 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/get-detail-tracking', [UsersTrackingController::class, 'getDetailTracking'])->name('getDetailTracking');
     Route::get('/get-heat-map', [UsersTrackingController::class, 'getHeatMap'])->name('getHeatMap');
     Route::get('/get-link-for-heat-map', [UsersTrackingController::class, 'getLinkForHeatMap'])->name('getLinkForHeatMap');
+
+    Route::get('/list-domain', [DomainController::class, 'listDomain'])->name('listDomain');
+    Route::get('/create-domain', [DomainController::class, 'createDomain'])->name('domain.create');
 });

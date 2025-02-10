@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
-@section('title')
-HTML Source
-@endsection
+@section('title', 'Log HTML Source')
 
 @section('styles')
 <link href="{{ asset('css/html-source.css') }}" rel="stylesheet">
