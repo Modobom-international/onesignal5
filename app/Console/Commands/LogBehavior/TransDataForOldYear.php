@@ -93,7 +93,7 @@ class TransDataForOldYear extends Command
                     'app' => $logBehavior->app,
                     'platform' => $logBehavior->platform,
                     'network' => $logBehavior->network,
-                    'country' => isset($logBehavior->country) ? $logBehavior->country : '',
+                    'country' => $logBehavior->country,
                     'behavior' => $logBehavior->behavior,
                     'date' => $logBehavior->date,
                 ];
