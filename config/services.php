@@ -45,4 +45,10 @@ return [
         'api_url'    => env('GODADDY_API_URL'),
     ],
 
+    'cloudflare' => [
+        'api_token'    => env('CLOUDFLARE_API_TOKEN'),
+        'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
+        'api_url'    => env('CLOUDFLARE_API_URL'),
+    ],
+
 ];

@@ -36,11 +36,7 @@ Route::options('{any}', function () {
     return response()->json([], 204);
 })->where('any', '.*');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+Route::middleware('auth')->group(function () {});
 
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 
@@ -117,22 +113,13 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
         Route::post('/update-password', [UsersController::class, 'updatePassword'])->name('updatePassword');
     });
 
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::get('/fetch-horizon-dashboard', [AdminController::class, 'fetchHorizonDashboard'])->name('fetchHorizonDashboard');
     Route::resource('roles', RolesController::class);
     Route::resource('permissions', PermissionsController::class);
-
-    Route::get('/list-devices-status', [ApiPlayerPhoneController::class, 'listDeviceStatus'])->name('list-devices-status');
-    Route::get('/active-device-status/{id}', [ApiPlayerPhoneController::class, 'activeDeviceStatus'])->name('active.device.status');
-    Route::get('/lock-device-status/{id}', [ApiPlayerPhoneController::class, 'lockDeviceStatus'])->name('lock.device.status');
-    Route::get('/delete-device-status/{id}', [ApiPlayerPhoneController::class, 'deleteDeviceStatus'])->name('delete.device.status');
-    Route::get('/save-note-device-status/{id}', [ApiPlayerPhoneController::class, 'saveNoteDeviceStatus'])->name('save.note.device.status');
-
-    Route::get('/list-storage-sim', [StorageSimController::class, 'listStorageSim'])->name('list.storage.sim');
-    Route::get('/list-storage-check-sim', [StorageSimController::class, 'listStorageCheckSim'])->name('list.storage.check.sim');
-    Route::get('/list-service-otp', [StorageSimController::class, 'listOTP'])->name('list.service.otp');
-    Route::get('/get-history-sim', [StorageSimController::class, 'getListHistorySim'])->name('list.history.sim');
-    Route::get('/delete-storage-sim/{id}', [StorageSimController::class, 'deleteStorageSim'])->name('delete.storage.sim');
-    Route::delete('/delete-multi-storage-sim', [StorageSimController::class, 'deleteAll'])->name('delete.all');
 
     Route::get('/html-source', [HtmlSourceController::class, 'listHtmlSource'])->name('listHtmlSource');
     Route::get('/html-source/{id}', [HtmlSourceController::class, 'showHtmlSource'])->name('showHtmlSource');

@@ -65,19 +65,4 @@ class DomainController extends Controller
 
         return response()->json($result);
     }
-
-    public function purchaseDomain(Request $request)
-    {
-        $request->validate([
-            'domain' => 'required|string',
-            'period' => 'required|integer',
-        ]);
-
-        $result = $this->godaddyService->purchaseDomain(
-            $request->domain,
-            $request->period
-        );
-
-        return response()->json($result);
-    }
 }
