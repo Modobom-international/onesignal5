@@ -39,4 +39,10 @@ return [
         'token' => env('TELEGRAM_MEDIAFIRE_BOT_TOKEN', 'YOUR BOT TOKEN HERE')
     ],
 
+    'godaddy' => [
+        'api_key'    => env('GODADDY_API_KEY'),
+        'api_secret' => env('GODADDY_API_SECRET'),
+        'api_url'    => env('GODADDY_API_URL'),
+    ],
+
 ];
