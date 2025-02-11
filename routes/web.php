@@ -132,7 +132,5 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/list-domain', [DomainController::class, 'listDomain'])->name('listDomain');
     Route::get('/create-domain', [DomainController::class, 'createDomain'])->name('domain.create');
     Route::get('/check-domain', [DomainController::class, 'checkDomain'])->name('domain.check');
-    Route::get('/get-list-domain', [DomainController::class, 'getListDomain'])->name('domain.get.list');
-    Route::get('/purchase-domain', [DomainController::class, 'purchaseDomain'])->name('domain.purchase');
-    Route::post('/update-nameservers-domain', [GoDaddyController::class, 'updateNameserversDomain'])->name('domain.update.nameservers');
+    Route::get('/up-domain', [DomainController::class, 'upDomain'])->name('domain.up');
 });

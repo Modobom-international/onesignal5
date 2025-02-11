@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UpDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\GoDaddyService;
+use App\Events\UpDomainDump;
 
 class DomainController extends Controller
 {
@@ -33,30 +35,47 @@ class DomainController extends Controller
     {
         $domain = $request->get('domain');
         $details = $this->godaddyService->getDomainDetails($domain);
-
-        return response()->json($details);
-    }
-
-    public function updateNameservers(Request $request)
-    {
-        $request->validate([
-            'domain'      => 'required|string',
-        ]);
-
-        $data = [
-            'domain'      => $request->domain,
-            'nameservers' => [
-                'ben.ns.cloudflare.com',
-                'jean.ns.cloudflare.com',
-            ],
+        $response = [
+            'message' => 'Domain có thể up!',
+            'status' => 1,
+            'data' => $details
         ];
 
-        $result = $this->godaddyService->updateNameservers(
-            $data['domain'],
-            $data['nameservers']
-        );
+        if (array_key_exists('error', $details)) {
+            $response['message'] = 'Lỗi hệ thống!';
+            $response['status'] = 0;
+        }
 
-        return response()->json($result);
+        if (array_key_exists('code', $details)) {
+            if ($details['code'] == 'NOT_FOUND') {
+                $response['message'] = 'Domain không thuộc quản lý của tài khoản trên Godaddy';
+                $response['status'] = 0;
+            } else {
+                $response['message'] = 'Lỗi khác!';
+                $response['status'] = 0;
+            }
+        } else {
+            if (array_key_exists('nameServers', $details)) {
+                foreach ($details['nameServers'] as $nameServers) {
+                    if ($nameServers == 'ben.ns.cloudflare.com' or $nameServers == 'jean.ns.cloudflare.com') {
+                        $response['message'] = 'Domain đã được up!';
+                        $response['status'] = 0;
+                    }
+                }
+            }
+        }
+
+        return response()->json($response);
+    }
+
+    public function upDomain(Request $request)
+    {
+        UpDomain::dispatch($request->get('domain'));
+
+        return response()->json([
+            'message' => 'Đang xử lý...',
+            'status' => 1
+        ]);
     }
 
     public function getListDomain()

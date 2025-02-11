@@ -9,7 +9,7 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex mt-3 mb-3">
             <a href="{{ route('domain.create') }}" class="btn btn-success">Thêm domain</a>
         </div>
 
@@ -20,8 +20,9 @@
                         <thead>
                             <tr>
                                 <th>Domain</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
+                                <th>Ngày tạo</th>
+                                <th>Server</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,7 +30,8 @@
                             <tr>
                                 <td>{{ $domain->domain }}</td>
                                 <td>{{ $domain->created_at }}</td>
-                                <td>{{ $domain->updated_at }}</td>
+                                <td>{{ $domain->server }}</td>
+                                <td><button class="btn btn-success">Chi tiết</button></td>
                             </tr>
                             @endforeach
                         </tbody>

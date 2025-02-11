@@ -61,60 +61,6 @@ return [
             'connection' => 'cache',
         ],
 
-        'redis_clone_1' => [ //\Cache::store('redis_clone_1')
-            'driver' => 'redis',
-            'connection' => 'cache_clone_1',
-        ],
-        'redis_thailand' => [ //\Cache::store('redis_thailand')
-            'driver' => 'redis',
-            'connection' => 'redis_thailand',
-        ],
-
-        'redis_romania' => [ //\Cache::store('redis_romania')
-            'driver' => 'redis',
-            'connection' => 'redis_romania',
-        ],
-
-        'redis_croatia' => [ //\Cache::store('redis_croatia')
-            'driver' => 'redis',
-            'connection' => 'redis_croatia',
-        ],
-
-        'redis_montenegro' => [ //\Cache::store('redis_montenegro')
-            'driver' => 'redis',
-            'connection' => 'redis_montenegro',
-        ],
-
-        'redis_slovenia' => [ //\Cache::store('redis_slovenia')
-            'driver' => 'redis',
-            'connection' => 'redis_slovenia',
-        ],
-
-        'redis_czech' => [ //\Cache::store('redis_czech')
-            'driver' => 'redis',
-            'connection' => 'redis_czech',
-        ],
-
-        'redis_switzerland' => [ //\Cache::store('redis_switzerland')
-            'driver' => 'redis',
-            'connection' => 'redis_switzerland',
-        ],
-
-        'redis_denmark' => [ //\Cache::store('redis_denmark')
-            'driver' => 'redis',
-            'connection' => 'redis_denmark',
-        ],
-
-        'redis_luxembourg' => [ //\Cache::store('redis_luxembourg')
-            'driver' => 'redis',
-            'connection' => 'redis_luxembourg',
-        ],
-
-        'redis_malaysia' => [ //\Cache::store('redis_malaysia')
-            'driver' => 'redis',
-            'connection' => 'redis_malaysia',
-        ],
-
         'memcached' => [
             'driver' => 'memcached',
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),

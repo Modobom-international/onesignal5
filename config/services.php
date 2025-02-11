@@ -45,6 +45,18 @@ return [
         'api_url'    => env('GODADDY_API_URL'),
     ],
 
+    'godaddy_tuan' => [
+        'api_key'    => env('GODADDY_TUAN_API_KEY'),
+        'api_secret' => env('GODADDY_TUAN_API_SECRET'),
+        'api_url'    => env('GODADDY_TUAN_API_URL'),
+    ],
+
+    'godaddy_linh' => [
+        'api_key'    => env('GODADDY_LINH_API_KEY'),
+        'api_secret' => env('GODADDY_LINH_API_SECRET'),
+        'api_url'    => env('GODADDY_LINH_API_URL'),
+    ],
+
     'cloudflare' => [
         'api_token'    => env('CLOUDFLARE_API_TOKEN'),
         'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
