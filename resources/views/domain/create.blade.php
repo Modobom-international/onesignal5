@@ -3,7 +3,7 @@
 @section('title', 'Create Domain')
 
 @section('styles')
-<!-- <link href="{{ asset('css/domain.css') }}" rel="stylesheet"> -->
+<link href="{{ asset('css/domain.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -56,7 +56,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="upDomainModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="upDomainModalLabel" aria-hidden="true">
+<div class="modal modal-lg fade" id="upDomainModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="upDomainModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -64,7 +64,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Modal body text goes here.</p>
+                <div class="">
+                    <textarea class="form-control bg-black" rows="10" id="area-log" readonly></textarea>
+                </div>
             </div>
         </div>
     </div>
@@ -102,8 +104,11 @@
         });
 
         Echo.channel("up-domain").listen("UpDomainDump", (data) => {
-            // const message = data.message;
-            console.log(data);
+            const message = data.message;
+            $('#area-log').val(function(index, value) {
+                return value + "\n" + message;
+            });
+
         });
     });
 

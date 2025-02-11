@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\UpDomainDump;
+use App\Services\CloudFlareService;
 use App\Services\GoDaddyService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -26,29 +27,36 @@ class UpDomain implements ShouldQueue
      */
     public function handle(): void
     {
-        // $data = [
-        //     'domain'      => $this->domain,
-        //     'nameservers' => [
-        //         'ben.ns.cloudflare.com',
-        //         'jean.ns.cloudflare.com',
-        //     ],
-        // ];
+        $goDaddyService = new GoDaddyService();
+        $cloudFlareService = new CloudFlareService();
 
-        // $this->godaddyService->updateNameservers(
-        //     $data['domain'],
-        //     $data['nameservers']
-        // );
+        $data = [
+            'domain'      => $this->domain,
+            'nameservers' => [
+                'ben.ns.cloudflare.com',
+                'jean.ns.cloudflare.com',
+            ],
+        ];
 
-        broadcast(new UpDomainDump('Xử lý bước 1'));
+        $result = $goDaddyService->updateNameservers(
+            $data['domain'],
+            $data['nameservers']
+        );
 
-        broadcast(new UpDomainDump('Xử lý bước 2'));
+        if (array_key_exists('error', $result)) {
+            $message = 'Lỗi không thay đổi được nameserver....';
 
-        broadcast(new UpDomainDump('Xử lý bước 3'));
+            broadcast(new UpDomainDump($message));
 
-        broadcast(new UpDomainDump('Xử lý bước 4'));
+            $message = 'Kết thúc quá trình up domain...';
 
-        broadcast(new UpDomainDump('Xử lý bước 5'));
+            broadcast(new UpDomainDump($message));
 
-        broadcast(new UpDomainDump('Xử lý bước 6'));
+            return;
+        } else {
+            $message = 'Hoàn tất thay đổi nameserver trên Godaddy!';
+
+            broadcast(new UpDomainDump($message));
+        }
     }
 }

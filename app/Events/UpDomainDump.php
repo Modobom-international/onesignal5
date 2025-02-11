@@ -28,6 +28,6 @@ class UpDomainDump implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        return ['data' => $this->message];
+        return ['message' => $this->message];
     }
 }
