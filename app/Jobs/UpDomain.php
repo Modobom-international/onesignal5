@@ -30,17 +30,18 @@ class UpDomain implements ShouldQueue
      */
     public function handle(): void
     {
-        // $goDaddyService = new GoDaddyService();
-        // $cloudFlareService = new CloudFlareService();
-        // $sshService = new SSHService();
+        $goDaddyService = new GoDaddyService();
+        $cloudFlareService = new CloudFlareService();
+        $sshService = new SSHService();
 
         $data = [
             'domain'      => $this->domain,
+            'server'      => config($this->server),
+            'command'     => '.',
             'nameservers' => [
                 'ben.ns.cloudflare.com',
                 'jean.ns.cloudflare.com',
             ],
-            'server'      => config($this->server),
         ];
 
         $result = [];
@@ -52,9 +53,9 @@ class UpDomain implements ShouldQueue
             ],
         ));
 
-        // $result = $cloudFlareService->addDomainToCloudflare(
-        //     $data['domain']
-        // );
+        $result = $cloudFlareService->addDomainToCloudflare(
+            $data['domain']
+        );
 
         if (array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -81,10 +82,10 @@ class UpDomain implements ShouldQueue
             ],
         ));
 
-        // $result = $goDaddyService->updateNameservers(
-        //     $data['domain'],
-        //     $data['nameservers']
-        // );
+        $result = $goDaddyService->updateNameservers(
+            $data['domain'],
+            $data['nameservers']
+        );
 
         if (array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -111,10 +112,10 @@ class UpDomain implements ShouldQueue
             ],
         ));
 
-        // $result = $cloudFlareService->updateDnsARecord(
-        //     $data['domain'],
-        //     $data['server']
-        // );
+        $result = $cloudFlareService->updateDnsARecord(
+            $data['domain'],
+            $data['server']
+        );
 
         if (array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -130,6 +131,36 @@ class UpDomain implements ShouldQueue
                 [
                     'message' => ' ✅ Hoàn tất thêm DNS trên Cloudflare!',
                     'id'  => 'process-3'
+                ],
+            ));
+        }
+
+
+        broadcast(new UpDomainDump(
+            [
+                'message' => ' 🔄 Bắt đầu tiến hành khởi tạo website....',
+                'id'  => 'process-4'
+            ],
+        ));
+
+        $result = $sshService->runCommand(
+            $data['command']
+        );
+
+        if (array_key_exists('error', $result)) {
+            broadcast(new UpDomainDump(
+                [
+                    'message' => ' ❌ Lỗi không khởi tạo được website.... \n ⚡ Kết thúc quá trình up domain...',
+                    'id'  => 'process-4'
+                ],
+            ));
+
+            return;
+        } else {
+            broadcast(new UpDomainDump(
+                [
+                    'message' => ' ✅ Hoàn tất khởi tạo website!',
+                    'id'  => 'process-4'
                 ],
             ));
         }

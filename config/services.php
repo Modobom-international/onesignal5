@@ -63,6 +63,11 @@ return [
         'api_url'    => env('CLOUDFLARE_API_URL'),
     ],
 
+    'ssh' => [
+        'ssh_user' => env('SSH_USER'),
+        'ssh_private_key'    => env('SSH_PRIVATE_KEY'),
+    ],
+
     'ip_server' => [
         'wp1'    => env('IP_WP1'),
         'wp2'    => env('IP_WP2'),
