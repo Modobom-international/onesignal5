@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -15,11 +15,14 @@ class GoDaddyService
 
     public function __construct()
     {
-        if (Auth::user()->email == 'vutuan.modobom') {
+        $user = Auth::user();
+        $email = $user ? $user->email : 'default@email.com';
+
+        if ($email == 'vutuan.modobom') {
             $this->apiKey = config('services.godaddy_tuan.api_key');
             $this->apiSecret = config('services.godaddy_tuan.api_secret');
             $this->apiUrl = config('services.godaddy_tuan.api_url');
-        } else if (Auth::user()->email == 'tranlinh.modobom') {
+        } else if ($email == 'tranlinh.modobom') {
             $this->apiKey = config('services.godaddy_linh.api_key');
             $this->apiSecret = config('services.godaddy_linh.api_secret');
             $this->apiUrl = config('services.godaddy_linh.api_url');

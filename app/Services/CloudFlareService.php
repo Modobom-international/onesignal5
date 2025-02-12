@@ -28,6 +28,47 @@ class CloudFlareService
         ]);
     }
 
+    public function getZoneId($domain)
+    {
+        $response = $this->client->get('/zones', [
+            'name' => $domain,
+        ]);
+
+        return optional($response->json()['result'][0])['id'] ?? null;
+    }
+
+    public function updateDnsARecord($domain, $ip)
+    {
+        $zoneId = $this->getZoneId($domain);
+        if (!$zoneId) {
+            return ['error' => 'Không tìm thấy Zone ID'];
+        }
+
+        $response = $this->client->get("/zones/{$zoneId}/dns_records", [
+            'type' => 'A',
+            'name' => $domain
+        ]);
+
+        $records = $response->json()['result'];
+        $body = [
+            'type' => 'A',
+            'name' => $domain,
+            'content' => $ip,
+            'ttl' => 1,
+            'proxied' => true
+        ];
+
+        if (!empty($records)) {
+            $response = $this->client->put("/zones/{$zoneId}/dns_records/{$recordId}", $body);
+
+            return json_decode($response->getBody(), true);
+        } else {
+            $response = $this->client->post("/zones/{$zoneId}/dns_records", $body);
+
+            return json_decode($response->getBody(), true);
+        }
+    }
+
     public function addDomainToCloudflare($domain)
     {
         $body = [

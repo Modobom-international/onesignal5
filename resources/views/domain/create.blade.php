@@ -23,9 +23,9 @@
                     <div class="mb-3">
                         <label for="server" class="form-label">Chọn server</label>
                         <select class="form-control">
-                            <option value="server-ip1">Server IP1</option>
-                            <option value="server-ip2">Server IP2</option>
-                            <option value="server-ip3">Server IP3</option>
+                            <option value="services.ip_server.wp1">Server IP1</option>
+                            <option value="services.ip_server.wp2">Server IP2</option>
+                            <option value="services.ip_server.wp3">Server IP3</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -64,8 +64,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="">
-                    <textarea class="form-control bg-black" rows="10" id="area-log" readonly></textarea>
+                <div class="" id="area-log">
+
                 </div>
             </div>
         </div>
@@ -103,12 +103,17 @@
             });
         });
 
-        Echo.channel("up-domain").listen("UpDomainDump", (data) => {
-            const message = data.message;
-            $('#area-log').val(function(index, value) {
-                return value + "\n" + message;
-            });
+        Echo.channel("up-domain").listen("UpDomainDump", (e) => {
+            const data = e.data;
+            let logEntry = $("#" + data.id);
 
+            if (logEntry.length === 0) {
+                $("#area-log").append(`<p id="${data.id}">${data.message}</p>`);
+            } else {
+                logEntry.html(data.message);
+            }
+
+            $("#area-log").scrollTop($("#area-log")[0].scrollHeight);
         });
     });
 

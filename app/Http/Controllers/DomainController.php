@@ -70,7 +70,10 @@ class DomainController extends Controller
 
     public function upDomain(Request $request)
     {
-        UpDomain::dispatch($request->get('domain'));
+        $domain = $request->get('domain');
+        $server = $request->get('server');
+
+        UpDomain::dispatch($domain, $server);
 
         return response()->json([
             'message' => 'Đang xử lý...',

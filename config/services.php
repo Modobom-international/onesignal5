@@ -63,4 +63,10 @@ return [
         'api_url'    => env('CLOUDFLARE_API_URL'),
     ],
 
+    'ip_server' => [
+        'wp1'    => env('IP_WP1'),
+        'wp2'    => env('IP_WP2'),
+        'wp3'    => env('IP_WP3'),
+    ],
+
 ];

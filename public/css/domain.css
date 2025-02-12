@@ -1,6 +1,17 @@
-textarea#area-log {
+#area-log {
     background: #c3c3c3 !important;
-    resize: none;
     height: 300px !important;
-    overflow-x: auto;
+    overflow-y: auto;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    -moz-appearance: textfield-multiline;
+    appearance: textarea;
+    -webkit-appearance: textarea;
+    border: 1px solid gray;
+    font: medium -moz-fixed;
+    font: -webkit-small-control;
+    height: 28px;
+    resize: none;
+    width: 100%;
 }
