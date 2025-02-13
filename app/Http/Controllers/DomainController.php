@@ -12,9 +12,9 @@ class DomainController extends Controller
 {
     protected $godaddyService;
 
-    public function __construct(GoDaddyService $godaddyService)
+    public function __construct()
     {
-        $this->godaddyService = $godaddyService;
+        $this->godaddyService = new GoDaddyService(Auth::user()->email);
     }
 
     public function listDomain()
@@ -74,8 +74,6 @@ class DomainController extends Controller
         $server = $request->get('server');
         $provider = Auth::user()->id;
         $email = Auth::user()->email;
-
-        dd($email);
 
         UpDomain::dispatch($domain, $server, $provider, $email);
 

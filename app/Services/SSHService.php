@@ -12,7 +12,7 @@ class SSHService
 
     public function __construct($server)
     {
-        $this->server = config($server);
+        $this->server = $server;
         $this->user = config('services.ssh.ssh_user');
         $this->privateKey = config('services.ssh.ssh_private_key');
     }

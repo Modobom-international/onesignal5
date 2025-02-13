@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <div class="mb-3">
                         <label for="server" class="form-label">Chọn server</label>
-                        <select class="form-control">
+                        <select class="form-control" id="server">
                             <option value="services.ip_server.wp1">Server IP1</option>
                             <option value="services.ip_server.wp2">Server IP2</option>
                             <option value="services.ip_server.wp3">Server IP3</option>
@@ -72,12 +72,14 @@
 
         $('#up-domain').on('click', function() {
             var domain = document.getElementById('domain').value;
+            var server = document.getElementById('server').value;
 
             $.ajax({
                 url: '/admin/up-domain',
                 type: 'GET',
                 data: {
-                    domain: domain
+                    domain: domain,
+                    server: server
                 },
                 success: function(response) {
                     upDomainModal.show();

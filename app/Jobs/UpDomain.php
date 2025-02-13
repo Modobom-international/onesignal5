@@ -4,9 +4,8 @@ namespace App\Jobs;
 
 use App\Events\UpDomainDump;
 use App\Services\CloudFlareService;
-use App\Services\GoDaddyService;
 use App\Services\SSHService;
-use Auth;
+use App\Services\GoDaddyService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -14,10 +13,10 @@ class UpDomain implements ShouldQueue
 {
     use Queueable;
 
-    private $domain;
-    private $server;
-    private $provider;
-    private $email;
+    protected $domain;
+    protected $server;
+    protected $provider;
+    protected $email;
 
     /**
      * Create a new job instance.
@@ -35,16 +34,15 @@ class UpDomain implements ShouldQueue
      */
     public function handle(): void
     {
-        $goDaddyService = new GoDaddyService($this->email);
-        $cloudFlareService = new CloudFlareService();
-        $sshService = new SSHService($this->server);
-
+        $result = [];
         $data = [
             'domain'      => $this->domain,
             'server'      => config($this->server),
         ];
 
-        $result = [];
+        $goDaddyService = new GoDaddyService($this->email);
+        $cloudFlareService = new CloudFlareService();
+        $sshService = new SSHService($data['server']);
 
         broadcast(new UpDomainDump(
             [
@@ -86,7 +84,7 @@ class UpDomain implements ShouldQueue
             $data['domain']
         );
 
-        if (array_key_exists('error', $result)) {
+        if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
                 [
                     'message' => ' ❌ Lỗi không thay đổi được nameserver.... <br> ⚡ Kết thúc quá trình up domain...',
@@ -142,10 +140,10 @@ class UpDomain implements ShouldQueue
         ));
 
         $result = $sshService->runScript(
-            $data['command']
+            $data['domain']
         );
 
-        if (array_key_exists('error', $result)) {
+        if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
                 [
                     'message' => ' ❌ Lỗi không khởi tạo được website.... <br> ⚡ Kết thúc quá trình up domain...',
@@ -171,10 +169,10 @@ class UpDomain implements ShouldQueue
         ));
 
         $result = $sshService->getOutputResult(
-            $data['command']
+            $data['domain']
         );
 
-        if (array_key_exists('error', $result)) {
+        if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
                 [
                     'message' => ' ❌ Lỗi không lưu trữ được dữ liệu domain.... <br> ⚡ Kết thúc quá trình up domain...',
@@ -189,7 +187,7 @@ class UpDomain implements ShouldQueue
             'domain' => $this->domain,
             'admin_username' => $result['admin_username'],
             'admin_password' => $result['admin_password'],
-            'server' => $this->server,
+            'server' => config($this->server),
             'status' => 1,
             'provider' => $this->provider
         ];

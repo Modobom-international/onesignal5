@@ -76,7 +76,7 @@ class GoDaddyService
         $customerID = $getCustomerID['customerId'];
 
         try {
-            $response = $client->put("/v2/customers/{$customerID}/domains/{$domain}/nameServers", [
+            $response = $this->client->put("/v2/customers/{$customerID}/domains/{$domain}/nameServers", [
                 'json' => $body
             ]);
             
@@ -102,8 +102,7 @@ class GoDaddyService
         try {
             $response = $this->client->get("/v1/shoppers/{$this->shopperID}?includes=customerId");
 
-            return $this->shopperID;
-            // return json_decode($response->getBody(), true);
+            return json_decode($response->getBody(), true);
         } catch (RequestException $e) {
             return $this->handleException($e);
         }

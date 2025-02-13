@@ -38,7 +38,7 @@ class CloudFlareService
 
     public function getZoneId($domain)
     {
-        $response = $this->client->get($apiUrl . "/zones?name={$domain}");
+        $response = $this->client->get($this->apiUrl . "/zones?name={$domain}");
         $result = json_decode($response->getBody(), true);
         $zoneID = $result['result'][0]['id'] ?? null;
 
@@ -61,7 +61,7 @@ class CloudFlareService
                 'proxied' => true
             ];
 
-            $response = $client->post($apiUrl . "/zones/{$zoneId}/dns_records", [
+            $response = $this->clientDNS->post($this->apiUrl . "/zones/{$zoneId}/dns_records", [
                 'json' => $body
             ]);
 
