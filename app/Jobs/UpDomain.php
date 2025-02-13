@@ -8,6 +8,7 @@ use App\Services\SSHService;
 use App\Services\GoDaddyService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use DB;
 
 class UpDomain implements ShouldQueue
 {
