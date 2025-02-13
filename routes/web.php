@@ -70,21 +70,7 @@ Route::get('/apk/load-web', [HomeController::class, 'apkLoadWeb'])->name('apkLoa
 Route::get('/apk/load-web-count', [HomeController::class, 'apkLoadWebCount'])->name('apkLoadWebCount');
 Route::get('/apk/load-web-count-diff', [HomeController::class, 'apkLoadWebCountDiff'])->name('apkLoadWebCountDiff');
 
-Route::get('/get-player-phone', [ApiPlayerPhoneController::class, 'getPlayerPhone']);
-Route::get('/get-sms-otp', [ApiPlayerPhoneController::class, 'getSmsOtp']);
-Route::get('/get-device-status', [ApiPlayerPhoneController::class, 'getDeviceStatus']);
-Route::post('/create-sms-otp', [ApiPlayerPhoneController::class, 'createSmsOtp']);
-Route::post('/create-user-social', [ApiPlayerPhoneController::class, 'createUserSocial']);
-Route::post('/update-user-social', [ApiPlayerPhoneController::class, 'updateUserSocial']);
-
-Route::post('/store-storage-sim', [StorageSimController::class, 'storeStorageSim']);
-Route::get('/get-phone-in-storage-sim', [StorageSimController::class, 'getPhoneInStorageSim']);
-Route::get('/get-message-in-sim/{id}', [StorageSimController::class, 'getMessageSim'])->name('getMessageSim');
-Route::post('/create-sms-otp-storage-sim', [StorageSimController::class, 'createSmsOtpStorageSim']);
-Route::get('/get-otp-storage-sim', [StorageSimController::class, 'updateHistorySim']);
-Route::post('/update-history-sim', [StorageSimController::class, 'updateHistorySim']);
-
-Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'])->name('logBehavior');
+// Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'])->name('logBehavior');
 Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
 
