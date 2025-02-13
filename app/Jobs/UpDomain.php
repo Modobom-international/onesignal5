@@ -17,15 +17,17 @@ class UpDomain implements ShouldQueue
     private $domain;
     private $server;
     private $provider;
+    private $email;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($domain, $server, $provider)
+    public function __construct($domain, $server, $provider, $email)
     {
         $this->domain = $domain;
         $this->server = $server;
         $this->provider = $provider;
+        $this->email = $email;
     }
 
     /**
@@ -33,18 +35,13 @@ class UpDomain implements ShouldQueue
      */
     public function handle(): void
     {
-        $goDaddyService = new GoDaddyService();
+        $goDaddyService = new GoDaddyService($this->email);
         $cloudFlareService = new CloudFlareService();
         $sshService = new SSHService($this->server);
 
         $data = [
             'domain'      => $this->domain,
             'server'      => config($this->server),
-            'command'     => '.',
-            'nameservers' => [
-                'ben.ns.cloudflare.com',
-                'jean.ns.cloudflare.com',
-            ],
         ];
 
         $result = [];
@@ -86,8 +83,7 @@ class UpDomain implements ShouldQueue
         ));
 
         $result = $goDaddyService->updateNameservers(
-            $data['domain'],
-            $data['nameservers']
+            $data['domain']
         );
 
         if (array_key_exists('error', $result)) {

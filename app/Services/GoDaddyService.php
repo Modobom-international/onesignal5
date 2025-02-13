@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Auth;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -13,18 +12,17 @@ class GoDaddyService
     protected $apiSecret;
     protected $apiUrl;
     protected $shopperID;
+    protected $email;
 
-    public function __construct()
+    public function __construct($email)
     {
-        $user = Auth::user();
-        $email = $user ? $user->email : 'admin@email.com';
-
-        if ($email == 'vutuan.modobom@gmail.com') {
+        $this->email = $email;
+        if ($this->email == 'vutuan.modobom@gmail.com') {
             $this->apiKey = config('services.godaddy_tuan.api_key');
             $this->apiSecret = config('services.godaddy_tuan.api_secret');
             $this->apiUrl = config('services.godaddy_tuan.api_url');
-            $this->shopperID = config('services.godaddy_linh.shopper_id');
-        } else if ($email == 'tranlinh.modobom@gmail.com') {
+            $this->shopperID = config('services.godaddy_tuan.shopper_id');
+        } else if ($this->email == 'tranlinh.modobom@gmail.com') {
             $this->apiKey = config('services.godaddy_linh.api_key');
             $this->apiSecret = config('services.godaddy_linh.api_secret');
             $this->apiUrl = config('services.godaddy_linh.api_url');
@@ -65,17 +63,20 @@ class GoDaddyService
         }
     }
 
-    public function updateNameservers($domain, $nameservers)
+    public function updateNameservers($domain)
     {
         $body = [
-            "nameservers" => $nameservers
+            "nameServers" => [
+                'ben.ns.cloudflare.com',
+                'jean.ns.cloudflare.com',
+            ]
         ];
 
         $getCustomerID = $this->getCustomerID();
-        $this->customerID = $getCustomerID['customerId'];
+        $customerID = $getCustomerID['customerId'];
 
         try {
-            $response = $client->put("/v2/customers/{$this->customerID}/domains/{$domain}/nameServers", [
+            $response = $client->put("/v2/customers/{$customerID}/domains/{$domain}/nameServers", [
                 'json' => $body
             ]);
             
@@ -99,9 +100,10 @@ class GoDaddyService
     public function getCustomerID()
     {
         try {
-            $response = $this->client->get("/v1/shoppers/{$shopperID}?includes=customerId");
+            $response = $this->client->get("/v1/shoppers/{$this->shopperID}?includes=customerId");
 
-            return json_decode($response->getBody(), true);
+            return $this->shopperID;
+            // return json_decode($response->getBody(), true);
         } catch (RequestException $e) {
             return $this->handleException($e);
         }

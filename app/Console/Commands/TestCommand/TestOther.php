@@ -3,7 +3,8 @@
 namespace App\Console\Commands\TestCommand;
 
 use Illuminate\Console\Command;
-use Spatie\Ssh\Ssh;
+use App\Services\GoDaddyService;
+use Auth;
 
 class TestOther extends Command
 {
@@ -28,12 +29,11 @@ class TestOther extends Command
      */
     public function handle()
     {
-        $domain = 'gamesnood.com';
-        $server = '139.162.44.151';
-        $script = "bash /binhchay/create_site.sh $domain 2>&1";
-        $output = Ssh::create('root', $server)
-            ->execute($script);
+        $goDaddyService = new GoDaddyService('tranlinh.modobom@gmail.com');
+        // $user = Auth::user();
+        // $email = $user ? $user->email : 'admin@email.com';
 
-        dd($output->getOutput(), $output->getErrorOutput());
+        $result = $goDaddyService->getCustomerID();
+        dd($result);
     }
 }

@@ -73,8 +73,11 @@ class DomainController extends Controller
         $domain = $request->get('domain');
         $server = $request->get('server');
         $provider = Auth::user()->id;
+        $email = Auth::user()->email;
 
-        UpDomain::dispatch($domain, $server, $provider);
+        dd($email);
+
+        UpDomain::dispatch($domain, $server, $provider, $email);
 
         return response()->json([
             'message' => 'Đang xử lý...',
