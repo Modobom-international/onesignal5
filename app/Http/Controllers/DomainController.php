@@ -6,6 +6,7 @@ use App\Jobs\UpDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\GoDaddyService;
+use Auth;
 
 class DomainController extends Controller
 {
@@ -71,8 +72,9 @@ class DomainController extends Controller
     {
         $domain = $request->get('domain');
         $server = $request->get('server');
+        $provider = Auth::user()->id;
 
-        UpDomain::dispatch($domain, $server);
+        UpDomain::dispatch($domain, $server, $provider);
 
         return response()->json([
             'message' => 'Đang xử lý...',

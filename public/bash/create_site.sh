@@ -18,6 +18,7 @@ USER_DIR="/home/$USER/public_html"
 LOG_DIR="/home/$USER/logs"
 TMP_DIR="/home/$USER/tmp"
 SESSION_PATH="/home/$USER/php/session"
+JSON_OUTPUT="/binhchay/output/$DOMAIN.json"
 
 PLUGIN_DIR="$WEB_ROOT/wp-content/plugins/"
 PLUGIN_SOURCE_DIR="/binhchay/plugins/"
@@ -31,6 +32,9 @@ DB_PASS=$(openssl rand -base64 12)
 
 WEBSITE_TILE=$(echo "$DOMAIN" | sed -E 's/[-._]/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
 ADMIN_PASSWORD=$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9!@#$%^&*()_+={}[]')
+
+INFO_FILE="/home/DBinfo.txt"
+CURRENT_TIME=$(date +"%Y-%m-%d %H:%M:%S")
 
 # ==========================
 #      CHECK ENVIRONMENT
@@ -217,18 +221,42 @@ service php-fpm restart
 service nginx restart
 
 # ==========================
-#      OUTPUT JSON RESULT
+#      SAVE TO DBinfo.txt
 # ==========================
-echo "{"
-echo "  \"domain\": \"${DOMAIN}\","  
-echo "  \"username\": \"${USER}\","  
-echo "  \"db_name\": \"${DB_NAME}\","  
-echo "  \"db_user\": \"${DB_USER}\","  
-echo "  \"db_password\": \"${DB_PASS}\","  
-echo "  \"public_html\": \"${WEB_ROOT}\","  
-echo "  \"php_version\": \"${PHP_VERSION}\","  
-echo "  \"ftp_user\": \"${USER}\","  
-echo "  \"ftp_password\": \"${user_pass}\""
-echo "}"
+echo -e "\n\nBan đa them domain thanh cong. Hay luu lai thong tin de su dung" >> "$INFO_FILE"
+echo "$CURRENT_TIME" >> "$INFO_FILE"
+echo "---------------------------------------------------------------" >> "$INFO_FILE"
+echo "* Domain                     : $DOMAIN" >> "$INFO_FILE"
+echo "* DB_Name                    : $DB_NAME" >> "$INFO_FILE"
+echo "* DB_User                    : $DB_USER" >> "$INFO_FILE"
+echo "* DB_Password                : $DB_PASS" >> "$INFO_FILE"
+echo "* Username (FTP)             : $USER" >> "$INFO_FILE"
+echo "* Password (FTP)             : $user_pass" >> "$INFO_FILE"
+echo "* FTP Host                   : 139.162.44.151" >> "$INFO_FILE"
+echo "* FTP Port                   : 21" >> "$INFO_FILE"
+echo "* Public_html                : $WEB_ROOT" >> "$INFO_FILE"
+echo "* User dang nhap wp-admin    : admin" >> "$INFO_FILE"
+echo "* Mat khau dang nhap wp-admin: $ADMIN_PASSWORD" >> "$INFO_FILE"
+echo "---------------------------------------------------------------" >> "$INFO_FILE"
+
+# ==========================
+#      PRINT JSON OUTPUT
+# ==========================
+
+cat <<EOF > "$JSON_OUTPUT"
+{
+  "domain": "$DOMAIN",
+  "username": "$USER",
+  "db_name": "$DB_NAME",
+  "db_user": "$DB_USER",
+  "db_password": "$DB_PASS",
+  "public_html": "$WEB_ROOT",
+  "php_version": "$PHP_VERSION",
+  "ftp_user": "$USER",
+  "ftp_password": "$user_pass",
+  "admin_username": "admin",
+  "admin_password": "$ADMIN_PASSWORD"
+}
+EOF
 
 exit 0

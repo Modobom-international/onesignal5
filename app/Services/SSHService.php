@@ -25,11 +25,23 @@ class SSHService
             $output = Ssh::create($this->user, $this->server)
                 ->execute($script);
 
-            if (trim($output) === "SUCCESS" && (int)trim($statusCode) === 0) {
-                return json_decode($output, true);
-            } else {
-                return ['error' => 'Something went wrong'];
-            }
+            return $output->getOutput();
+        } catch (RequestException $e) {
+            return $this->handleException($e);
+        }
+    }
+
+    public function getOutputResult($domain)
+    {
+        try {
+            $filePath = '/binhchay/output/' . $domain . '.json';
+
+            $jsonData = Ssh::create($this->user, $this->server)
+                ->disableStrictHostKeyChecking()
+                ->execute("cat $filePath")
+                ->getOutput();
+
+            return json_decode($jsonData, true);
         } catch (RequestException $e) {
             return $this->handleException($e);
         }
