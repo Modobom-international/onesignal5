@@ -14,8 +14,6 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogBehaviorController;
 use App\Http\Controllers\PushSystemController;
-use App\Http\Controllers\ApiPlayerPhoneController;
-use App\Http\Controllers\StorageSimController;
 use App\Http\Controllers\PushSystemGlobalController;
 use App\Http\Controllers\HtmlSourceController;
 use App\Http\Controllers\UsersTrackingController;

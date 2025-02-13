@@ -142,7 +142,7 @@ class UpDomain implements ShouldQueue
             ],
         ));
 
-        $result = $sshService->runCommand(
+        $result = $sshService->runScript(
             $data['command']
         );
 

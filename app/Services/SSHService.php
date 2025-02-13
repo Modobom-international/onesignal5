@@ -20,15 +20,10 @@ class SSHService
     public function runScript($domain)
     {
         try {
-            $script = "bash /create_site.sh $domain";
+            $script = "bash /binhchay/create_site.sh $domain";
 
             $output = Ssh::create($this->user, $this->server)
-                ->usePrivateKey($this->privateKey)
                 ->execute($script);
-
-            $statusCode = Ssh::create($this->user, $this->server)
-                ->usePrivateKey($this->privateKey)
-                ->execute("echo $?");
 
             if (trim($output) === "SUCCESS" && (int)trim($statusCode) === 0) {
                 return json_decode($output, true);
