@@ -10,10 +10,6 @@ USER=${DOMAIN//[-._]/}
 USER=$(echo "$USER" | cut -c 1-7)
 USER="${USER}$(perl -le "print map+(A..Z,a..z,0-9)[rand 62],0..3")"
 
-DB_NAME="wp_${USER}"
-DB_USER="db_${USER}"
-DB_PASS=$(openssl rand -base64 12)
-
 PHP_FPM_CONF="/etc/php/$PHP_VERSION/fpm/pool.d/$DOMAIN.conf"
 NGINX_CONF="/etc/nginx/sites-available/$DOMAIN"
 WEB_ROOT="/home/$DOMAIN/public_html"
@@ -26,6 +22,14 @@ SESSION_PATH="/home/$USER/php/session"
 
 PLUGIN_DIR="$WEB_ROOT/wp-content/plugins/"
 PLUGIN_SOURCE_DIR="/binhchay/plugins/"
+
+PREFIX_DB=$(< /dev/urandom tr -dc '[:lower:]' | head -c"${1:-3}";echo;)
+DB_USER=$(echo "${USER}"_"${PREFIX_DB}" | tr '[:upper:]' '[:lower:]')
+DB_NAME=$(echo "${PREFIX_DB}"_"${USER}" | tr '[:upper:]' '[:lower:]')
+DB_PASS=$(openssl rand -base64 12)
+
+WEBSITE_TILE=$(echo "$DOMAIN" | sed -E 's/[-._]/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
+ADMIN_PASSWORD=$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9!@#$%^&*()_+={}[]')
 
 # ==========================
 #      CHECK ENVIRONMENT
@@ -44,9 +48,42 @@ check_service "php$PHP_VERSION-fpm" 103
 # ==========================
 #      CREATE USER & DIRS
 # ==========================
-if ! id "$USER" &>/dev/null; then
-    useradd --shell /bin/false "$USER"
-fi
+create_user() {
+    if ! id "$USER" &>/dev/null; then
+        useradd --shell /sbin/nologin "$USER"
+    fi
+}
+
+create_ftp() {
+    user_pass=$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9!@#$%^&*()_+={}[]')
+    pure-pw useradd "$USER" -u "$USER" -g "$USER" -d "$WEB_ROOT" <<EOF
+${user_pass}
+${user_pass}
+EOF
+    pure-pw mkdb
+    echo "FTP User Created: $USER with password $user_pass"
+}
+
+save_user_config() {
+    cat > "$USER_DIR/.${DOMAIN}.conf" <<END
+{
+    "domain": "${DOMAIN}",
+    "username": "${USER}",
+    "user_pass": "${user_pass}",
+    "db_name": "${db_name}",
+    "db_user": "${db_user}",
+    "db_password": "${db_pass}",
+    "public_html": "${WEB_ROOT}",
+    "php_version": "${PHP_VERSION}"
+}
+END
+    chmod 600 "$USER_DIR/.${DOMAIN}.conf"
+}
+
+create_user
+create_ftp
+save_user_config
+
 mkdir -p "$WEB_ROOT" "$LOG_DIR" "$TMP_DIR" "$SESSION_PATH" "$PLUGIN_DIR" "$USER_DIR"
 chown -R "$USER:$USER" "$WEB_ROOT"
 chmod 750 "$WEB_ROOT"
@@ -124,8 +161,21 @@ nginx -t && systemctl reload nginx
 cd "$WEB_ROOT"
 wp core download --allow-root
 wp config create --dbname="$DB_NAME" --dbuser="$DB_USER" --dbpass="$DB_PASS" --allow-root
-wp core install --url="https://$DOMAIN" --title="My Site" --admin_user="admin" --admin_password="AdminPass123!" --admin_email="binhchay.modobom@gmail.com" --allow-root
+wp core install --url="https://$DOMAIN" --title="$WEBSITE_TILE" --admin_user="admin" --admin_password="$ADMIN_PASSWORD" --admin_email="binhchay.modobom@gmail.com" --allow-root
 chown -R "$USER:$USER" "$WEB_ROOT"
+
+cat > "/home/$DOMAIN/public_html/robots.txt" <<END
+User-agent: *
+Disallow: /wp-admin/
+Disallow: /wp-includes/
+Disallow: /search?q=*
+Disallow: *?replytocom
+Disallow: */attachment/*
+Disallow: /images/
+Allow: /wp-admin/admin-ajax.php
+Allow: /*.js$
+Allow: /*.css$
+END
 
 # ==========================
 #      INSTALL PLUGINS
@@ -141,5 +191,19 @@ if [[ -d "$PLUGIN_SOURCE_DIR" ]]; then
     chown -R "$USER:$USER" "$PLUGIN_DIR"
 fi
 
-echo "SUCCESS"
+# ==========================
+#      OUTPUT JSON RESULT
+# ==========================
+echo "{"
+echo "  \"domain\": \"${DOMAIN}\","  
+echo "  \"username\": \"${USER}\","  
+echo "  \"db_name\": \"${db_name}\","  
+echo "  \"db_user\": \"${db_user}\","  
+echo "  \"db_password\": \"${db_pass}\","  
+echo "  \"public_html\": \"${WEB_ROOT}\","  
+echo "  \"php_version\": \"${PHP_VERSION}\","  
+echo "  \"ftp_user\": \"${USER}\","  
+echo "  \"ftp_password\": \"${user_pass}\""
+echo "}"
+
 exit 0

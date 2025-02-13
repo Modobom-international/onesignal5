@@ -7,14 +7,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return void
-     */
     public function index(Request $request)
     {
         $keyword = $request->get('search');
@@ -30,11 +26,6 @@ class UsersController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return void
-     */
     public function create()
     {
         $roles = Role::get();
@@ -42,23 +33,16 @@ class UsersController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return void
-     */
     public function store(Request $request)
     {
-        $this->validate(
-            $request,
+        $request->validate(
             [
                 'name' => 'required',
                 'email' => 'required|string|max:255',
                 'password' => 'required',
             ]
         );
+
         $data = $request->except('password');
         $data['password'] = bcrypt($request->password);
         $dataInsert = [
@@ -72,16 +56,9 @@ class UsersController extends Controller
 
         $user->syncRoles($request->get('roles'));
 
-        return redirect('admin/users')->with('flash_message', 'User added!');
+        return redirect('admin/users')->with('success', 'User added!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return void
-     */
     public function show($id)
     {
         $user = User::findOrFail($id);
@@ -89,13 +66,6 @@ class UsersController extends Controller
         return view('admin.users.show', compact('user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return void
-     */
     public function edit(User $user)
     {
         $user = $user;
@@ -108,18 +78,9 @@ class UsersController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int      $id
-     *
-     * @return void
-     */
     public function update(Request $request, $id)
     {
-        $this->validate(
-            $request,
+        $request->validate(
             [
                 'name' => 'required',
                 'email' => 'required|string|max:255|email|unique:users,email,' . $id,
@@ -135,51 +96,39 @@ class UsersController extends Controller
         $user->update($data);
         $user->syncRoles($request->get('roles'));
 
-        return redirect('admin/users')->with('flash_message', 'User updated!');
+        return redirect('admin/users')->with('success', 'User updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return void
-     */
     public function destroy($id)
     {
         User::destroy($id);
 
-        return redirect('admin/users')->with('flash_message', 'User deleted!');
+        return redirect('admin/users')->with('success', 'User deleted!');
     }
 
     public function changePasswordUser($id)
     {
-        $dataUser = \DB::table('users')->where('id', $id)->first();
+        $dataUser = DB::table('users')->where('id', $id)->first();
         return view('admin.users.change-password-user', compact('dataUser'));
     }
 
     public function updatePasswordUser(Request $request, $id)
     {
-        $dataUser = \DB::table('users')->where('id', $id)->first();
-        # Validation
+        $dataUser = DB::table('users')->where('id', $id)->first();
         $request->validate([
             'old_password' => 'required',
             'new_password' => 'required|confirmed',
         ]);
 
-
-        #Match The Old Password
-        if(!Hash::check($request->old_password, $dataUser->password)){
+        if (!Hash::check($request->old_password, $dataUser->password)) {
             return back()->with("error", "Old Password Doesn't match!");
         }
 
-
-        #Update the new Password
         User::whereId($dataUser->id)->update([
             'password' => Hash::make($request->new_password)
         ]);
 
-        return back()->with("status", "Password changed successfully!");
+        return back()->with("success", "Password changed successfully!");
     }
 
     public function changePassword()
@@ -189,24 +138,19 @@ class UsersController extends Controller
 
     public function updatePassword(Request $request)
     {
-        # Validation
         $request->validate([
             'old_password' => 'required',
             'new_password' => 'required|confirmed',
         ]);
 
-
-        #Match The Old Password
-        if(!Hash::check($request->old_password, auth()->user()->password)){
+        if (!Hash::check($request->old_password, auth()->user()->password)) {
             return back()->with("error", "Old Password Doesn't match!");
         }
 
-
-        #Update the new Password
         User::whereId(auth()->user()->id)->update([
             'password' => Hash::make($request->new_password)
         ]);
 
-        return back()->with("status", "Password changed successfully!");
+        return back()->with("success", "Password changed successfully!");
     }
 }

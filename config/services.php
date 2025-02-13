@@ -43,22 +43,26 @@ return [
         'api_key'    => env('GODADDY_API_KEY'),
         'api_secret' => env('GODADDY_API_SECRET'),
         'api_url'    => env('GODADDY_API_URL'),
+        'shopper_id'    => env('GODADDY_SHOPPER_ID'),
     ],
 
     'godaddy_tuan' => [
         'api_key'    => env('GODADDY_TUAN_API_KEY'),
         'api_secret' => env('GODADDY_TUAN_API_SECRET'),
         'api_url'    => env('GODADDY_TUAN_API_URL'),
+        'shopper_id'    => env('GODADDY_TUAN_SHOPPER_ID'),
     ],
 
     'godaddy_linh' => [
         'api_key'    => env('GODADDY_LINH_API_KEY'),
         'api_secret' => env('GODADDY_LINH_API_SECRET'),
         'api_url'    => env('GODADDY_LINH_API_URL'),
+        'shopper_id'    => env('GODADDY_LINH_SHOPPER_ID'),
     ],
 
     'cloudflare' => [
-        'api_token'    => env('CLOUDFLARE_API_TOKEN'),
+        'api_token_edit_zone_dns'    => env('CLOUDFLARE_API_TOKEN_EDIT_ZONE_DNS'),
+        'api_token_edit_zone'    => env('CLOUDFLARE_API_TOKEN_EDIT_ZONE'),
         'account_id' => env('CLOUDFLARE_ACCOUNT_ID'),
         'api_url'    => env('CLOUDFLARE_API_URL'),
     ],

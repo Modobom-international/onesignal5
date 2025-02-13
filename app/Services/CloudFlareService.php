@@ -8,21 +8,29 @@ use GuzzleHttp\Exception\RequestException;
 class CloudFlareService
 {
     protected $client;
+    protected $clientDNS;
     protected $apiToken;
+    protected $apiTokenDNS;
     protected $apiUrl;
     protected $accountId;
 
     public function __construct()
     {
         $this->apiUrl = config('services.cloudflare.api_url');
-        $this->apiToken = config('services.cloudflare.api_token');
+        $this->apiToken = config('services.cloudflare.api_token_edit_zone');
+        $this->apiTokenDNS = config('services.cloudflare.api_token_edit_zone_dns');
         $this->accountId = config('services.cloudflare.account_id');
 
         $this->client = new Client([
-            'base_uri' => $this->apiUrl,
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->apiToken,
-                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+        ]);
+
+        $this->clientDNS = new Client([
+            'headers' => [
+                'Authorization' => 'Bearer ' . $this->apiTokenDNS,
                 'Content-Type' => 'application/json',
             ],
         ]);
@@ -30,11 +38,11 @@ class CloudFlareService
 
     public function getZoneId($domain)
     {
-        $response = $this->client->get('/zones', [
-            'name' => $domain,
-        ]);
+        $response = $this->client->get($apiUrl . "/zones?name={$domain}");
+        $result = json_decode($response->getBody(), true);
+        $zoneID = $result['result'][0]['id'] ?? null;
 
-        return optional($response->json()['result'][0])['id'] ?? null;
+        return $zoneID;
     }
 
     public function updateDnsARecord($domain, $ip)
@@ -44,28 +52,22 @@ class CloudFlareService
             return ['error' => 'Không tìm thấy Zone ID'];
         }
 
-        $response = $this->client->get("/zones/{$zoneId}/dns_records", [
-            'type' => 'A',
-            'name' => $domain
-        ]);
+        try {
+            $body = [
+                'type' => 'A',
+                'name' => $domain,
+                'content' => $ip,
+                'ttl' => 1,
+                'proxied' => true
+            ];
 
-        $records = $response->json()['result'];
-        $body = [
-            'type' => 'A',
-            'name' => $domain,
-            'content' => $ip,
-            'ttl' => 1,
-            'proxied' => true
-        ];
-
-        if (!empty($records)) {
-            $response = $this->client->put("/zones/{$zoneId}/dns_records/{$recordId}", $body);
+            $response = $client->post($apiUrl . "/zones/{$zoneId}/dns_records", [
+                'json' => $body
+            ]);
 
             return json_decode($response->getBody(), true);
-        } else {
-            $response = $this->client->post("/zones/{$zoneId}/dns_records", $body);
-
-            return json_decode($response->getBody(), true);
+        } catch (RequestException $e) {
+            return $this->handleException($e);
         }
     }
 
@@ -78,7 +80,7 @@ class CloudFlareService
         ];
 
         try {
-            $response = $this->client->post('/zones', ['json' => $body]);
+            $response = $this->client->post($this->apiUrl . '/zones', ['json' => $body]);
 
             return json_decode($response->getBody(), true);
         } catch (RequestException $e) {

@@ -17,7 +17,7 @@
         </div>
 
         <div class="card mt-4 position-relative">
-            <!-- <div class="overlay"></div> -->
+            <div class="overlay"></div>
             <div class="card-body">
                 <div class="form-group">
                     <div class="mb-3">
@@ -27,24 +27,6 @@
                             <option value="services.ip_server.wp2">Server IP2</option>
                             <option value="services.ip_server.wp3">Server IP3</option>
                         </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="area-plugin" class="form-label">Chọn plugin</label>
-                        <div id="area-plugin">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="wp-rocket">
-                                <label class="form-check-label" for="wp-rocket">
-                                    WP-Rocket
-                                </label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="elementor-pro">
-                                <label class="form-check-label" for="elementor-pro">
-                                    Elementor Pro
-                                </label>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="mb-3">

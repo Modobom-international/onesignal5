@@ -32,7 +32,7 @@ class UpDomain implements ShouldQueue
     {
         $goDaddyService = new GoDaddyService();
         $cloudFlareService = new CloudFlareService();
-        $sshService = new SSHService();
+        $sshService = new SSHService($this->server);
 
         $data = [
             'domain'      => $this->domain,
@@ -135,7 +135,6 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-
         broadcast(new UpDomainDump(
             [
                 'message' => ' 🔄 Bắt đầu tiến hành khởi tạo website....',
@@ -147,22 +146,22 @@ class UpDomain implements ShouldQueue
             $data['command']
         );
 
-        if (array_key_exists('error', $result)) {
-            broadcast(new UpDomainDump(
-                [
-                    'message' => ' ❌ Lỗi không khởi tạo được website.... \n ⚡ Kết thúc quá trình up domain...',
-                    'id'  => 'process-4'
-                ],
-            ));
+        // if (array_key_exists('error', $result)) {
+        //     broadcast(new UpDomainDump(
+        //         [
+        //             'message' => ' ❌ Lỗi không khởi tạo được website.... \n ⚡ Kết thúc quá trình up domain...',
+        //             'id'  => 'process-4'
+        //         ],
+        //     ));
 
-            return;
-        } else {
-            broadcast(new UpDomainDump(
-                [
-                    'message' => ' ✅ Hoàn tất khởi tạo website!',
-                    'id'  => 'process-4'
-                ],
-            ));
-        }
+        //     return;
+        // } else {
+        //     broadcast(new UpDomainDump(
+        //         [
+        //             'message' => ' ✅ Hoàn tất khởi tạo website!',
+        //             'id'  => 'process-4'
+        //         ],
+        //     ));
+        // }
     }
 }

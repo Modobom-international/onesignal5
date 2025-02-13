@@ -6,7 +6,6 @@ use App\Jobs\UpDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\GoDaddyService;
-use App\Events\UpDomainDump;
 
 class DomainController extends Controller
 {
