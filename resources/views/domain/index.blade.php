@@ -20,18 +20,20 @@
                         <thead>
                             <tr>
                                 <th>Domain</th>
-                                <th>Ngày tạo</th>
                                 <th>Server</th>
-                                <th>Hành động</th>
+                                <th>Tài khoản</th>
+                                <th>Mật khẩu</th>
+                                <th>Ngày tạo</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($domains as $domain)
                             <tr>
                                 <td>{{ $domain->domain }}</td>
+                                <td>{{ \App\Enums\ListServer::SERVER[$domain->server] }}</td>
+                                <td>{{ $domain->admin_username }}</td>
+                                <td>{{ $domain->admin_password }}</td>
                                 <td>{{ $domain->created_at }}</td>
-                                <td>{{ $domain->server }}</td>
-                                <td><button class="btn btn-success">Chi tiết</button></td>
                             </tr>
                             @endforeach
                         </tbody>

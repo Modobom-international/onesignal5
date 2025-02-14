@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Common;
 use App\Jobs\UpDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class DomainController extends Controller
     public function listDomain()
     {
         $domains = DB::connection('mongodb')
-            ->table('domain')
+            ->table('domains')
             ->get();
 
         return view('domain.index', compact('domains'));
@@ -74,8 +75,9 @@ class DomainController extends Controller
         $server = $request->get('server');
         $provider = Auth::user()->id;
         $email = Auth::user()->email;
+        $date = Common::covertDateTimeToMongoBSONDateGMT7(Common::getCurrentVNTime());
 
-        UpDomain::dispatch($domain, $server, $provider, $email);
+        UpDomain::dispatch($domain, $server, $provider, $email, $date);
 
         return response()->json([
             'message' => 'Đang xử lý...',

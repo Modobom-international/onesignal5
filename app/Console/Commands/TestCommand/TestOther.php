@@ -29,11 +29,6 @@ class TestOther extends Command
      */
     public function handle()
     {
-        $goDaddyService = new GoDaddyService('tranlinh.modobom@gmail.com');
-        // $user = Auth::user();
-        // $email = $user ? $user->email : 'admin@email.com';
 
-        $result = $goDaddyService->getCustomerID();
-        dd($result);
     }
 }

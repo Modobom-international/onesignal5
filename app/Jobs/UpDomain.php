@@ -18,16 +18,18 @@ class UpDomain implements ShouldQueue
     protected $server;
     protected $provider;
     protected $email;
+    protected $date;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($domain, $server, $provider, $email)
+    public function __construct($domain, $server, $provider, $email, $date)
     {
         $this->domain = $domain;
         $this->server = $server;
         $this->provider = $provider;
         $this->email = $email;
+        $this->date = $date;
     }
 
     /**
@@ -190,7 +192,8 @@ class UpDomain implements ShouldQueue
             'admin_password' => $result['admin_password'],
             'server' => config($this->server),
             'status' => 1,
-            'provider' => $this->provider
+            'provider' => $this->provider,
+            'created_at' => $this->date
         ];
 
         DB::connection('mongodb')
@@ -199,8 +202,8 @@ class UpDomain implements ShouldQueue
 
         broadcast(new UpDomainDump(
             [
-                'message' => ' ✅ Hoàn tất lưu trữ dữ liệu domain! <br> ------- Hoàn tất việc up domain -------',
-                'id'  => 'process-4'
+                'message' => ' ✅ Hoàn tất lưu trữ dữ liệu domain! <br><br> -------------- Hoàn tất việc up domain --------------',
+                'id'  => 'process-5'
             ],
         ));
     }

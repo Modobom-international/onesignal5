@@ -13,6 +13,7 @@ USER="${USER}$(perl -le "print map+(A..Z,a..z,0-9)[rand 62],0..3")"
 PHP_FPM_CONF="/etc/php-fpm.d/$DOMAIN.conf"
 NGINX_CONF="/etc/nginx/conf.d/$DOMAIN.conf"
 WEB_ROOT="/home/$DOMAIN/public_html"
+LOG_DOMAIN_DIR="/home/$DOMAIN/logs"
 USER_DIR="/home/$USER/public_html"
 
 LOG_DIR="/home/$USER/logs"
@@ -85,6 +86,7 @@ END
 }
 
 mkdir -p "$USER_DIR"
+mkdir -p "$LOG_DOMAIN_DIR"
 mkdir -p "$WEB_ROOT" "$LOG_DIR" "$TMP_DIR" "$SESSION_PATH" "$PLUGIN_DIR" "$USER_DIR"
 
 create_user
@@ -92,7 +94,8 @@ create_ftp
 save_user_config
 
 chown -R "$USER:$USER" "$WEB_ROOT"
-chmod 750 "$WEB_ROOT"
+chmod -R 755 "/home/$DOMAIN/public_html/"
+chmod -R 755 "/home/$DOMAIN/logs/"
 
 # ==========================
 #      CREATE DATABASE
@@ -216,9 +219,9 @@ if [[ -d "$PLUGIN_SOURCE_DIR" ]]; then
     chown -R "$USER:$USER" "$PLUGIN_DIR"
 fi
 
-service varnish restart
 service php-fpm restart
 service nginx restart
+service varnish restart
 
 # ==========================
 #      SAVE TO DBinfo.txt
