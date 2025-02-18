@@ -192,6 +192,9 @@ wp config create --dbname="$DB_NAME" --dbuser="$DB_USER" --dbpass="$DB_PASS" --a
 wp core install --url="https://$DOMAIN" --title="$WEBSITE_TILE" --admin_user="admin" --admin_password="$ADMIN_PASSWORD" --admin_email="binhchay.modobom@gmail.com" --allow-root
 chown -R "$USER:$USER" "$WEB_ROOT"
 
+echo "define('FORCE_SSL_ADMIN', true);" >> "$WEB_ROOT/wp-config.php"
+echo "\$_SERVER['HTTPS'] = 'on';" >> "$WEB_ROOT/wp-config.php"
+
 cat > "/home/$DOMAIN/public_html/robots.txt" <<END
 User-agent: *
 Disallow: /wp-admin/
