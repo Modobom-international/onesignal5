@@ -223,6 +223,33 @@ return [
                 'maxProcesses' => 5,
                 'tries' => 0,
             ],
+
+            'supervisor-onesignal5-10' => [
+                'connection' => 'redis',
+                'queue' => ['create_log_behavior'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 1,
+                'tries' => 0,
+            ],
+
+            'supervisor-onesignal5-11' => [
+                'connection' => 'redis',
+                'queue' => ['behavior_store_log'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 5,
+                'tries' => 0,
+            ],
+
+            'supervisor-onesignal5-12' => [
+                'connection' => 'redis',
+                'queue' => ['notify_telegram_install_log_behavior'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 5,
+                'tries' => 0,
+            ],
         ],
     ],
 ];
