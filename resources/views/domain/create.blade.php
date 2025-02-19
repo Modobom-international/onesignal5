@@ -105,7 +105,7 @@
         var domain = document.getElementById('domain').value;
         if (domain == '') {
             toastr.error('Domain không được để trống');
-            $('.overlay').hide();
+            $('.overlay').show();
             return;
         }
 
