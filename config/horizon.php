@@ -144,24 +144,6 @@ return [
         '*' => [
             'supervisor-onesignal5-1' => [
                 'connection' => 'redis',
-                'queue' => ['create_log_behavior'],
-                'balance' => 'auto',
-                'minProcesses' => 1,
-                'maxProcesses' => 1,
-                'tries' => 0,
-            ],
-
-            'supervisor-onesignal5-2' => [
-                'connection' => 'redis',
-                'queue' => ['behavior_store_log'],
-                'balance' => 'auto',
-                'minProcesses' => 1,
-                'maxProcesses' => 5,
-                'tries' => 0,
-            ],
-
-            'supervisor-onesignal5-3' => [
-                'connection' => 'redis',
                 'queue' => ['save_push_system_data'],
                 'balance' => 'auto',
                 'minProcesses' => 1,
@@ -169,7 +151,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-4' => [
+            'supervisor-onesignal5-2' => [
                 'connection' => 'redis',
                 'queue' => ['save_request_get_system_setting'],
                 'balance' => 'auto',
@@ -178,7 +160,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-5' => [
+            'supervisor-onesignal5-3' => [
                 'connection' => 'redis',
                 'queue' => ['save_user_active_push_system'],
                 'balance' => 'auto',
@@ -188,7 +170,7 @@ return [
                 'timeout' => 300,
             ],
 
-            'supervisor-onesignal5-6' => [
+            'supervisor-onesignal5-4' => [
                 'connection' => 'redis',
                 'queue' => ['save_request_get_system_global_setting'],
                 'balance' => 'auto',
@@ -197,7 +179,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-7' => [
+            'supervisor-onesignal5-5' => [
                 'connection' => 'redis',
                 'queue' => ['create_html_source'],
                 'balance' => 'auto',
@@ -206,16 +188,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-8' => [
-                'connection' => 'redis',
-                'queue' => ['notify_telegram_install_log_behavior'],
-                'balance' => 'auto',
-                'minProcesses' => 1,
-                'maxProcesses' => 5,
-                'tries' => 0,
-            ],
-
-            'supervisor-onesignal5-8' => [
+            'supervisor-onesignal5-6' => [
                 'connection' => 'redis',
                 'queue' => ['create_users_tracking'],
                 'balance' => 'auto',
@@ -224,7 +197,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-9' => [
+            'supervisor-onesignal5-7' => [
                 'connection' => 'redis',
                 'queue' => ['create_heat_map'],
                 'balance' => 'auto',
@@ -233,7 +206,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-10' => [
+            'supervisor-onesignal5-8' => [
                 'connection' => 'redis',
                 'queue' => ['fetch_full_page'],
                 'balance' => 'auto',
@@ -242,7 +215,7 @@ return [
                 'tries' => 0,
             ],
 
-            'supervisor-onesignal5-11' => [
+            'supervisor-onesignal5-9' => [
                 'connection' => 'redis',
                 'queue' => ['fetch_image_view'],
                 'balance' => 'auto',
