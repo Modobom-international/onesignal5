@@ -135,61 +135,8 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-    const chartDataLogBehavior = <?php echo json_encode($dataChart['create_log_behavior']) ?>;
     const chartDataHtmlSource = <?php echo json_encode($dataChart['create_html_source']) ?>;
     const chartDataUsersTracking = <?php echo json_encode($dataChart['create_users_tracking']) ?>;
-
-    var optionsLog = {
-        chart: {
-            type: 'line',
-            height: 250,
-            background: 'transparent',
-            toolbar: {
-                show: false
-            },
-            zoom: {
-                enabled: false
-            }
-        },
-        series: [{
-            name: 'log_behavior',
-            data: chartDataLogBehavior.values
-        }],
-        xaxis: {
-            labels: {
-                show: false
-            },
-            axisBorder: {
-                show: false
-            },
-            axisTicks: {
-                show: false
-            }
-        },
-        yaxis: {
-            labels: {
-                show: false
-            },
-            axisBorder: {
-                show: false
-            },
-            axisTicks: {
-                show: false
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        legend: {
-            show: false
-        },
-        tooltip: {
-            enabled: false
-        },
-        grid: {
-            show: false
-        },
-    }
 
     var optionsHtml = {
         chart: {
@@ -295,11 +242,9 @@
         },
     }
 
-    const chartLog = new ApexCharts(document.querySelector("#chartLog"), optionsLog);
     const chartHtml = new ApexCharts(document.querySelector("#chartHtml"), optionsHtml);
     const chartUsers = new ApexCharts(document.querySelector("#chartUsers"), optionsUsers);
 
-    chartLog.render();
     chartHtml.render();
     chartUsers.render();
 
@@ -309,10 +254,6 @@
             method: 'GET',
             dataType: 'json',
             success: function(response) {
-                $('#log-behavior-length').text(response.create_log_behavior.length);
-                $('#log-behavior-runtime').text(Math.floor(response.create_log_behavior.runtime));
-                $('#log-behavior-processes').text(response.create_log_behavior.processes);
-
                 $('#html-source-length').text(response.create_html_source.length);
                 $('#html-source-runtime').text(Math.floor(response.create_html_source.runtime));
                 $('#html-source-processes').text(response.create_html_source.processes);

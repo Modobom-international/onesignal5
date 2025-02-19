@@ -11,19 +11,12 @@ class AdminController extends Controller
     public function index()
     {
         $workloads = app(WorkloadRepository::class)->get();
-        $runTimeLogBehavior = app(MetricsRepository::class)->runtimeForQueue('create_log_behavior');
         $runTimeHtmlSource = app(MetricsRepository::class)->runtimeForQueue('create_html_source');
         $runeTimeUsersTracking = app(MetricsRepository::class)->runtimeForQueue('create_users_tracking');
-        $snapshotLogBehavior = app(MetricsRepository::class)->snapshotsForQueue('create_log_behavior');
         $snapshotHtmlSource = app(MetricsRepository::class)->snapshotsForQueue('create_html_source');
         $snapshotUsersTracking = app(MetricsRepository::class)->snapshotsForQueue('create_users_tracking');
 
         $data = [
-            'create_log_behavior' => [
-                'length' => 0,
-                'processes' => 0,
-                'runtime' => $runTimeLogBehavior,
-            ],
             'create_html_source' => [
                 'length' => 0,
                 'processes' => 0,
@@ -37,11 +30,6 @@ class AdminController extends Controller
         ];
 
         foreach ($workloads as $queue) {
-            if ($queue['name'] == 'create_log_behavior') {
-                $data['create_log_behavior']['length'] = $queue['length'];
-                $data['create_log_behavior']['processes'] = $queue['processes'];
-            }
-
             if ($queue['name'] == 'create_html_source') {
                 $data['create_html_source']['length'] = $queue['length'];
                 $data['create_html_source']['processes'] = $queue['processes'];
@@ -54,10 +42,6 @@ class AdminController extends Controller
         }
 
         $dataChart = [
-            'create_log_behavior' => [
-                'labels' => [],
-                'values' => [],
-            ],
             'create_html_source' => [
                 'labels' => [],
                 'values' => [],
@@ -67,11 +51,6 @@ class AdminController extends Controller
                 'values' => [],
             ]
         ];
-
-        foreach ($snapshotLogBehavior as $snapLog) {
-            $dataChart['create_log_behavior']['labels'][] = $snapLog->time;
-            $dataChart['create_log_behavior']['values'][] = $snapLog->throughput;
-        }
 
         foreach ($snapshotHtmlSource as $snapHtml) {
             $dataChart['create_html_source']['labels'][] = $snapHtml->time;
@@ -89,16 +68,10 @@ class AdminController extends Controller
     public function fetchHorizonDashboard()
     {
         $workloads = app(WorkloadRepository::class)->get();
-        $runTimeLogBehavior = app(MetricsRepository::class)->runtimeForQueue('create_log_behavior');
         $runTimeHtmlSource = app(MetricsRepository::class)->runtimeForQueue('create_html_source');
         $runTimeUsersTracking = app(MetricsRepository::class)->runtimeForQueue('create_users_tracking');
 
         $data = [
-            'create_log_behavior' => [
-                'length' => 0,
-                'processes' => 0,
-                'runtime' => $runTimeLogBehavior,
-            ],
             'create_html_source' => [
                 'length' => 0,
                 'processes' => 0,
@@ -112,11 +85,6 @@ class AdminController extends Controller
         ];
 
         foreach ($workloads as $queue) {
-            if ($queue['name'] == 'create_log_behavior') {
-                $data['create_log_behavior']['length'] = $queue['length'];
-                $data['create_log_behavior']['processes'] = $queue['processes'];
-            }
-
             if ($queue['name'] == 'create_html_source') {
                 $data['create_html_source']['length'] = $queue['length'];
                 $data['create_html_source']['processes'] = $queue['processes'];
