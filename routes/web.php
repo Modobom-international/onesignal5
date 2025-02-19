@@ -12,7 +12,6 @@
 */
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LogBehaviorController;
 use App\Http\Controllers\PushSystemController;
 use App\Http\Controllers\PushSystemGlobalController;
 use App\Http\Controllers\HtmlSourceController;
@@ -68,22 +67,12 @@ Route::get('/apk/load-web', [HomeController::class, 'apkLoadWeb'])->name('apkLoa
 Route::get('/apk/load-web-count', [HomeController::class, 'apkLoadWebCount'])->name('apkLoadWebCount');
 Route::get('/apk/load-web-count-diff', [HomeController::class, 'apkLoadWebCountDiff'])->name('apkLoadWebCountDiff');
 
-// Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'])->name('logBehavior');
 Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
 
 Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(function () {
     Route::group(['middleware' => ['auth', 'role_or_permission:super-admin|check-log-count-data|manager-file']], function () {
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
-
-        Route::get('/log-behavior', [LogBehaviorController::class, 'viewLogBehavior'])->name('viewLogBehavior');
-        Route::get('/get-data-chart-log-behavior', [LogBehaviorController::class, 'getDataChartLogBehavior'])->name('getDataChartLogBehavior');
-        Route::get('/store-config-filter-log-behavior', [LogBehaviorController::class, 'storeConfigFilterLogBehavior'])->name('storeConfigFilterLogBehavior');
-        Route::get('/reset-config-filter-log-behavior', [LogBehaviorController::class, 'resetConfigFilterLogBehavior'])->name('resetConfigFilterLogBehavior');
-        Route::get('/compare-date', [LogBehaviorController::class, 'compareDate'])->name('compareDate');
-        Route::get('/save-list-app-for-check', [LogBehaviorController::class, 'saveListAppForCheck'])->name('saveListAppForCheck');
-        Route::get('/delete-app-in-list-for-check', [LogBehaviorController::class, 'deleteAppInListForCheck'])->name('deleteAppInListForCheck');
-        Route::get('/get-activity-uid', [LogBehaviorController::class, 'getActivityUid'])->name('getActivityUid');
 
         Route::get('/push-system', [PushSystemController::class, 'listPushSystem'])->name('listPushSystem');
         Route::get('/config-link/add', [PushSystemController::class, 'addConfigSystemLink'])->name('addConfigSystemLink');
