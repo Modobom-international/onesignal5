@@ -18,9 +18,23 @@ class ShareGlobalVariable
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->expectsHtml() && Auth::check()) {
-            $notificationSystem = DB::connection('mongodb')->table('domains')->where('users_id', Auth::user()->id)->orderBy('created_at')->limit(4)->get();
-            View::share('notificationSystem', $notificationSystem);
+        if ($request->expectsJson()) {
+            return $next($request);
+        }
+
+        if (Auth::check()) {
+            $notificationSystem = DB::connection('mongodb')
+                ->table('domains')
+                ->where('users_id', Auth::user()->id)
+                ->orderBy('created_at')
+                ->limit(4)
+                ->get();
+
+            if (class_exists('Illuminate\Support\Facades\View')) {
+                View::share('notificationSystem', $notificationSystem);
+            } else {
+                \Log::error('View facade not found');
+            }
         }
 
         return $next($request);
