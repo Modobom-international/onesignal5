@@ -18,8 +18,10 @@ class ShareGlobalVariable
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $notificationSystem = DB::connection('mongodb')->table('domains')->where('users_id', Auth::user()->id)->orderBy('created_at')->limit(4)->get();
-        View::share('notificationSystem', $notificationSystem);
+        if ($request->expectsHtml() && Auth::check()) {
+            $notificationSystem = DB::connection('mongodb')->table('domains')->where('users_id', Auth::user()->id)->orderBy('created_at')->limit(4)->get();
+            View::share('notificationSystem', $notificationSystem);
+        }
 
         return $next($request);
     }
