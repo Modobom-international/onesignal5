@@ -136,6 +136,10 @@
     transform: translate3d(0px, 42.4px, 0px);
 }
 
+.hide {
+    visibility: hidden;
+}
+
 @-webkit-keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);

@@ -13,7 +13,7 @@
                 <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle new-notification"></span>
             </div>
 
-            <ul class="dropdown-menu" id="dropdown-notification">
+            <ul class="dropdown-menu" id="dropdown-notification" data-popper-placement="bottom-end">
                 @if(count($notificationSystem) > 0)
                 @foreach($notificationSystem as $notification)
                 @if($notification->status_read == 0)
@@ -34,6 +34,7 @@
                 <li><a class="dropdown-item background-grey">{{ __('Không có thông báo nào mới') }}</a></li>
                 @endif
             </ul>
+
         </x-button>
 
         <x-button type="button" class="hidden md:inline-flex" icon-only variant="secondary" sr-text="Toggle dark mode" x-on:click="toggleTheme">
