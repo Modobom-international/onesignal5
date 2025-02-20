@@ -25,6 +25,8 @@ class SSHService
             $output = Ssh::create($this->user, $this->server)
                 ->execute($script);
 
+            \Log::info('-----------Result :', $output);
+
             return $output->getOutput();
         } catch (RequestException $e) {
             return $this->handleException($e);
