@@ -71,6 +71,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="{{ asset('js/chart.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
 
     <script>
         toastr.options = {
@@ -106,6 +107,26 @@
         <?php if (session('warning')) { ?>
             toastr.warning("{{ session('warning') }}");
         <?php } ?>
+    </script>
+
+    <script>
+        const users_id = '<?php echo Auth::user()->id; ?>';
+
+        $(document).ready(function() {
+            Echo.channel("notification-system").listen("NotificationSystem", (e) => {
+                const data = e.data;
+                if (users_id == data.users_id) {
+                    if ($('#bell-notification').hasClass('hide')) {
+                        $('#bell-notification').removeClass('hide');
+                    }
+
+                    $("#dropdown-notification").prepend(`<li><a class="dropdown-item background-grey">` + data.message + `</a></li>`);
+                    if ($("#dropdown-notification li").length >= 4) {
+                        $("#dropdown-notification").last().remove();
+                    }
+                }
+            });
+        });
     </script>
 
     @yield('scripts')

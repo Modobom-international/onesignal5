@@ -23,18 +23,13 @@ use App\Http\Controllers\Admin\PermissionsController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogBehaviorController;
-use Illuminate\Support\Facades\Route;
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\ShareGlobalVariable;
 
 require __DIR__ . '/auth.php';
-
-Route::options('{any}', function () {
-    return response()->json([], 204);
-})->where('any', '.*');
-
-Route::middleware('auth')->group(function () {});
 
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 
@@ -72,7 +67,7 @@ Route::get('/apk/load-web-count-diff', [HomeController::class, 'apkLoadWebCountD
 Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
 
-Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(function () {
+Route::middleware(Authenticate::class, IsAdmin::class, ShareGlobalVariable::class)->prefix('admin')->group(function () {
     Route::group(['middleware' => ['auth', 'role_or_permission:super-admin|check-log-count-data|manager-file']], function () {
         Route::get('/', [AdminController::class, 'index'])->name('dashboard');
 

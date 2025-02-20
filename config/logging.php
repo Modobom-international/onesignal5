@@ -134,48 +134,6 @@ return [
             'days' => 0
         ],
 
-        'api_log_date' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/api_log_date/api_log_date.log'),
-            'level' => 'debug',
-            'days' => 0
-        ],
-
-        'push_onesignal_log' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/push_onesignal_log/push_onesignal_log.log'),
-            'level' => 'debug',
-            'days' => 5
-        ],
-
-        'delete_key_cache_log' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/delete_key_cache_log/delete_key_cache_log.log'),
-            'level' => 'debug',
-            'days' => 5
-        ],
-
-        'upload_total_virus_log' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/upload_total_virus_log.log'),
-            'level' => 'debug',
-            'days' => 5
-        ],
-
-        'malaysia' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/malaysia/malay-log.log'),
-            'level' => 'debug',
-            'days' => 5
-        ],
-
-        'denmark' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/denmark/denmark-log.log'),
-            'level' => 'debug',
-            'days' => 5
-        ],
-
         'debug' => [
             'driver' => 'daily',
             'path' => storage_path('logs/debug/debug.log'),

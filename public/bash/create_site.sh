@@ -22,7 +22,9 @@ SESSION_PATH="/home/$USER/php/session"
 JSON_OUTPUT="/binhchay/output/$DOMAIN.json"
 
 PLUGIN_DIR="$WEB_ROOT/wp-content/plugins/"
+THEME_DIR="$WEB_ROOT/wp-content/themes/"
 PLUGIN_SOURCE_DIR="/binhchay/plugins/"
+THEME_SOURCE_DIR="/binhchay/themes/"
 
 SOCKET_PATH="/var/run/php-fpm/$USER.sock"
 
@@ -136,7 +138,7 @@ php_admin_value[upload_tmp_dir] = /home/$USER/tmp
 php_admin_value[open_basedir] = /home/$DOMAIN/:/home/$USER/:/dev/urandom:/usr/share/php/:/dev/shm
 security.limit_extensions = .php
 EOF
-systemctl reload php$PHP_VERSION-fpm
+service php-fpm restart
 
 # ==========================
 #      CONFIGURE NGINX
@@ -177,10 +179,6 @@ server {
     include /etc/nginx/wordpress/disable_xmlrpc.conf;
 }
 EOF
-if [ -L "/etc/nginx/sites-enabled/$DOMAIN" ]; then
-    rm "/etc/nginx/sites-enabled/$DOMAIN"
-fi
-ln -s "$NGINX_CONF" "/etc/nginx/sites-enabled/"
 nginx -t && systemctl reload nginx
 
 # ==========================
@@ -192,8 +190,7 @@ wp config create --dbname="$DB_NAME" --dbuser="$DB_USER" --dbpass="$DB_PASS" --a
 wp core install --url="https://$DOMAIN" --title="$WEBSITE_TILE" --admin_user="admin" --admin_password="$ADMIN_PASSWORD" --admin_email="binhchay.modobom@gmail.com" --allow-root
 chown -R "$USER:$USER" "$WEB_ROOT"
 
-echo "define('FORCE_SSL_ADMIN', true);" >> "$WEB_ROOT/wp-config.php"
-echo "\$_SERVER['HTTPS'] = 'on';" >> "$WEB_ROOT/wp-config.php"
+grep -q "define('FORCE_SSL_ADMIN', true);" "$WEB_ROOT/wp-config.php" || sed -i "/\/\* That's all, stop editing! Happy publishing. \*\//i\define('FORCE_SSL_ADMIN', true);\n\$_SERVER['HTTPS'] = 'on';" "$WEB_ROOT/wp-config.php"
 
 cat > "/home/$DOMAIN/public_html/robots.txt" <<END
 User-agent: *
@@ -209,6 +206,20 @@ Allow: /*.css$
 END
 
 # ==========================
+#      INSTALL THEME
+# ==========================
+if [[ -d "$THEME_SOURCE_DIR" ]]; then
+    for THEME_ZIP in "$THEME_SOURCE_DIR"/*.zip; do
+        if [[ -f "$THEME_ZIP" ]]; then
+            unzip -o "$THEME_ZIP" -d "$THEME_DIR"
+        fi
+    done
+
+    wp theme activate bds
+    chown -R "$USER:$USER" "$THEME_DIR"
+fi
+
+# ==========================
 #      INSTALL PLUGINS
 # ==========================
 if [[ -d "$PLUGIN_SOURCE_DIR" ]]; then
@@ -222,6 +233,7 @@ if [[ -d "$PLUGIN_SOURCE_DIR" ]]; then
     chown -R "$USER:$USER" "$PLUGIN_DIR"
 fi
 
+wp cache flush
 service php-fpm restart
 service nginx restart
 service varnish restart

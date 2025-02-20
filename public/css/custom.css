@@ -115,6 +115,27 @@
     cursor: not-allowed;
 }
 
+.position-relative {
+    position: relative;
+}
+
+.new-notification {
+    top: 10px !important;
+    left: 25px !important;
+    padding: .3rem !important;
+}
+
+.background-grey {
+    background-color: grey;
+}
+
+#dropdown-notification {
+    position: absolute;
+    inset: 0px auto auto 0px;
+    margin: 0px;
+    transform: translate3d(0px, 42.4px, 0px);
+}
+
 @-webkit-keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);

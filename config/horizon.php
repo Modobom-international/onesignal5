@@ -250,6 +250,15 @@ return [
                 'maxProcesses' => 5,
                 'tries' => 0,
             ],
+
+            'supervisor-onesignal5-13' => [
+                'connection' => 'redis',
+                'queue' => ['notification_system'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 5,
+                'tries' => 0,
+            ],
         ],
     ],
 ];

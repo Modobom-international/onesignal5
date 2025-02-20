@@ -191,7 +191,7 @@ class UpDomain implements ShouldQueue
             'admin_username' => $result['admin_username'],
             'admin_password' => $result['admin_password'],
             'server' => config($this->server),
-            'status' => 1,
+            'status' => 0,
             'provider' => $this->provider,
             'created_at' => $this->date
         ];

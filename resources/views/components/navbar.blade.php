@@ -7,6 +7,35 @@
     </div>
 
     <div class="flex items-center gap-3">
+        <x-button type="button" class="hidden md:inline-flex position-relative" data-bs-toggle="dropdown" aria-expanded="false" icon-only variant="secondary" onclick="displayNotification()">
+            <x-icons.bell class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
+            <div id="bell-notification" class="hide">
+                <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle new-notification"></span>
+            </div>
+
+            <ul class="dropdown-menu" id="dropdown-notification">
+                @if(count($notificationSystem) > 0)
+                @foreach($notificationSystem as $notification)
+                @if($notification->status_read == 0)
+                <li><a class="dropdown-item background-grey">{{ $notification->message }}</a></li>
+                @else
+                <li><a class="dropdown-item">{{ $notification->message }}</a></li>
+                @endif
+                @endforeach
+
+                @if(count($notificationSystem) == 4)
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#">Read more</a></li>
+                @endif
+
+                @else
+                <li><a class="dropdown-item background-grey">{{ __('Không có thông báo nào mới') }}</a></li>
+                @endif
+            </ul>
+        </x-button>
+
         <x-button type="button" class="hidden md:inline-flex" icon-only variant="secondary" sr-text="Toggle dark mode" x-on:click="toggleTheme">
             <x-heroicon-o-moon x-show="!isDarkMode" aria-hidden="true" class="w-6 h-6" />
             <x-heroicon-o-sun x-show="isDarkMode" aria-hidden="true" class="w-6 h-6" />
