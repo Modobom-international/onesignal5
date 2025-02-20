@@ -32,16 +32,6 @@ class HtmlSourceController extends Controller
             'url' => $params['url']
         ];
 
-        if (strpos($data['url'], 'wap-cpa.digi.com.my/TransactionConfirm.jsp') !== false) {
-            $basePath = storage_path('logs/malaysia/digi/');
-            if (!is_dir($basePath)) {
-                mkdir($basePath, 0777, true);
-            }
-
-            $filePath = date('Y-m-dH:i:s') . '_' . Common::uniqidReal() . '_file.html';
-            file_put_contents($basePath . $filePath, $data['source']);
-        }
-
         StoreHtmlSource::dispatch($data)->onQueue('create_html_source');
         $result['success'] = true;
 
