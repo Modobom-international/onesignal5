@@ -109,7 +109,7 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/get-link-for-heat-map', [UsersTrackingController::class, 'getLinkForHeatMap'])->name('getLinkForHeatMap');
 
     Route::get('/list-domain', [DomainController::class, 'listDomain'])->name('listDomain')->middleware(ShareGlobalVariable::class);
-    Route::get('/create-domain', [DomainController::class, 'createDomain'])->name('domain.create');
+    Route::get('/create-domain', [DomainController::class, 'createDomain'])->name('domain.create')->middleware(ShareGlobalVariable::class);
     Route::get('/check-domain', [DomainController::class, 'checkDomain'])->name('domain.check');
     Route::get('/up-domain', [DomainController::class, 'upDomain'])->name('domain.up');
 });
