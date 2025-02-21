@@ -26,19 +26,19 @@ class NotificationCheckDomain implements ShouldQueue
      */
     public function handle(): void
     {
-        $message = 'Domain: ' . $this->data->domain . ' đã hoạt động';
+        $message = 'Domain: ' . $this->data['domain'] . ' đã hoạt động';
 
         broadcast(new NotificationSystem(
             [
                 'message' => $message,
-                'users_id'  => $this->data->provider,
+                'users_id'  => $this->data['provider'],
                 'status_read' => 0
             ],
         ));
 
         $dataInsert = [
             'message' => $message,
-            'users_id'  => $this->data->provider,
+            'users_id'  => $this->data['provider'],
             'created_at' => Common::covertDateTimeToMongoBSONDateGMT7(Common::getCurrentVNTime()),
             'status_read' => 0
         ];

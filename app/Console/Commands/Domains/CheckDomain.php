@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Jobs\NotificationCheckDomain;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Log;
 
 class CheckDomain extends Command
 {
@@ -28,7 +29,12 @@ class CheckDomain extends Command
      */
     public function handle()
     {
+        Log::info('------------------------ Đã chạy vào đây rồi nhé!!');
         $listDomain = DB::connection('mongodb')->table('domains')->where('status', 0)->get();
+
+        if (count($listDomain) == 0) {
+            return;
+        }
 
         foreach ($listDomain as $record) {
             $response = Http::timeout(10)->get($record->domain);
