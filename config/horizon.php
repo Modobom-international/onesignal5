@@ -1,5 +1,8 @@
 <?php
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 return [
 
     /*
@@ -128,6 +131,16 @@ return [
     */
 
     'memory_limit' => 256,
+
+    'logger' => [
+        'driver' => 'custom',
+        'via' => \Laravel\Horizon\HorizonServiceProvider::class,
+        'handler' => StreamHandler::class,
+        'with' => [
+            'stream' => storage_path('logs/horizon.log'),
+            'level' => Logger::INFO,
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
