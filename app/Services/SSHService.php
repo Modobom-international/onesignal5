@@ -25,8 +25,6 @@ class SSHService
             $output = Ssh::create($this->user, $this->server)
                 ->execute($script);
 
-            \Log::info('-----------Result :' . json_encode($output));
-
             return $output->getOutput();
         } catch (RequestException $e) {
             return $this->handleException($e);
@@ -42,8 +40,6 @@ class SSHService
                 ->disableStrictHostKeyChecking()
                 ->execute("cat $filePath")
                 ->getOutput();
-
-            \Log::info('-----------Result json :' . json_encode($jsonData));
 
             return json_decode($jsonData, true);
         } catch (RequestException $e) {

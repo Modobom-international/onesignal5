@@ -215,7 +215,7 @@ if [[ -d "$THEME_SOURCE_DIR" ]]; then
         fi
     done
 
-    wp theme activate bds
+    wp theme activate bds --allow-root
     chown -R "$USER:$USER" "$THEME_DIR"
 fi
 
@@ -233,7 +233,8 @@ if [[ -d "$PLUGIN_SOURCE_DIR" ]]; then
     chown -R "$USER:$USER" "$PLUGIN_DIR"
 fi
 
-wp cache flush
+chown -R "$USER" "$WEB_ROOT/"
+wp cache flush --allow-root
 service php-fpm restart
 service nginx restart
 service varnish restart
