@@ -43,7 +43,7 @@ class SSHService
                 ->execute("cat $filePath")
                 ->getOutput();
 
-            \Log::info('-----------Result json :' . json_encode($output));
+            \Log::info('-----------Result json :' . json_encode($jsonData));
 
             return json_decode($jsonData, true);
         } catch (RequestException $e) {
