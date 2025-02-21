@@ -29,7 +29,6 @@ class CheckDomain extends Command
      */
     public function handle()
     {
-        Log::info('------------------------ Đã chạy vào đây rồi nhé!!');
         $listDomain = DB::connection('mongodb')->table('domains')->where('status', 0)->get();
 
         if (count($listDomain) == 0) {

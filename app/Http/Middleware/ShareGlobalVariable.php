@@ -32,8 +32,6 @@ class ShareGlobalVariable
 
             if (class_exists('Illuminate\Support\Facades\View')) {
                 View::share('notificationSystem', $notificationSystem);
-            } else {
-                \Log::error('View facade not found');
             }
         }
 
