@@ -30,6 +30,10 @@ class ShareGlobalVariable
                 ->limit(4)
                 ->get();
 
+            if (!is_array($notificationSystem)) {
+                $notificationSystem = [];
+            }
+
             if (class_exists('Illuminate\Support\Facades\View')) {
                 View::share('notificationSystem', $notificationSystem);
             }
