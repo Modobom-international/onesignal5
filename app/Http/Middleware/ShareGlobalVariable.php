@@ -24,19 +24,13 @@ class ShareGlobalVariable
 
         if (Auth::check()) {
             $notificationSystem = DB::connection('mongodb')
-                ->table('domains')
+                ->table('notification_system')
                 ->where('users_id', Auth::user()->id)
                 ->orderBy('created_at')
                 ->limit(4)
                 ->get();
 
-            if (!is_array($notificationSystem)) {
-                $notificationSystem = [];
-            }
-
-            if (class_exists('Illuminate\Support\Facades\View')) {
-                View::share('notificationSystem', $notificationSystem);
-            }
+            View::share('notificationSystem', $notificationSystem);
         }
 
         return $next($request);

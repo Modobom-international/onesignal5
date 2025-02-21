@@ -126,14 +126,14 @@
 }
 
 .background-grey {
-    background-color: grey;
+    background-color: #e3e2e2;
 }
 
 #dropdown-notification {
     position: absolute;
-    inset: 0px auto auto 0px;
+    inset: 0px 0px auto auto;
     margin: 0px;
-    transform: translate3d(0px, 42.4px, 0px);
+    transform: translate3d(-148px, 50.4px, 0px);
 }
 
 .hide {

@@ -112,4 +112,6 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/create-domain', [DomainController::class, 'createDomain'])->name('domain.create')->middleware(ShareGlobalVariable::class);
     Route::get('/check-domain', [DomainController::class, 'checkDomain'])->name('domain.check');
     Route::get('/up-domain', [DomainController::class, 'upDomain'])->name('domain.up');
+    
+    Route::get('/change-status-notification', [AdminController::class, 'changeStatusNotification'])->name('changeStatusNotification');
 });

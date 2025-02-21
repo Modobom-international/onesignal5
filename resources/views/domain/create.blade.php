@@ -43,6 +43,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="upDomainModalLabel">Tiến hành up domain</h5>
+                <div id="pre-loader" class="ml-4">
+                    @include('components.pre-loader')
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -59,14 +62,20 @@
 <script>
     $(document).ready(function() {
         var upDomainModal = new bootstrap.Modal(document.getElementById('upDomainModal'), {
-            keyboard: false
-        })
+            keyboard: false,
+            backdrop: 'static'
+        });
 
         $("#domain").on("input", function() {
             $('.overlay').show();
         });
 
         $("#domain").focusin(function() {
+            $('.overlay').show();
+        });
+
+        document.getElementById('upDomainModal').addEventListener('hidden.bs.modal', function() {
+            $("#pre-loader").show();
             $('.overlay').show();
         });
 
@@ -88,6 +97,7 @@
         });
 
         Echo.channel("up-domain").listen("UpDomainDump", (e) => {
+            $("#pre-loader").attr("style", "display: none !important");
             const data = e.data;
             let logEntry = $("#" + data.id);
 

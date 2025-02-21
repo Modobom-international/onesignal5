@@ -13,29 +13,29 @@
                 <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle new-notification"></span>
             </div>
 
-            <ul class="dropdown-menu" id="dropdown-notification" data-popper-placement="bottom-end">
-                @if(count($notificationSystem) > 0)
-                @foreach($notificationSystem as $notification)
-                @if($notification->status_read == 0)
-                <li><a class="dropdown-item background-grey">{{ $notification->message }}</a></li>
-                @else
-                <li><a class="dropdown-item">{{ $notification->message }}</a></li>
-                @endif
-                @endforeach
-
-                @if(count($notificationSystem) == 4)
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Read more</a></li>
-                @endif
-
-                @else
-                <li><a class="dropdown-item background-grey">{{ __('Không có thông báo nào mới') }}</a></li>
-                @endif
-            </ul>
-
         </x-button>
+
+        <ul class="dropdown-menu" id="dropdown-notification" data-popper-placement="bottom-end">
+            @if(count($notificationSystem) > 0)
+            @foreach($notificationSystem as $notification)
+            @if($notification->status_read == 0)
+            <li class="background-grey" id="{{ $notification->id->__toString() }}"><a class="dropdown-item">{{ $notification->message }}</a></li>
+            @else
+            <li><a class="dropdown-item">{{ $notification->message }}</a></li>
+            @endif
+            @endforeach
+
+            @if(count($notificationSystem) == 4)
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Read more</a></li>
+            @endif
+
+            @else
+            <li><a class="dropdown-item">{{ __('Không có thông báo nào!') }}</a></li>
+            @endif
+        </ul>
 
         <x-button type="button" class="hidden md:inline-flex" icon-only variant="secondary" sr-text="Toggle dark mode" x-on:click="toggleTheme">
             <x-heroicon-o-moon x-show="!isDarkMode" aria-hidden="true" class="w-6 h-6" />

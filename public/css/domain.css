@@ -15,3 +15,8 @@
     resize: none;
     width: 100%;
 }
+
+#loader {
+   width: 30px !important;
+   height: 30px !important;
+}

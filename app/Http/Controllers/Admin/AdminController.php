@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Laravel\Horizon\Contracts\WorkloadRepository;
 use Laravel\Horizon\Contracts\MetricsRepository;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -97,5 +99,23 @@ class AdminController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function changeStatusNotification(Request $request)
+    {
+        $id = $request->get('id');
+
+        if (!isset($id)) {
+            abort(403);
+        }
+
+        DB::connection('mongodb')
+            ->table('notification_system')
+            ->where('id', $id)
+            ->update([
+                'status_read' => 1,
+            ]);
+
+        return response()->json(['message' => 'Successful!']);
     }
 }
