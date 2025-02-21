@@ -6,6 +6,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use App\Events\NotificationSystem;
 use App\Helper\Common;
+use Illuminate\Support\Facades\DB;
 
 class NotificationCheckDomain implements ShouldQueue
 {
