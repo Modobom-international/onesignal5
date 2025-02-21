@@ -67,11 +67,11 @@ Route::get('/apk/load-web-count-diff', [HomeController::class, 'apkLoadWebCountD
 Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
 
-Route::middleware(Authenticate::class, IsAdmin::class, ShareGlobalVariable::class)->prefix('admin')->group(function () {
+Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(function () {
     Route::group(['middleware' => ['auth', 'role_or_permission:super-admin|check-log-count-data|manager-file']], function () {
-        Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+        Route::get('/', [AdminController::class, 'index'])->name('dashboard')->middleware(ShareGlobalVariable::class);
 
-        Route::get('/log-behavior', [LogBehaviorController::class, 'viewLogBehavior'])->name('viewLogBehavior');
+        Route::get('/log-behavior', [LogBehaviorController::class, 'viewLogBehavior'])->name('viewLogBehavior')->middleware(ShareGlobalVariable::class);
         Route::get('/get-data-chart-log-behavior', [LogBehaviorController::class, 'getDataChartLogBehavior'])->name('getDataChartLogBehavior');
         Route::get('/store-config-filter-log-behavior', [LogBehaviorController::class, 'storeConfigFilterLogBehavior'])->name('storeConfigFilterLogBehavior');
         Route::get('/reset-config-filter-log-behavior', [LogBehaviorController::class, 'resetConfigFilterLogBehavior'])->name('resetConfigFilterLogBehavior');
@@ -80,7 +80,7 @@ Route::middleware(Authenticate::class, IsAdmin::class, ShareGlobalVariable::clas
         Route::get('/delete-app-in-list-for-check', [LogBehaviorController::class, 'deleteAppInListForCheck'])->name('deleteAppInListForCheck');
         Route::get('/get-activity-uid', [LogBehaviorController::class, 'getActivityUid'])->name('getActivityUid');
 
-        Route::get('/push-system', [PushSystemController::class, 'listPushSystem'])->name('listPushSystem');
+        Route::get('/push-system', [PushSystemController::class, 'listPushSystem'])->name('listPushSystem')->middleware(ShareGlobalVariable::class);
         Route::get('/config-link/add', [PushSystemController::class, 'addConfigSystemLink'])->name('addConfigSystemLink');
     });
 
@@ -92,7 +92,7 @@ Route::middleware(Authenticate::class, IsAdmin::class, ShareGlobalVariable::clas
         Route::post('/update-password', [UsersController::class, 'updatePassword'])->name('updatePassword');
     });
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit')->middleware(ShareGlobalVariable::class);
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
@@ -100,15 +100,15 @@ Route::middleware(Authenticate::class, IsAdmin::class, ShareGlobalVariable::clas
     Route::resource('roles', RolesController::class);
     Route::resource('permissions', PermissionsController::class);
 
-    Route::get('/html-source', [HtmlSourceController::class, 'listHtmlSource'])->name('listHtmlSource');
+    Route::get('/html-source', [HtmlSourceController::class, 'listHtmlSource'])->name('listHtmlSource')->middleware(ShareGlobalVariable::class);
     Route::get('/html-source/{id}', [HtmlSourceController::class, 'showHtmlSource'])->name('showHtmlSource');
 
-    Route::get('/users-tracking', [UsersTrackingController::class, 'viewUsersTracking'])->name('viewUsersTracking');
+    Route::get('/users-tracking', [UsersTrackingController::class, 'viewUsersTracking'])->name('viewUsersTracking')->middleware(ShareGlobalVariable::class);
     Route::get('/get-detail-tracking', [UsersTrackingController::class, 'getDetailTracking'])->name('getDetailTracking');
     Route::get('/get-heat-map', [UsersTrackingController::class, 'getHeatMap'])->name('getHeatMap');
     Route::get('/get-link-for-heat-map', [UsersTrackingController::class, 'getLinkForHeatMap'])->name('getLinkForHeatMap');
 
-    Route::get('/list-domain', [DomainController::class, 'listDomain'])->name('listDomain');
+    Route::get('/list-domain', [DomainController::class, 'listDomain'])->name('listDomain')->middleware(ShareGlobalVariable::class);
     Route::get('/create-domain', [DomainController::class, 'createDomain'])->name('domain.create');
     Route::get('/check-domain', [DomainController::class, 'checkDomain'])->name('domain.check');
     Route::get('/up-domain', [DomainController::class, 'upDomain'])->name('domain.up');
