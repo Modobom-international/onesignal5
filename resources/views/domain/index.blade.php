@@ -9,9 +9,11 @@
 @section('content')
 <div class="row">
     <div class="col-12">
+        @if(Auth::users()->email == 'vutuan.modobom@gmail.com' or Auth::users()->email == 'tranlinh.modobom@gmail.com')
         <div class="d-flex mt-3 mb-3">
             <a href="{{ route('domain.create') }}" class="btn btn-success">Thêm domain</a>
         </div>
+        @endif
 
         <div class="card">
             <div class="card-body">

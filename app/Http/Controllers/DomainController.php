@@ -29,7 +29,11 @@ class DomainController extends Controller
 
     public function createDomain()
     {
-        return view('domain.create');
+        if (Auth::user()->email == 'tranlinh.modobom@gmail.com' or Auth::user()->email == 'vutuan.modobom@gmail.com') {
+            return view('domain.create');
+        } else {
+            abort(403);
+        }
     }
 
     public function checkDomain(Request $request)
