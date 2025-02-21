@@ -29,14 +29,6 @@ class NotificationCheckDomain implements ShouldQueue
     {
         $message = 'Domain: ' . $this->data['domain'] . ' đã hoạt động';
 
-        broadcast(new NotificationSystem(
-            [
-                'message' => $message,
-                'users_id'  => $this->data['provider'],
-                'status_read' => 0
-            ],
-        ));
-
         $dataInsert = [
             'message' => $message,
             'users_id'  => $this->data['provider'],
@@ -44,8 +36,17 @@ class NotificationCheckDomain implements ShouldQueue
             'status_read' => 0
         ];
 
-        DB::connection('mongodb')
+        $idInsert = DB::connection('mongodb')
             ->table('notification_system')
-            ->insert($dataInsert);
+            ->idAppInstall($dataInsert);
+
+        broadcast(new NotificationSystem(
+            [
+                'message' => $message,
+                'users_id'  => $this->data['provider'],
+                'status_read' => 0,
+                'id' => $idInsert
+            ],
+        ));
     }
 }

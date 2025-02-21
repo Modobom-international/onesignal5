@@ -120,7 +120,7 @@
                         $('#bell-notification').removeClass('hide');
                     }
 
-                    $("#dropdown-notification").prepend(`<li><a class="dropdown-item background-grey">` + data.message + `</a></li>`);
+                    $("#dropdown-notification").prepend(`<li class="background-grey" id="` + data.id + `"><a class="dropdown-item">` + data.message + `</a></li>`);
                     if ($("#dropdown-notification li").length >= 4) {
                         $("#dropdown-notification").last().remove();
                     }
