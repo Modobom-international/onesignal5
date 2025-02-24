@@ -17,6 +17,10 @@
 }
 
 #loader {
-   width: 30px !important;
-   height: 30px !important;
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.area-domain-detail {
+    list-style-type: circle !important;
 }

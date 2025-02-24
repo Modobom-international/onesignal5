@@ -66,10 +66,32 @@ class ImportDomainFromCSV extends Command
                         continue;
                     }
 
+                    dump($row);
+
+                    if ($count == 5) {
+                        dd(1);
+                    }
+
+                    if ($server == '139.162.44.151') {
+                        $domain = $row[2];
+                        $admin_password = $row[3];
+                        $db_name = $row[6];
+                        $ftp_user = $row[5];
+                    } else if ($server == '139.177.186.184') {
+                        $domain = $row[2];
+                        $admin_password = $row[4];
+                        $db_name = $row[6];
+                        $ftp_user = $row[5];
+                    } else {
+                        $domain = $row[2];
+                        $admin_password = $row[3];
+                        $db_name = $row[6];
+                        $ftp_user = $row[5];
+                    }
+
                     $this->apiKey = $listKey['tuan']['apiKey'];
                     $this->apiSecret = $listKey['tuan']['apiSecret'];
                     $this->apiUrl = $listKey['tuan']['apiUrl'];
-                    $domain = $row[2];
                     $linesAfter = 10;
                     $explodePublicHtml = explode(' ', $row[7]);
                     $result = $this->getDetailDomain($domain);
@@ -149,12 +171,12 @@ class ImportDomainFromCSV extends Command
                     $data = [
                         'domain' => $domain,
                         'admin_username' => 'admin',
-                        'admin_password' => $row[4],
-                        'db_name' => $row[6],
+                        'admin_password' => $admin_password,
+                        'db_name' => $db_name,
                         'db_user' => $dbUser,
                         'db_password' => $dbPassword,
                         'public_html' => trim($explodePublicHtml[1]),
-                        'ftp_user' => $row[5],
+                        'ftp_user' => $ftp_user,
                         'server' => $server,
                         'status' => 1,
                         'provider' => $provider,

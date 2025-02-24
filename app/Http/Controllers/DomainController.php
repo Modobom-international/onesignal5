@@ -35,7 +35,9 @@ class DomainController extends Controller
                 }
             }
         }
-        
+
+        $domains = Common::paginate($domains);
+
         return view('domain.index', compact('domains'));
     }
 
@@ -98,6 +100,31 @@ class DomainController extends Controller
         return response()->json([
             'message' => 'Đang xử lý...',
             'status' => 1
+        ]);
+    }
+
+    public function searchDomain(Request $request)
+    {
+        $query = $request->input('query');
+        $domains = DB::connection('mongodb')->table('domains')->where('domain', 'LIKE', "%{$query}%")
+            ->get();
+
+        $users = DB::connection('mysql')
+            ->table('users')
+            ->get();
+
+        foreach ($domains as $domain) {
+            foreach ($users as $user) {
+                if ($domain->provider == $user->id) {
+                    $domain->email = $user->email;
+                }
+            }
+        }
+
+        $domains = Common::paginate($domains);
+
+        return response()->json([
+            'html' => view('includes.table-domain', compact('domains'))->render()
         ]);
     }
 
