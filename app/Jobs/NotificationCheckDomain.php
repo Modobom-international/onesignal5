@@ -38,7 +38,7 @@ class NotificationCheckDomain implements ShouldQueue
 
         $idInsert = DB::connection('mongodb')
             ->table('notification_system')
-            ->idAppInstall($dataInsert);
+            ->insertGetId($dataInsert);
 
         broadcast(new NotificationSystem(
             [
