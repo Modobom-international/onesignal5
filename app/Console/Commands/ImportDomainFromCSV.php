@@ -87,7 +87,7 @@ class ImportDomainFromCSV extends Command
                     $this->apiSecret = $listKey['tuan']['apiSecret'];
                     $this->apiUrl = $listKey['tuan']['apiUrl'];
                     $linesAfter = 10;
-                    $explodePublicHtml = explode(' ', $row[7]);
+                    $public_html = `/home/` . $domain . "/public_html";
                     $result = $this->getDetailDomain($domain);
 
                     dump('---------- Bắt đầu với domain : ' . $domain);
@@ -169,7 +169,7 @@ class ImportDomainFromCSV extends Command
                         'db_name' => $db_name,
                         'db_user' => $dbUser,
                         'db_password' => $dbPassword,
-                        'public_html' => trim($explodePublicHtml[1]),
+                        'public_html' => $public_html,
                         'ftp_user' => $ftp_user,
                         'server' => $server,
                         'status' => 1,
