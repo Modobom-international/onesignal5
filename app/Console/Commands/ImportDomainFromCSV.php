@@ -52,7 +52,7 @@ class ImportDomainFromCSV extends Command
         ];
 
         foreach ($listIP as $server) {
-            $dbInfoPath = public_path('/db-info/DBinfo-' . $server . '.txt');
+            $dbInfoPath = public_path('db-info/DBinfo-' . $server . '.txt');
 
             if (($handle = fopen(public_path('import-domain/' . $server . '.csv'), 'r')) !== false) {
                 while (($row = fgetcsv($handle)) !== false) {
