@@ -66,12 +66,6 @@ class ImportDomainFromCSV extends Command
                         continue;
                     }
 
-                    dump($row);
-
-                    if ($count == 5) {
-                        dd(1);
-                    }
-
                     if ($server == '139.162.44.151') {
                         $domain = $row[2];
                         $admin_password = $row[3];
@@ -207,7 +201,7 @@ class ImportDomainFromCSV extends Command
             ],
         ]);
 
-        $maxRetries = 5; // Số lần thử lại tối đa
+        $maxRetries = 5;
         $attempt = 0;
 
         while ($attempt < $maxRetries) {
