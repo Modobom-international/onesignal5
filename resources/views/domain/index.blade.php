@@ -25,6 +25,7 @@
                                 <th>Server</th>
                                 <th>Tài khoản</th>
                                 <th>Mật khẩu</th>
+                                <th>Quản lý</th>
                                 <th>Ngày tạo</th>
                             </tr>
                         </thead>
@@ -35,6 +36,7 @@
                                 <td>{{ \App\Enums\ListServer::SERVER[$domain->server] }}</td>
                                 <td>{{ $domain->admin_username }}</td>
                                 <td>{{ $domain->admin_password }}</td>
+                                <td>{{ $domain->email ?? '' }}</td>
                                 <td>{{ $domain->created_at }}</td>
                             </tr>
                             @endforeach

@@ -24,6 +24,18 @@ class DomainController extends Controller
             ->table('domains')
             ->get();
 
+        $users = DB::connection('mysql')
+            ->table('users')
+            ->get();
+
+        foreach ($domains as $domain) {
+            foreach ($users as $user) {
+                if ($domain->provider == $user->id) {
+                    $domain->email = $user->email;
+                }
+            }
+        }
+        
         return view('domain.index', compact('domains'));
     }
 

@@ -49,7 +49,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="" id="area-log">
+                <div id="area-log">
 
                 </div>
             </div>

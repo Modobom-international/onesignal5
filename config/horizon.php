@@ -1,8 +1,5 @@
 <?php
 
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-
 return [
 
     /*
@@ -134,12 +131,7 @@ return [
 
     'logger' => [
         'driver' => 'custom',
-        'via' => \Laravel\Horizon\HorizonServiceProvider::class,
-        'handler' => StreamHandler::class,
-        'with' => [
-            'stream' => storage_path('logs/horizon.log'),
-            'level' => Logger::INFO,
-        ],
+        'via' => \App\Logging\CustomHorizonLogger::class,
     ],
 
     /*

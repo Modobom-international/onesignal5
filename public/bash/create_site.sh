@@ -33,6 +33,7 @@ DB_USER=$(echo "${USER}"_"${PREFIX_DB}" | tr '[:upper:]' '[:lower:]')
 DB_NAME=$(echo "${PREFIX_DB}"_"${USER}" | tr '[:upper:]' '[:lower:]')
 DB_PASS=$(openssl rand -base64 12)
 
+NEW_OPTION_VALUE='a:223:{i:0;b:0;s:17:"flatsome_fallback";i:0;s:20:"topbar_elements_left";a:0:{}s:21:"topbar_elements_right";a:0:{}s:20:"header_elements_left";a:0:{}s:21:"header_elements_right";a:1:{i:0;s:6:"search";}s:27:"header_elements_bottom_left";a:0:{}s:29:"header_elements_bottom_center";a:0:{}s:28:"header_elements_bottom_right";a:0:{}s:27:"header_mobile_elements_left";a:1:{i:0;s:9:"menu-icon";}s:28:"header_mobile_elements_right";a:1:{i:0;s:6:"search";}s:26:"header_mobile_elements_top";a:0:{}s:14:"mobile_sidebar";a:2:{i:0;s:9:"languages";i:1;s:3:"nav";}s:14:"product_layout";s:19:"right-sidebar-small";}'
 WEBSITE_TILE=$(echo "$DOMAIN" | sed -E 's/[-._]/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
 ADMIN_PASSWORD=$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9!@#$%^&*()_+={}[]')
 
@@ -188,6 +189,7 @@ cd "$WEB_ROOT"
 wp core download --allow-root
 wp config create --dbname="$DB_NAME" --dbuser="$DB_USER" --dbpass="$DB_PASS" --allow-root
 wp core install --url="https://$DOMAIN" --title="$WEBSITE_TILE" --admin_user="admin" --admin_password="$ADMIN_PASSWORD" --admin_email="binhchay.modobom@gmail.com" --allow-root
+wp post create --post_type="blocks" --post_title="Footer" --post_content="[section bg=\"811\" bg_size=\"thumbnail\" bg_color=\"rgb(0,0,0)\" bg_overlay=\"rgba(8, 7, 7, 0.99)\"][row style=\"collapse\"][col span__sm=\"12\"]<p style=\"text-align: center;\"><span style=\"font-size: 14.4px; color: #ffffff;\">Copyright © 2024 apklilo.com</span></p><div class=\"copyright\"><p style=\"text-align: center;\"><span style=\"color: #ffffff;\">This Website Provides You With A Link To Download Games/Apps. We Do Not Directly Create Products Nor Do Business On Products (Games, Apps).</span></p><p style=\"text-align: center;\"><span style=\"color: #ffffff;\"><a style=\"color: #ffffff;\" href=\"/introduction/\"><b>Introduction</b></a> | <a style=\"color: #ffffff;\" href=\"/privacy-policy/\"><b>Privacy Policy</b></a> | <a style=\"color: #ffffff;\" href=\"/terms-conditions/\"><b>Terms – Conditions</b></a> | <a style=\"color: #ffffff;\" href=\"/installation-uninstallation-instructions/\"><strong>Installation/Uninstallation Instructions</strong></a> | <a style=\"color: #ffffff;\" href=\"/contact-us/\"><b>Contact Us</b></a> |</span></p></div>[/col][/row][/section]" --post_status="publish" --post_name="footer" --post_author=2 --ping_status="closed" --comment_status="closed" --post_date="2017-08-26 09:05:04" --post_date_gmt="2017-08-26 02:05:04" --guid="https://apklilo.com/?post_type=blocks&p=219" --allow-root
 chown -R "$USER:$USER" "$WEB_ROOT"
 
 grep -q "define('FORCE_SSL_ADMIN', true);" "$WEB_ROOT/wp-config.php" || sed -i "/\/\* That's all, stop editing! Happy publishing. \*\//i\define('FORCE_SSL_ADMIN', true);\n\$_SERVER['HTTPS'] = 'on';" "$WEB_ROOT/wp-config.php"
@@ -234,6 +236,7 @@ if [[ -d "$PLUGIN_SOURCE_DIR" ]]; then
 fi
 
 chown -R "$USER" "$WEB_ROOT/"
+wp option update theme_mods_bds "$NEW_OPTION_VALUE" --path="$WEB_ROOT"
 wp cache flush --allow-root
 service php-fpm restart
 service nginx restart
