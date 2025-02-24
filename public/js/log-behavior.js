@@ -172,7 +172,7 @@ $(function () {
             data: {
                 id: id
             }
-        }).done(function (result) {
+        }).done(function () {
             let idElement = '#' + id;
             $(idElement).remove();
             $('.error-message-modal p').text('Ứng dụng xóa khỏi danh sách thành công!');

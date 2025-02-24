@@ -27,6 +27,7 @@
                                 <th>Mật khẩu</th>
                                 <th>Quản lý</th>
                                 <th>Ngày tạo</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,6 +39,7 @@
                                 <td>{{ $domain->admin_password }}</td>
                                 <td>{{ $domain->email ?? '' }}</td>
                                 <td>{{ $domain->created_at }}</td>
+                                <td><button class="btn" data-bs-toggle="modal" data-total="[]" data-bs-target="#modalDetail"><i class="fa fa-info-circle"></i></button></td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -47,4 +49,36 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalDetail" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetailLabel">Thông tin chi tiết</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="area-domain-detail">
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        var detailDomainModal = new bootstrap.Modal(document.getElementById('upDomainModal'), {
+            keyboard: false,
+            backdrop: 'static'
+        });
+
+        detailDomainModal.addEventListener('show.bs.modal', function(event) {
+            var myBookId = $(this).data('id');
+            $(".modal-body #bookId").val(myBookId);
+        })
+    });
+</script>
 @endsection

@@ -7,6 +7,7 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use App\Helper\Common;
 
 class ImportDomainFromCSV extends Command
 {
@@ -51,6 +52,8 @@ class ImportDomainFromCSV extends Command
         ];
 
         foreach ($listIP as $server) {
+            $dbInfoPath = public_path('/db-info/DBinfo-' . $server . '.txt');
+
             if (($handle = fopen(public_path('import-domain/' . $server . '.csv'), 'r')) !== false) {
                 while (($row = fgetcsv($handle)) !== false) {
                     if ($count <= 2) {
@@ -67,12 +70,13 @@ class ImportDomainFromCSV extends Command
                     $this->apiSecret = $listKey['tuan']['apiSecret'];
                     $this->apiUrl = $listKey['tuan']['apiUrl'];
                     $domain = $row[2];
+                    $linesAfter = 10;
                     $explodePublicHtml = explode(' ', $row[7]);
                     $result = $this->getDetailDomain($domain);
 
                     dump('---------- Bắt đầu với domain : ' . $domain);
 
-                    if ($result['code'] == 'NOT_FOUND') {
+                    if (array_key_exists('code', $result) and $result['code'] == 'NOT_FOUND') {
                         $this->apiKey = $listKey['linh']['apiKey'];
                         $this->apiSecret = $listKey['linh']['apiSecret'];
                         $this->apiUrl = $listKey['linh']['apiUrl'];
@@ -82,32 +86,77 @@ class ImportDomainFromCSV extends Command
 
                         $result = $this->getDetailDomain($domain);
 
-                        if ($result['code'] == 'NOT_FOUND') {
+                        if (array_key_exists('code', $result) and $result['code'] == 'NOT_FOUND') {
                             $count++;
 
                             dump('Domain này không phải của Linh');
+                            dump('Skip domain');
+                            continue;
+                        } else if (array_key_exists('error', $result)) {
+                            $count++;
+
+                            dump('Gọi lên api liên tiếp không thành công');
                             dump('Skip domain');
                             continue;
                         } else {
                             $getUser = DB::table('users')->where('email', 'tranlinh.modobom@gmail.com')->first();
                             $provider = $getUser->id;
                         }
+                    } else if (array_key_exists('error', $result)) {
+                        $count++;
+
+                        dump('Gọi lên api liên tiếp không thành công');
+                        dump('Skip domain');
+                        continue;
                     } else {
                         $getUser = DB::table('users')->where('email', 'vutuan.modobom@gmail.com')->first();
                         $provider = $getUser->id;
                     }
 
+                    if (file_exists($dbInfoPath)) {
+                        $lines = file($dbInfoPath, FILE_IGNORE_NEW_LINES);
+                        $found = false;
+                        $output = [];
+
+                        foreach ($lines as $index => $line) {
+                            if (strpos($line, $domain) !== false) {
+                                $found = true;
+                                $output = array_slice($lines, $index, $linesAfter + 1);
+                                break;
+                            }
+                        }
+
+                        if ($found) {
+                            dump("Tìm thấy thông tin domain!");
+                        } else {
+                            $count++;
+                            dump("Không tìm thấy về thông tin domain!");
+                            dump('Skip domain');
+                            continue;
+                        }
+                    } else {
+                        $count++;
+                        dump("File thông tin server không tồn tại!");
+                        dump('Skip domain');
+                        continue;
+                    }
+
+                    $explodeDBUser = explode(':', $output[2]);
+                    $explodeDBPassword = explode(':', $output[3]);
+                    $dbUser = trim($explodeDBUser[1]);
+                    $dbPassword = trim($explodeDBPassword[1]);
+
                     $data = [
                         'domain' => $domain,
                         'admin_username' => 'admin',
-                        'admin_password' => $row[3],
+                        'admin_password' => $row[4],
                         'db_name' => $row[6],
-                        'db_user' => $result['db_user'],
-                        'db_password' => $result['db_password'],
+                        'db_user' => $dbUser,
+                        'db_password' => $dbPassword,
                         'public_html' => trim($explodePublicHtml[1]),
                         'ftp_user' => $row[5],
                         'server' => $server,
-                        'status' => 0,
+                        'status' => 1,
                         'provider' => $provider,
                         'created_at' => Common::covertDateTimeToMongoBSONDateGMT7(Common::getCurrentVNTime())
                     ];
@@ -136,13 +185,33 @@ class ImportDomainFromCSV extends Command
             ],
         ]);
 
-        try {
-            $response = $this->client->get("/v1/domains/{$domain}");
+        $maxRetries = 5; // Số lần thử lại tối đa
+        $attempt = 0;
 
-            return json_decode($response->getBody(), true);
-        } catch (Exception $e) {
-            return $this->handleException($e);
+        while ($attempt < $maxRetries) {
+            try {
+                if ($attempt > 0) {
+                    dump('Thử lại lần thứ ' . $attempt);
+                }
+
+                $response = $this->client->get("/v1/domains/{$domain}");
+
+                return json_decode($response->getBody(), true);
+            } catch (Exception $e) {
+                $error = $this->handleException($e);
+
+                if (isset($error['code']) && $error['code'] === 'TOO_MANY_REQUESTS') {
+                    $retryAfter = $error['retryAfterSec'] ?? 30;
+                    dump("Quá nhiều request, thử lại sau {$retryAfter} giây...");
+                    sleep($retryAfter);
+                    $attempt++;
+                } else {
+                    return $error;
+                }
+            }
         }
+
+        return ['error' => 'SKIP_DOMAIN'];
     }
 
     public function handleException(Exception $e)

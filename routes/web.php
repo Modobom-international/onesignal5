@@ -63,7 +63,7 @@ Route::get('/apk/load-web', [HomeController::class, 'apkLoadWeb'])->name('apkLoa
 Route::get('/apk/load-web-count', [HomeController::class, 'apkLoadWebCount'])->name('apkLoadWebCount');
 Route::get('/apk/load-web-count-diff', [HomeController::class, 'apkLoadWebCountDiff'])->name('apkLoadWebCountDiff');
 
-// Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'])->name('logBehavior');
+Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'])->name('logBehavior');
 Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
 
@@ -112,6 +112,6 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/create-domain', [DomainController::class, 'createDomain'])->name('domain.create')->middleware(ShareGlobalVariable::class);
     Route::get('/check-domain', [DomainController::class, 'checkDomain'])->name('domain.check');
     Route::get('/up-domain', [DomainController::class, 'upDomain'])->name('domain.up');
-    
+
     Route::get('/change-status-notification', [AdminController::class, 'changeStatusNotification'])->name('changeStatusNotification');
 });
