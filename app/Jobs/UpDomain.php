@@ -9,6 +9,7 @@ use App\Services\SSHService;
 use App\Services\GoDaddyService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 use DB;
 
 class UpDomain implements ShouldQueue
@@ -162,6 +163,8 @@ class UpDomain implements ShouldQueue
         $result = $sshService->getOutputResult(
             $data['domain']
         );
+
+        Log::info(json_encode($result));
 
         if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
