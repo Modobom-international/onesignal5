@@ -128,6 +128,7 @@ class LogBehaviorController extends Controller
         $response['success'] = true;
         return \response()->json($response);
     }
+
     public function viewLogBehavior(Request $request)
     {
         $date = $request->get('date');

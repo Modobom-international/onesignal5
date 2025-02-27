@@ -28,7 +28,6 @@
                 <div class="text-center">
                     <h1 class="text-9xl font-bold text-gray-900 dark:text-gray-200">@yield('code')</h1>
                     <p class="text-3xl font-semibold mt-6">@yield('title')</p>
-
                 </div>
 
                 <x-footer />

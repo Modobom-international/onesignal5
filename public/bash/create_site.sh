@@ -25,6 +25,7 @@ PLUGIN_DIR="$WEB_ROOT/wp-content/plugins/"
 THEME_DIR="$WEB_ROOT/wp-content/themes/"
 PLUGIN_SOURCE_DIR="/binhchay/plugins/"
 THEME_SOURCE_DIR="/binhchay/themes/"
+FILE_PATH_UPDATE_THEME="/binhchay/theme_update.txt"
 
 SOCKET_PATH="/var/run/php-fpm/$USER.sock"
 
@@ -33,7 +34,6 @@ DB_USER=$(echo "${USER}"_"${PREFIX_DB}" | tr '[:upper:]' '[:lower:]')
 DB_NAME=$(echo "${PREFIX_DB}"_"${USER}" | tr '[:upper:]' '[:lower:]')
 DB_PASS=$(openssl rand -base64 12)
 
-NEW_OPTION_VALUE='a:223:{i:0;b:0;s:17:"flatsome_fallback";i:0;s:20:"topbar_elements_left";a:0:{}s:21:"topbar_elements_right";a:0:{}s:20:"header_elements_left";a:0:{}s:21:"header_elements_right";a:1:{i:0;s:6:"search";}s:27:"header_elements_bottom_left";a:0:{}s:29:"header_elements_bottom_center";a:0:{}s:28:"header_elements_bottom_right";a:0:{}s:27:"header_mobile_elements_left";a:1:{i:0;s:9:"menu-icon";}s:28:"header_mobile_elements_right";a:1:{i:0;s:6:"search";}s:26:"header_mobile_elements_top";a:0:{}s:14:"mobile_sidebar";a:2:{i:0;s:9:"languages";i:1;s:3:"nav";}s:14:"product_layout";s:19:"right-sidebar-small";}'
 WEBSITE_TILE=$(echo "$DOMAIN" | sed -E 's/[-._]/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
 ADMIN_PASSWORD=$(openssl rand -base64 12 | tr -dc 'A-Za-z0-9!@#$%^&*()_+={}[]')
 
@@ -236,7 +236,25 @@ if [[ -d "$PLUGIN_SOURCE_DIR" ]]; then
 fi
 
 chown -R "$USER" "$WEB_ROOT/"
-wp option update theme_mods_bds "$NEW_OPTION_VALUE" --path="$WEB_ROOT" --allow-root
+
+# ==========================
+#      READ FILE AND UPDATE THEME
+# ==========================
+
+if [[ -f "$FILE_PATH_UPDATE_THEME" ]]; then
+    FILE_CONTENT=$(cat "$FILE_PATH_UPDATE_THEME")
+    ESCAPED_CONTENT=$(echo "$FILE_CONTENT" | sed "s/'/\\\'/g")
+
+    mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "
+    UPDATE wp_options
+    SET option_value = '$ESCAPED_CONTENT'
+    WHERE option_name = 'theme_mods_bds';"
+
+    echo "Cập nhật dữ liệu thành công vào wp_options!"
+else
+    echo "File $FILE_PATH không tồn tại!"
+fi
+
 wp cache flush --allow-root
 service php-fpm restart
 service nginx restart
