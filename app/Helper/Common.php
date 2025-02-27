@@ -141,6 +141,14 @@ class Common
         $scriptPath = public_path('bash/logo_render.sh');
         $ipServer = env('IP_ORIGIN_SERVER', '127.0.0.1');
 
+        $command = [
+            'rsync',
+            '-avzhe',
+            'ssh',
+            '/binhchay/images/sspaps-1.png',
+            "root@{$ipServer}:{$sourcePath}"
+        ];
+
         try {
             $process = new Process(['bash', $scriptPath]);
             $process->setTimeout(600);
@@ -151,7 +159,7 @@ class Common
             }
             $scriptOutput = $process->getOutput();
 
-            $process = new Process('rsync -avzhe ssh /binhchay/images/sspaps-1.png root@' . $ipServer . ':' . $sourcePath);
+            $process = new Process($command);
             $process->setTimeout(600);
             $process->run();
 
