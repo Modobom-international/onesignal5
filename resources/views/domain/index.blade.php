@@ -42,19 +42,22 @@
                         <p class="fw-bold">Domain : <span id="domain-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Tài khoản admin : <span id="admin_username-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">Username admin : <span id="admin_username-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Mật khẩu admin : <span id="admin_password-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">Password admin : <span id="admin_password-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
                         <p class="fw-bold">Ngày tạo : <span id="created_at-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Tên cơ sở dữ liệu : <span id="db_name-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">DB name : <span id="db_name-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Mật khẩu cơ sở dữ liệu : <span id="db_password-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">DB username : <span id="db_user-modal" class="ml-2 fw-normal"></span></p>
+                    </li>
+                    <li>
+                        <p class="fw-bold">DB password : <span id="db_password-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
                         <p class="fw-bold">Email : <span id="email-modal" class="ml-2 fw-normal"></span></p>
