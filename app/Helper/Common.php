@@ -8,6 +8,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Illuminate\Support\Facades\Log;
 
 class Common
 {
@@ -168,12 +169,15 @@ class Common
             }
 
             $rsyncOutput = $process->getOutput();
-
-            return response()->json([
+            $response = [
                 'status' => 'success',
                 'script_output' => $scriptOutput,
                 'rsync_output' => $rsyncOutput,
-            ]);
+            ];
+
+            Log::info(json_encode($response));
+
+            return response()->json($response);
         } catch (ProcessFailedException $e) {
             return response()->json([
                 'error' => $e->getMessage(),

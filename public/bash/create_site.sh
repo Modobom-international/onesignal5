@@ -259,6 +259,7 @@ else
     echo "File $FILE_PATH không tồn tại!"
 fi
 
+mkdir /home/$DOMAIN/public_html/wp-content/uploads/2025/02/
 wp cache flush --allow-root
 service php-fpm restart
 service nginx restart
