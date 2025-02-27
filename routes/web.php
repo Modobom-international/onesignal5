@@ -85,10 +85,10 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     });
 
     Route::group(['middleware' => ['role:super-admin']], function () {
-        Route::resource('users', UsersController::class)->name('index', 'list.users');
-        Route::get('/change-password-user/{id}', [UsersController::class, 'changePasswordUser'])->name('changePasswordUser');
+        Route::resource('users', UsersController::class)->name('index', 'list.users')->middleware(ShareGlobalVariable::class);
+        Route::get('/change-password-user/{id}', [UsersController::class, 'changePasswordUser'])->name('changePasswordUser')->middleware(ShareGlobalVariable::class);
         Route::post('/update-password-user/{id}', [UsersController::class, 'updatePasswordUser'])->name('updatePasswordUser');
-        Route::get('/change-password', [UsersController::class, 'changePassword'])->name('changePassword');
+        Route::get('/change-password', [UsersController::class, 'changePassword'])->name('changePassword')->middleware(ShareGlobalVariable::class);
         Route::post('/update-password', [UsersController::class, 'updatePassword'])->name('updatePassword');
     });
 

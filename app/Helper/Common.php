@@ -133,4 +133,42 @@ class Common
 
         return $export;
     }
+
+    public function renderLogoForDomain($sourcePath)
+    {
+        $scriptPath = public_path('bash/logo_render.sh');
+        $ipServer = env('IP_ORIGIN_SERVER', '127.0.0.1');
+
+        try {
+            $process = new Process(['bash', $scriptPath]);
+            $process->setTimeout(600);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+            $scriptOutput = $process->getOutput();
+
+            $process = new Process('rsync -avzhe ssh /binhchay/images/sspaps-1.png root@' . $ipServer . ':' . $sourcePath);
+            $process->setTimeout(600);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+
+            $rsyncOutput = $process->getOutput();
+
+            return response()->json([
+                'status' => 'success',
+                'script_output' => $scriptOutput,
+                'rsync_output' => $rsyncOutput,
+            ]);
+        } catch (ProcessFailedException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'error_output' => $e->getProcess()->getErrorOutput(),
+            ], 500);
+        }
+    }
 }

@@ -66,6 +66,15 @@
             backdrop: 'static'
         });
 
+        var stringArray = {
+            'process-1': ' 🔄 Bắt đầu tiến hành thêm domain vào Cloudflare....',
+            'process-2': ' 🔄 Bắt đầu tiến hành đổi nameserver trên Godaddy....',
+            'process-3': ' 🔄 Bắt đầu tiến hành thêm DNS trên Cloudflare....',
+            'process-4': ' 🔄 Bắt đầu tiến hành khởi tạo website....',
+            'process-5': ' 🔄 Bắt đầu tiến hành tạo logo cho domain....',
+            'process-6': ' 🔄 Bắt đầu tiến hành lưu trữ dữ liệu domain....',
+        };
+
         $("#domain").on("input", function() {
             $('.overlay').show();
         });
@@ -91,6 +100,14 @@
                     server: server
                 },
                 success: function(response) {
+                    for (var i in stringArray) {
+                        if (i == 'process-1') {
+                            $("#area-log").append(`<p id="${i}">${stringArray[i]}</p>`);
+                        } else {
+                            $("#area-log").append(`<p class="hide" id="${i}">${stringArray[i]}</p>`);
+                        }
+                    }
+
                     upDomainModal.show();
                 }
             });
@@ -100,6 +117,10 @@
             $("#pre-loader").attr("style", "display: none !important");
             const data = e.data;
             let logEntry = $("#" + data.id);
+            let split = data.id.split('-');
+            let numberIndex = split[1];
+            let nextID = parseInt(numberIndex) + 1;
+            let nextLogEntry = $("#process-" + nextID);
 
             if (logEntry.length === 0) {
                 $("#area-log").append(`<p id="${data.id}">${data.message}</p>`);
@@ -107,6 +128,7 @@
                 logEntry.html(data.message);
             }
 
+            nextLogEntry.removeClass('hide');
             $("#area-log").scrollTop($("#area-log")[0].scrollHeight);
         });
     });

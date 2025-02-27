@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Events\UpDomainDump;
+use App\Helper\Common;
 use App\Services\CloudFlareService;
 use App\Services\SSHService;
 use App\Services\GoDaddyService;
@@ -46,13 +47,8 @@ class UpDomain implements ShouldQueue
         $goDaddyService = new GoDaddyService($this->email);
         $cloudFlareService = new CloudFlareService();
         $sshService = new SSHService($data['server']);
-
-        broadcast(new UpDomainDump(
-            [
-                'message' => ' 🔄 Bắt đầu tiến hành thêm domain vào Cloudflare....',
-                'id'  => 'process-1'
-            ],
-        ));
+        $common = new Common;
+        $sourcePath = `/home/` . $this->domain . `/public_html/wp-content/uploads/2025/02`;
 
         $result = $cloudFlareService->addDomainToCloudflare(
             $data['domain']
@@ -76,13 +72,6 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-        broadcast(new UpDomainDump(
-            [
-                'message' => ' 🔄 Bắt đầu tiến hành đổi nameserver trên Godaddy....',
-                'id'  => 'process-2'
-            ],
-        ));
-
         $result = $goDaddyService->updateNameservers(
             $data['domain']
         );
@@ -104,13 +93,6 @@ class UpDomain implements ShouldQueue
                 ],
             ));
         }
-
-        broadcast(new UpDomainDump(
-            [
-                'message' => ' 🔄 Bắt đầu tiến hành thêm DNS trên Cloudflare....',
-                'id'  => 'process-3'
-            ],
-        ));
 
         $result = $cloudFlareService->updateDnsARecord(
             $data['domain'],
@@ -135,13 +117,6 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-        broadcast(new UpDomainDump(
-            [
-                'message' => ' 🔄 Bắt đầu tiến hành khởi tạo website....',
-                'id'  => 'process-4'
-            ],
-        ));
-
         $result = $sshService->runScript(
             $data['domain']
         );
@@ -164,12 +139,25 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-        broadcast(new UpDomainDump(
-            [
-                'message' => ' 🔄 Bắt đầu tiến hành lưu trữ dữ liệu domain....',
-                'id'  => 'process-5'
-            ],
-        ));
+        $result = $common->renderLogoForDomain($sourcePath);
+
+        if (is_array($result) and array_key_exists('error', $result)) {
+            broadcast(new UpDomainDump(
+                [
+                    'message' => ' ❌ Lỗi không tạo được ảnh logo cho domain.... <br> ⚡ Kết thúc quá trình up domain...',
+                    'id'  => 'process-5'
+                ],
+            ));
+
+            return;
+        } else {
+            broadcast(new UpDomainDump(
+                [
+                    'message' => ' ✅ Hoàn tất tạo ảnh logo cho domain!',
+                    'id'  => 'process-5'
+                ],
+            ));
+        }
 
         $result = $sshService->getOutputResult(
             $data['domain']
@@ -179,7 +167,7 @@ class UpDomain implements ShouldQueue
             broadcast(new UpDomainDump(
                 [
                     'message' => ' ❌ Lỗi không lưu trữ được dữ liệu domain.... <br> ⚡ Kết thúc quá trình up domain...',
-                    'id'  => 'process-5'
+                    'id'  => 'process-6'
                 ],
             ));
 
@@ -208,7 +196,7 @@ class UpDomain implements ShouldQueue
         broadcast(new UpDomainDump(
             [
                 'message' => ' ✅ Hoàn tất lưu trữ dữ liệu domain! <br><br> -------------- Hoàn tất việc up domain --------------',
-                'id'  => 'process-5'
+                'id'  => 'process-6'
             ],
         ));
     }

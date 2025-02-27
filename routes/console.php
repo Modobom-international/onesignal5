@@ -7,6 +7,7 @@ use App\Console\Commands\Domains\CheckDomain;
 
 Schedule::command('horizon:snapshot')->everyFiveMinutes();
 Schedule::command('telescope:prune')->daily();
+Schedule::command('horizon:clear-log')->monthlyOn(1, '00:00');
 
 Schedule::command(NotifyTelegramInstallLogBehavior::class)->everyMinute();
 Schedule::command(CheckDomain::class)->everyMinute();

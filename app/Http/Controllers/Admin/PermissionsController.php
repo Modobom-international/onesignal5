@@ -8,11 +8,14 @@ use Illuminate\Http\Request;
 
 class PermissionsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    function __construct()
+    {
+        $this->middleware('share-global-variable')->only('index');
+        $this->middleware('share-global-variable')->only('create');
+        $this->middleware('share-global-variable')->only('show');
+        $this->middleware('share-global-variable')->only('edit');
+    }
+
     public function index(Request $request)
     {
         $keyword = $request->get('search');
@@ -29,22 +32,11 @@ class PermissionsController extends Controller
         ]);
     }
 
-    /**
-     * Show form for creating permissions
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('admin.permissions.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -57,12 +49,6 @@ class PermissionsController extends Controller
             ->with('flash_message', 'Permission created!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  Permission  $post
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Permission $permission)
     {
         return view('admin.permissions.edit', [
@@ -70,17 +56,10 @@ class PermissionsController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Permission  $permission
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Permission $permission)
     {
         $request->validate([
-            'name' => 'required|unique:permissions,name,'.$permission->id
+            'name' => 'required|unique:permissions,name,' . $permission->id
         ]);
 
         $permission->update($request->only('name'));
@@ -89,12 +68,6 @@ class PermissionsController extends Controller
             ->with('flash_message', 'Permission updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Permission $permission)
     {
         $permission->delete();
@@ -102,5 +75,4 @@ class PermissionsController extends Controller
         return redirect()->route('permissions.index')
             ->with('flash_message', 'Permission deleted!');
     }
-
 }

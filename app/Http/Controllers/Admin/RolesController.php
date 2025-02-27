@@ -9,7 +9,13 @@ use Spatie\Permission\Models\Permission;
 
 class RolesController extends Controller
 {
-    function __construct() {}
+    function __construct()
+    {
+        $this->middleware('share-global-variable')->only('index');
+        $this->middleware('share-global-variable')->only('create');
+        $this->middleware('share-global-variable')->only('show');
+        $this->middleware('share-global-variable')->only('edit');
+    }
 
     public function index(Request $request)
     {

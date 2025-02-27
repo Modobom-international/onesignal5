@@ -29,7 +29,10 @@ FILE_PATH_UPDATE_THEME="/binhchay/theme_update.txt"
 
 SOCKET_PATH="/var/run/php-fpm/$USER.sock"
 
-PREFIX_DB=$(< /dev/urandom tr -dc '[:lower:]' | head -c3; echo)
+PREFIX_DB=$(
+    tr </dev/urandom -dc '[:lower:]' | head -c3
+    echo
+)
 DB_USER=$(echo "${USER}"_"${PREFIX_DB}" | tr '[:upper:]' '[:lower:]')
 DB_NAME=$(echo "${PREFIX_DB}"_"${USER}" | tr '[:upper:]' '[:lower:]')
 DB_PASS=$(openssl rand -base64 12)
@@ -73,7 +76,7 @@ EOF
 }
 
 save_user_config() {
-    cat > "$USER_DIR/.${DOMAIN}.conf" <<END
+    cat >"$USER_DIR/.${DOMAIN}.conf" <<END
 {
     "domain": "${DOMAIN}",
     "username": "${USER}",
@@ -111,7 +114,7 @@ FLUSH PRIVILEGES;"
 # ==========================
 #      CONFIGURE PHP-FPM
 # ==========================
-cat > "$PHP_FPM_CONF" << EOF
+cat >"$PHP_FPM_CONF" <<EOF
 [$USER]
 listen = $SOCKET_PATH;
 listen.allowed_clients = 127.0.0.1
@@ -144,7 +147,7 @@ service php-fpm restart
 # ==========================
 #      CONFIGURE NGINX
 # ==========================
-cat > "$NGINX_CONF" << EOF
+cat >"$NGINX_CONF" <<EOF
 upstream php-${USER} {
     server unix:$SOCKET_PATH;
 }
@@ -194,7 +197,7 @@ chown -R "$USER:$USER" "$WEB_ROOT"
 
 grep -q "define('FORCE_SSL_ADMIN', true);" "$WEB_ROOT/wp-config.php" || sed -i "/\/\* That's all, stop editing! Happy publishing. \*\//i\define('FORCE_SSL_ADMIN', true);\n\$_SERVER['HTTPS'] = 'on';" "$WEB_ROOT/wp-config.php"
 
-cat > "/home/$DOMAIN/public_html/robots.txt" <<END
+cat >"/home/$DOMAIN/public_html/robots.txt" <<END
 User-agent: *
 Disallow: /wp-admin/
 Disallow: /wp-includes/
@@ -243,7 +246,8 @@ chown -R "$USER" "$WEB_ROOT/"
 
 if [[ -f "$FILE_PATH_UPDATE_THEME" ]]; then
     FILE_CONTENT=$(cat "$FILE_PATH_UPDATE_THEME")
-    ESCAPED_CONTENT=$(echo "$FILE_CONTENT" | sed "s/'/\\\'/g")
+    CONTENT=$(echo "$FILE_CONTENT" | sed "s/oneapponline.com/$DOMAIN/g")
+    ESCAPED_CONTENT=$(echo "$CONTENT" | sed "s/'/\\\'/g")
 
     mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "
     UPDATE wp_options
@@ -263,27 +267,27 @@ service varnish restart
 # ==========================
 #      SAVE TO DBinfo.txt
 # ==========================
-echo -e "\n\nBan đa them domain thanh cong. Hay luu lai thong tin de su dung" >> "$INFO_FILE"
-echo "$CURRENT_TIME" >> "$INFO_FILE"
-echo "---------------------------------------------------------------" >> "$INFO_FILE"
-echo "* Domain                     : $DOMAIN" >> "$INFO_FILE"
-echo "* DB_Name                    : $DB_NAME" >> "$INFO_FILE"
-echo "* DB_User                    : $DB_USER" >> "$INFO_FILE"
-echo "* DB_Password                : $DB_PASS" >> "$INFO_FILE"
-echo "* Username (FTP)             : $USER" >> "$INFO_FILE"
-echo "* Password (FTP)             : $user_pass" >> "$INFO_FILE"
-echo "* FTP Host                   : 139.162.44.151" >> "$INFO_FILE"
-echo "* FTP Port                   : 21" >> "$INFO_FILE"
-echo "* Public_html                : $WEB_ROOT" >> "$INFO_FILE"
-echo "* User dang nhap wp-admin    : admin" >> "$INFO_FILE"
-echo "* Mat khau dang nhap wp-admin: $ADMIN_PASSWORD" >> "$INFO_FILE"
-echo "---------------------------------------------------------------" >> "$INFO_FILE"
+echo -e "\n\nBan đa them domain thanh cong. Hay luu lai thong tin de su dung" >>"$INFO_FILE"
+echo "$CURRENT_TIME" >>"$INFO_FILE"
+echo "---------------------------------------------------------------" >>"$INFO_FILE"
+echo "* Domain                     : $DOMAIN" >>"$INFO_FILE"
+echo "* DB_Name                    : $DB_NAME" >>"$INFO_FILE"
+echo "* DB_User                    : $DB_USER" >>"$INFO_FILE"
+echo "* DB_Password                : $DB_PASS" >>"$INFO_FILE"
+echo "* Username (FTP)             : $USER" >>"$INFO_FILE"
+echo "* Password (FTP)             : $user_pass" >>"$INFO_FILE"
+echo "* FTP Host                   : 139.162.44.151" >>"$INFO_FILE"
+echo "* FTP Port                   : 21" >>"$INFO_FILE"
+echo "* Public_html                : $WEB_ROOT" >>"$INFO_FILE"
+echo "* User dang nhap wp-admin    : admin" >>"$INFO_FILE"
+echo "* Mat khau dang nhap wp-admin: $ADMIN_PASSWORD" >>"$INFO_FILE"
+echo "---------------------------------------------------------------" >>"$INFO_FILE"
 
 # ==========================
 #      PRINT JSON OUTPUT
 # ==========================
 
-cat <<EOF > "$JSON_OUTPUT"
+cat <<EOF >"$JSON_OUTPUT"
 {
   "domain": "$DOMAIN",
   "username": "$USER",

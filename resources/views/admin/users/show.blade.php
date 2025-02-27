@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">User</div>
                 <div class="card-body">
