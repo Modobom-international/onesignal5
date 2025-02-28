@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Services\CloudFlareService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +28,7 @@ class DeleteDomain implements ShouldQueue
     public function handle(): void
     {
         $getDomain = DB::connection('mongodb')->table('domains')->where('domain', $this->domain)->first();
+        $cloudFlareService = new CloudFlareService;
 
         $data = [
             'domain' => $getDomain->domain,
