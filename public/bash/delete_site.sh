@@ -77,8 +77,26 @@ else
     echo "Thư mục $PUBLIC_ROOT không tồn tại."
 fi
 
-service nginx restart
-service php-fpm restart
+# ==========================
+#      CHECK NGINX
+# ==========================
+echo "Kiểm tra cấu hình Nginx..."
+if ! nginx -t 2>/dev/null; then
+    echo "Lỗi: Cấu hình Nginx không hợp lệ. Không restart Nginx."
+    exit 1
+fi
+
+# ==========================
+#      CHECK PHP-FPM
+# ==========================
+echo "Kiểm tra cấu hình PHP-FPM..."
+if ! php-fpm -t 2>/dev/null; then
+    echo "Lỗi: Cấu hình PHP-FPM không hợp lệ. Không restart PHP-FPM."
+    exit 1
+fi
+
+service nginx reload
+service php-fpm reload
 
 echo "Hoàn tất quá trình xóa."
 exit 0

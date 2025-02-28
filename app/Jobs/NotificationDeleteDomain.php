@@ -2,10 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Helper\Domain;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
-class NotificationCheckDomain implements ShouldQueue
+class NotificationDeleteDomain implements ShouldQueue
 {
     use Queueable;
 
@@ -25,7 +26,7 @@ class NotificationCheckDomain implements ShouldQueue
     public function handle(): void
     {
         $send = [
-            'message' => 'Domain: ' . $this->data['domain'] . ' đã hoạt động',
+            'message' => 'Domain: ' . $this->data['domain'] . ' đã được xóa',
             'provider' => $this->data['provider']
         ];
 

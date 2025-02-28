@@ -33,7 +33,8 @@ class DeleteDomain implements ShouldQueue
             'user_ftp' => $getDomain->ftp_user,
             'db_name' => $getDomain->db_name,
             'db_user' => $getDomain->db_user,
-            'server' => $getDomain->server
+            'server' => $getDomain->server,
+            'provider' => $getDomain->provider
         ];
 
         $sshService = new SSHService($data['server']);
@@ -54,6 +55,8 @@ class DeleteDomain implements ShouldQueue
 
             return;
         }
+
+        NotificationDeleteDomain::dispatch($data)->onQueue('notification_system');
 
         dump('Xóa thành công domain');
     }

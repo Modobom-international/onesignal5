@@ -94,7 +94,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="removeDomain()">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="removeDomain()" data-bs-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>
@@ -174,7 +174,7 @@
                 domain: domain
             },
             success: function(response) {
-                $('#table-domain').html(response.html);
+                
             }
         });
     }
