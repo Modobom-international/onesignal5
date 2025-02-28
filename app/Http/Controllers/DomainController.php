@@ -84,8 +84,6 @@ class DomainController extends Controller
             }
         }
 
-        $response['status'] = 1;
-
         return response()->json($response);
     }
 
