@@ -264,6 +264,42 @@ return [
                 'maxProcesses' => 5,
                 'tries' => 0,
             ],
+
+            'supervisor-onesignal5-14' => [
+                'connection' => 'redis',
+                'queue' => ['up-domain'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 5,
+                'tries' => 0,
+            ],
+
+            'supervisor-onesignal5-15' => [
+                'connection' => 'redis',
+                'queue' => ['delete-domain'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 5,
+                'tries' => 0,
+            ],
+
+            'supervisor-onesignal5-16' => [
+                'connection' => 'redis',
+                'queue' => ['up-domain-dump'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 5,
+                'tries' => 0,
+            ],
+
+            'supervisor-onesignal5-17' => [
+                'connection' => 'redis',
+                'queue' => ['notification-system-broadcast'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 5,
+                'tries' => 0,
+            ],
         ],
     ],
 ];

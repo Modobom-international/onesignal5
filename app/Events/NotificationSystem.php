@@ -12,6 +12,8 @@ class NotificationSystem implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $connection = 'redis';
+    public $queue = 'notification-system-broadcast';
     private $data;
 
     public function __construct($data)

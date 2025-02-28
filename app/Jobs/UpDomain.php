@@ -51,7 +51,7 @@ class UpDomain implements ShouldQueue
         $common = new Common;
         $sourcePath = `/home/` . $this->domain . `/public_html/wp-content/uploads/2025/02`;
 
-        $result = $cloudFlareService->addDomainToCloudflare(
+        $result = $cloudFlareService->addDomain(
             $data['domain']
         );
 
@@ -193,6 +193,24 @@ class UpDomain implements ShouldQueue
             'provider' => $this->provider,
             'created_at' => $this->date
         ];
+
+        $result = $goDaddyService->getDomainDetails(
+            $data['domain']
+        );
+
+        if (is_array($result) and array_key_exists('error', $result)) {
+            broadcast(new UpDomainDump(
+                [
+                    'message' => ' ❌ Lỗi không lưu trữ được dữ liệu domain.... <br> ⚡ Kết thúc quá trình up domain...',
+                    'id'  => 'process-6'
+                ],
+            ));
+
+            return;
+        }
+
+        $data['expired_at'] = Common::covertDateTimeToMongoBSONDateGMT7(date('Y-m-d H:i:s', strtotime($result['expires'])));
+        $data['renew_deadline'] = Common::covertDateTimeToMongoBSONDateGMT7(date('Y-m-d H:i:s', strtotime($result['renewDeadline'])));
 
         DB::connection('mongodb')
             ->table('domains')

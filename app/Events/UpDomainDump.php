@@ -12,6 +12,8 @@ class UpDomainDump implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $connection = 'redis';
+    public $queue = 'up-domain-dump';
     private $data;
 
     public function __construct($data)

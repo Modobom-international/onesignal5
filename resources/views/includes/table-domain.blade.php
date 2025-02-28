@@ -20,7 +20,12 @@
                 <td>{{ $domain->admin_password }}</td>
                 <td>{{ $domain->email ?? '' }}</td>
                 <td>{{ $domain->created_at }}</td>
-                <td><button class="btn btn-primary" data-bs-toggle="modal" data-total="{{ json_encode($domain) }}" data-bs-target="#modalDetailDomain"><i class="fa fa-info-circle"></i></button></td>
+                <td>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-total="{{ json_encode($domain) }}" data-bs-target="#modalDetailDomain"><i class="fa fa-info-circle"></i></button>
+                    @if($domain->provider == Auth::user()->id)
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-domain="{{ $domain->domain }}" data-bs-target="#modalDeleteDomain"><i class="fa fa-trash"></i></button>
+                    @endif
+                </td>
             </tr>
             @endforeach
         </tbody>

@@ -71,7 +71,7 @@ class CloudFlareService
         }
     }
 
-    public function addDomainToCloudflare($domain)
+    public function addDomain($domain)
     {
         $body = [
             'name' => $domain,
@@ -81,6 +81,22 @@ class CloudFlareService
 
         try {
             $response = $this->client->post($this->apiUrl . '/zones', ['json' => $body]);
+
+            return json_decode($response->getBody(), true);
+        } catch (RequestException $e) {
+            return $this->handleException($e);
+        }
+    }
+
+    public function deleteDomain($domain)
+    {
+        $zoneId = $this->getZoneId($domain);
+        if (!$zoneId) {
+            return ['error' => 'Không tìm thấy Zone ID'];
+        }
+
+        try {
+            $response = $this->client->delete($this->apiUrl . "/zones/{$zoneId}");
 
             return json_decode($response->getBody(), true);
         } catch (RequestException $e) {

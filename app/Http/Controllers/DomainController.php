@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helper\Common;
+use App\Jobs\DeleteDomain;
 use App\Jobs\UpDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -95,7 +96,7 @@ class DomainController extends Controller
         $email = Auth::user()->email;
         $date = Common::covertDateTimeToMongoBSONDateGMT7(Common::getCurrentVNTime());
 
-        UpDomain::dispatch($domain, $server, $provider, $email, $date);
+        UpDomain::dispatch($domain, $server, $provider, $email, $date)->onQueue('up-domain');
 
         return response()->json([
             'message' => 'Đang xử lý...',
@@ -133,5 +134,16 @@ class DomainController extends Controller
         $result = $this->godaddyService->getDomains();
 
         return response()->json($result);
+    }
+
+    public function deleteDomain(Request $request)
+    {
+        $domain = $request->get('domain');
+
+        DeleteDomain::dispatch($domain)->onQueue('delete-domain');
+
+        return response()->json([
+            'message' => 'Successfully'
+        ]);
     }
 }

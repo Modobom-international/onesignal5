@@ -60,13 +60,10 @@
                         <p class="fw-bold">DB password : <span id="db_password-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Email : <span id="email-modal" class="ml-2 fw-normal"></span></p>
-                    </li>
-                    <li>
                         <p class="fw-bold">Người dùng FTP : <span id="ftp_user-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Người quản lý : <span id="provider-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">Người quản lý : <span id="email-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
                         <p class="fw-bold">Thư mục domain : <span id="public_html-modal" class="ml-2 fw-normal"></span></p>
@@ -78,6 +75,26 @@
                         <p class="fw-bold">Trạng thái : <span id="status-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDeleteDomain" tabindex="-1" aria-labelledby="modalDeleteDomainLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDeleteDomainLabel">Xác nhận xóa <span id="domain-in-title"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn xóa domain <span id="domain-in-body"></span> không ? </p>
+                <p class="fw-bold fst-italic text-danger text-decoration-underline mt-3">Lựa chọn này sẽ bao gồm cả xóa tất cả dữ liệu liên quan, thư mục và điều chỉnh trên server và cloudflare.</p>
+                <input type="hidden" id="domain-in-hidden">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="removeDomain()">Save changes</button>
             </div>
         </div>
     </div>
@@ -100,25 +117,19 @@
             }
         });
 
+        $('#modalDeleteDomain').off('show.bs.modal').on('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var domain = button.getAttribute('data-domain');
+
+            $('#domain-in-hidden').val(domain);
+            $('#domain-in-title').text(domain);
+            $('#domain-in-body').text(domain);
+        });
+
         $('#search-domain').on('keyup', function() {
             clearTimeout(typingTimer);
             typingTimer = setTimeout(performSearch, doneTypingInterval);
         });
-
-        function performSearch() {
-            var query = $('#search-domain').val();
-
-            $.ajax({
-                url: "{{ route('domain.search') }}",
-                type: "GET",
-                data: {
-                    query: query
-                },
-                success: function(response) {
-                    $('#table-domain').html(response.html);
-                }
-            });
-        }
 
         $(document).on('click', '.pagination a', function(event) {
             event.preventDefault();
@@ -137,5 +148,35 @@
             });
         });
     });
+
+    function performSearch() {
+        var query = $('#search-domain').val();
+
+        $.ajax({
+            url: "{{ route('domain.search') }}",
+            type: "GET",
+            data: {
+                query: query
+            },
+            success: function(response) {
+                $('#table-domain').html(response.html);
+            }
+        });
+    }
+
+    function removeDomain() {
+        var domain = $('#domain-in-hidden').val();
+
+        $.ajax({
+            url: "{{ route('domain.delete') }}",
+            type: "GET",
+            data: {
+                domain: domain
+            },
+            success: function(response) {
+                $('#table-domain').html(response.html);
+            }
+        });
+    }
 </script>
 @endsection

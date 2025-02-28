@@ -6,7 +6,7 @@ use App\Enums\ListServer;
 use Illuminate\Console\Command;
 use App\Services\SSHService;
 
-class DeleteDomain extends Command
+class DeleteDomainInList extends Command
 {
     protected $client;
     protected $apiKey;
@@ -18,14 +18,14 @@ class DeleteDomain extends Command
      *
      * @var string
      */
-    protected $signature = 'domains:delete-domain';
+    protected $signature = 'domains:delete-domain-in-list';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Delete domain and dir root';
+    protected $description = 'Delete domain and dir root in list';
 
     /**
      * Execute the console command.
@@ -92,14 +92,14 @@ class DeleteDomain extends Command
                         if (array_key_exists('code', $result) and $result['code'] != 'NOT_FOUND') {
                             $count++;
 
-                            dump('Domain có tồn tại.');
+                            dump('Domain có tồn tại ở tài khoản Linh.');
                             dump('Skip domain');
                             continue;
                         }
                     } else {
                         $count++;
 
-                        dump('Gọi lên api liên tiếp không thành công');
+                        dump('Domain có tồn tại ở tài khoản Tuấn.');
                         dump('Skip domain');
                         continue;
                     }
@@ -143,17 +143,30 @@ class DeleteDomain extends Command
                         'domain' => $domain,
                         'user_ftp' => $userFTP,
                         'db_name' => $dbName,
-                        'db_user' => $dbUser
+                        'db_user' => $dbUser,
+                        'server' => $server
                     ];
 
                     $sshService = new SSHService($data['server']);
-                    $result = $sshService->runScript($data);
+                    $result = $sshService->runDeleteSiteScript($data);
 
                     if (is_array($result) and array_key_exists('error', $result)) {
                         $count++;
 
                         dump('Lỗi xóa domain : ' . json_encode($result));
-                        dump('Domain xóa không thành công!');
+                        dump('Skip domain');
+                        continue;
+                    }
+
+                    $result = $cloudFlareService->deleteDomain(
+                        $domain
+                    );
+
+                    if (is_array($result) and array_key_exists('error', $result)) {
+                        $count++;
+
+                        dump('Lỗi xóa domain : ' . json_encode($result));
+                        dump('Skip domain');
                         continue;
                     }
 

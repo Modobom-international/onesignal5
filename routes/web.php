@@ -113,6 +113,7 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/check-domain', [DomainController::class, 'checkDomain'])->name('domain.check');
     Route::get('/up-domain', [DomainController::class, 'upDomain'])->name('domain.up');
     Route::get('/search-domain', [DomainController::class, 'searchDomain'])->name('domain.search');
+    Route::get('/delete-domain', [DomainController::class, 'deleteDomain'])->name('domain.delete');
 
     Route::get('/change-status-notification', [AdminController::class, 'changeStatusNotification'])->name('changeStatusNotification');
 });
