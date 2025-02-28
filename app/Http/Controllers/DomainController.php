@@ -16,7 +16,9 @@ class DomainController extends Controller
 
     public function __construct()
     {
-        $this->godaddyService = new GoDaddyService(Auth::user()->email);
+        if(Auth::check()) {
+            $this->godaddyService = new GoDaddyService(Auth::user()->email);
+        }
     }
 
     public function listDomain()
