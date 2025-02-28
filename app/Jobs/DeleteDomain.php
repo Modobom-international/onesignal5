@@ -56,6 +56,8 @@ class DeleteDomain implements ShouldQueue
             return;
         }
 
+        DB::connection('mongodb')->table('domains')->where('domain', $this->domain)->delete();
+
         NotificationDeleteDomain::dispatch($data)->onQueue('notification_system');
 
         dump('Xóa thành công domain');
