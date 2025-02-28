@@ -122,6 +122,8 @@ class UpDomain implements ShouldQueue
             $data['domain']
         );
 
+        Log::info('--------Log run script create site : ' . json_encode($result));
+
         if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
                 [
@@ -142,7 +144,7 @@ class UpDomain implements ShouldQueue
 
         $result = $common->renderLogoForDomain($sourcePath);
 
-        Log::info(json_encode($result));
+        Log::info('--------Log render logo : ' . json_encode($result));
 
         if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -165,8 +167,6 @@ class UpDomain implements ShouldQueue
         $result = $sshService->getOutputResult(
             $data['domain']
         );
-
-        Log::info(json_encode($result));
 
         if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(

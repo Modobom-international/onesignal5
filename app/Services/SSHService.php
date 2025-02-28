@@ -47,7 +47,7 @@ class SSHService
         }
     }
 
-    public function runCreateSiteScript($script, $data = null)
+    public function runCreateSiteScript($script)
     {
         try {
             $output = Ssh::create($this->user, $this->server)
