@@ -75,8 +75,6 @@
             'process-6': ' 🔄 Bắt đầu tiến hành lưu trữ dữ liệu domain....',
         };
 
-        var s = new Date().toLocaleString();
-
         $("#domain").on("input", function() {
             $('.overlay').show();
         });
@@ -129,14 +127,10 @@
             } else {
                 logEntry.html(data.message);
             }
-
-            console.log(s)
             
             nextLogEntry.removeClass('hide');
             $("#area-log").scrollTop($("#area-log")[0].scrollHeight);
         });
-
-        console.log(s)
     });
 
     function checkDomain() {
