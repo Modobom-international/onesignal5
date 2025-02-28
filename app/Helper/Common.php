@@ -136,10 +136,9 @@ class Common
         return $export;
     }
 
-    public function renderLogoForDomain($sourcePath)
+    public function renderLogoForDomain($sourcePath, $ipServer)
     {
         $scriptPath = public_path('bash/logo_render.sh');
-        $ipServer = env('IP_ORIGIN_SERVER', '127.0.0.1');
 
         $command = [
             'rsync',

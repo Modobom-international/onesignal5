@@ -142,7 +142,7 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-        $result = $common->renderLogoForDomain($sourcePath);
+        $result = $common->renderLogoForDomain($sourcePath, $data['server']);
 
         Log::info('--------Log render logo : ' . json_encode($result));
 

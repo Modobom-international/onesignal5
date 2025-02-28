@@ -47,9 +47,11 @@ class SSHService
         }
     }
 
-    public function runCreateSiteScript($script)
+    public function runCreateSiteScript($domain)
     {
         try {
+            $script = "bash /binhchay/create_site.sh {$domain}";
+
             $output = Ssh::create($this->user, $this->server)
                 ->execute($script);
 
