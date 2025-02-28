@@ -101,8 +101,6 @@ END
     chmod 600 "$USER_DIR/.${DOMAIN}.conf"
 }
 
-#!/bin/bash
-
 # ==========================
 #      CONFIG VARIABLES
 # ==========================
@@ -312,16 +310,34 @@ chown -R "$USER" "$WEB_ROOT/"
 if [[ -f "$FILE_PATH_UPDATE_THEME" ]]; then
     FILE_CONTENT=$(cat "$FILE_PATH_UPDATE_THEME")
     CONTENT=$(echo "$FILE_CONTENT" | sed "s/oneapponline.com/$DOMAIN/g")
-    ESCAPED_CONTENT=$(echo "$CONTENT" | sed "s/'/\\\'/g")
 
-    mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "
-    UPDATE wp_options
-    SET option_value = '$ESCAPED_CONTENT'
-    WHERE option_name = 'theme_mods_bds';"
+    echo "Nội dung file đã sửa (serialized): $CONTENT"
+
+    PHP_ARRAY=$(php -r "echo json_encode(unserialize('$CONTENT'));" 2>/dev/null)
+
+    wp option update theme_mods_bds "$PHP_ARRAY" --format=json --allow-root || {
+        echo "ERROR: Failed to update theme_mods_bds with WP-CLI"
+        exit 1
+    }
+
+    wp cache flush --allow-root
+
+    THEME_MODS_SERIALIZED=$(mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -N -e "SELECT option_value FROM wp_options WHERE option_name = 'theme_mods_bds';")
+    echo "Giá trị serialized từ database: $THEME_MODS_SERIALIZED"
+
+    if [ "$THEME_MODS_SERIALIZED" = "$CONTENT" ]; then
+        echo "Giá trị khớp với nội dung file!"
+    else
+        echo "Giá trị không khớp với nội dung file!"
+        echo "Debug: CONTENT length: ${#CONTENT}, THEME_MODS length: ${#THEME_MODS_SERIALIZED}"
+    fi
+
+    THEME_MODS=$(wp option get theme_mods_bds --allow-root --format=json)
+    echo "Giá trị của theme_mods_bds từ WP-CLI: $THEME_MODS"
 
     echo "Cập nhật dữ liệu thành công vào wp_options!"
 else
-    echo "File $FILE_PATH không tồn tại!"
+    echo "File $FILE_PATH_UPDATE_THEME không tồn tại!"
 fi
 
 mkdir -p /home/$DOMAIN/public_html/wp-content/uploads/2025/02/

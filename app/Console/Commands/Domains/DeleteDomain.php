@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Domains;
 
 use App\Enums\ListServer;
-use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use App\Helper\Common;
+use App\Services\SSHService;
 
-class ImportDomainFromCSV extends Command
+class DeleteDomain extends Command
 {
     protected $client;
     protected $apiKey;
@@ -21,23 +18,23 @@ class ImportDomainFromCSV extends Command
      *
      * @var string
      */
-    protected $signature = 'app:import-domain-from-csv';
+    protected $signature = 'domains:delete-domain';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Import domain from CSV file';
+    protected $description = 'Delete domain and dir root';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $listIP = ListServer::LIST_SERVER;
+        $listServer = ListServer::LIST_SERVER;
+        $linesAfter = 11;
         $count = 1;
-
         $listKey = [
             'tuan' => [
                 'apiKey' => config('services.godaddy_tuan.api_key'),
@@ -51,7 +48,7 @@ class ImportDomainFromCSV extends Command
             ]
         ];
 
-        foreach ($listIP as $server) {
+        foreach ($listServer as $server) {
             $dbInfoPath = public_path('db-info/DBinfo-' . $server . '.txt');
 
             if (($handle = fopen(public_path('import-domain/' . $server . '.csv'), 'r')) !== false) {
@@ -66,28 +63,10 @@ class ImportDomainFromCSV extends Command
                         continue;
                     }
 
-                    if ($server == '139.162.44.151') {
-                        $domain = $row[2];
-                        $admin_password = $row[3];
-                        $db_name = $row[6];
-                        $ftp_user = $row[5];
-                    } else if ($server == '139.177.186.184') {
-                        $domain = $row[2];
-                        $admin_password = $row[4];
-                        $db_name = $row[6];
-                        $ftp_user = $row[5];
-                    } else {
-                        $domain = $row[2];
-                        $admin_password = $row[3];
-                        $db_name = $row[6];
-                        $ftp_user = $row[5];
-                    }
-
                     $this->apiKey = $listKey['tuan']['apiKey'];
                     $this->apiSecret = $listKey['tuan']['apiSecret'];
                     $this->apiUrl = $listKey['tuan']['apiUrl'];
-                    $linesAfter = 10;
-                    $public_html = `/home/` . $domain . "/public_html";
+                    $domain = $row[2];
                     $result = $this->getDetailDomain($domain);
 
                     dump('---------- Bắt đầu với domain : ' . $domain);
@@ -97,36 +76,32 @@ class ImportDomainFromCSV extends Command
                         $this->apiSecret = $listKey['linh']['apiSecret'];
                         $this->apiUrl = $listKey['linh']['apiUrl'];
 
-                        dump('Domain này không phải của Tuấn');
+                        dump('Domain này không phải của Tuấn.');
                         dump('Tiếp tục kiểm tra với Linh');
 
                         $result = $this->getDetailDomain($domain);
 
-                        if (array_key_exists('code', $result) and $result['code'] == 'NOT_FOUND') {
+                        if (array_key_exists('error', $result)) {
                             $count++;
 
-                            dump('Domain này không phải của Linh');
+                            dump('Gọi lên api liên tiếp không thành công.');
                             dump('Skip domain');
                             continue;
-                        } else if (array_key_exists('error', $result)) {
-                            $count++;
-
-                            dump('Gọi lên api liên tiếp không thành công');
-                            dump('Skip domain');
-                            continue;
-                        } else {
-                            $getUser = DB::table('users')->where('email', 'tranlinh.modobom@gmail.com')->first();
-                            $provider = $getUser->id;
                         }
-                    } else if (array_key_exists('error', $result)) {
+
+                        if (array_key_exists('code', $result) and $result['code'] != 'NOT_FOUND') {
+                            $count++;
+
+                            dump('Domain có tồn tại.');
+                            dump('Skip domain');
+                            continue;
+                        }
+                    } else {
                         $count++;
 
                         dump('Gọi lên api liên tiếp không thành công');
                         dump('Skip domain');
                         continue;
-                    } else {
-                        $getUser = DB::table('users')->where('email', 'vutuan.modobom@gmail.com')->first();
-                        $provider = $getUser->id;
                     }
 
                     if (file_exists($dbInfoPath)) {
@@ -137,7 +112,7 @@ class ImportDomainFromCSV extends Command
                         foreach ($lines as $index => $line) {
                             if (strpos($line, $domain) !== false) {
                                 $found = true;
-                                $output = array_slice($lines, $index, $linesAfter + 1);
+                                $output = array_slice($lines, $index, $linesAfter);
                                 break;
                             }
                         }
@@ -158,35 +133,32 @@ class ImportDomainFromCSV extends Command
                     }
 
                     $explodeDBUser = explode(':', $output[2]);
-                    $explodeDBPassword = explode(':', $output[3]);
+                    $explodeDBName = explode(':', $output[1]);
+                    $explodeUserFTP = explode(':', $output[4]);
                     $dbUser = trim($explodeDBUser[1]);
-                    $dbPassword = trim($explodeDBPassword[1]);
+                    $dbName = trim($explodeDBName[1]);
+                    $userFTP = trim($explodeUserFTP[1]);
 
                     $data = [
                         'domain' => $domain,
-                        'admin_username' => 'admin',
-                        'admin_password' => $admin_password,
-                        'db_name' => $db_name,
-                        'db_user' => $dbUser,
-                        'db_password' => $dbPassword,
-                        'public_html' => $public_html,
-                        'ftp_user' => $ftp_user,
-                        'server' => $server,
-                        'status' => 1,
-                        'provider' => $provider,
-                        'created_at' => Common::covertDateTimeToMongoBSONDateGMT7(Common::getCurrentVNTime())
+                        'user_ftp' => $userFTP,
+                        'db_name' => $dbName,
+                        'db_user' => $dbUser
                     ];
 
-                    DB::connection('mongodb')
-                        ->table('domains')
-                        ->insert($data);
+                    $sshService = new SSHService($data['server']);
+                    $result = $sshService->runScript($data);
 
-                    dump('Domain import thành công');
+                    if (is_array($result) and array_key_exists('error', $result)) {
+                        $count++;
 
-                    $count++;
+                        dump('Lỗi xóa domain : ' . json_encode($result));
+                        dump('Domain xóa không thành công!');
+                        continue;
+                    }
+
+                    dump('Domain đã xóa thành công!');
                 }
-
-                fclose($handle);
             }
         }
     }

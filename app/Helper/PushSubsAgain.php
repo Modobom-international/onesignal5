@@ -22,17 +22,8 @@ class PushSubsAgain
     ];
 
     const KEYWORDS_PUSH = [
-
         self::KW_MK => [
             self::TELCO_DTAC => [
-                //DTAC
-                //EMAT_4541572
-                //GO_4541370
-                //IVF_4541293
-                //IVG_4541293
-                //RSTH_4541544
-                //THRS_4541544
-
                 [
                     'keyword' => 'EMAT',
                     'shortcode' => '4541572',
@@ -61,13 +52,6 @@ class PushSubsAgain
 
             ],
             self::TELCO_AIS => [
-                ///AIS
-                //IVF_4541293
-                //WICAT_4541763
-                //NARA_4541352
-                //GAMES_4541545
-                //TCL_4541571
-                //DSC_4541770
                 [
                     'keyword' => 'IVF',
                     'shortcode' => '4541293',
@@ -98,13 +82,6 @@ class PushSubsAgain
 
         self::KW_F2U => [
             self::TELCO_DTAC => [
-                ///DTAC
-                //F1_4761619
-                //J1_4761469
-                //R1_4761602
-                //A1_4761590
-                //R1_4761602
-                //J1_4761469
                 [
                     'keyword' => 'X1',
                     'shortcode' => '4761608',
@@ -144,12 +121,6 @@ class PushSubsAgain
 
             ],
             self::TELCO_AIS => [
-                /// AIS
-                //G1_4761620
-                //Z1_4761613
-                //T1_4761604
-                //Q1_4761601
-                //M1_4761597
                 [
                     'keyword' => 'X1',
                     'shortcode' => '4761608',
@@ -192,76 +163,6 @@ class PushSubsAgain
 
     ];
 
-
-    public static function pushSubsAgain($country = 'thailand', $limit = self::LIMIT_PUSH_SUBS, $version = Onesignal::VERSION_2)
-    {
-        $timeDiff = 6 * 60; //6 hours
-
-        $playersId = \DB::table('onesignal_push_subs_again')
-            ->whereRaw('(ROUND(TIMESTAMPDIFF(minute, created_at, now())) >= ?)', [$timeDiff]) //only get records diff created_at & now = 6 hours
-            ->limit($limit)
-            ->pluck('player_id')->toArray();
-
-        if (count($playersId) === 0) {
-            dump('[Push subs again] Nothing to do!');
-
-            return false;
-        }
-
-        $kwMKDTAC = self::pickKwMK(self::TELCO_DTAC);
-        $kwMKAIS = self::pickKwMK(self::TELCO_AIS);
-
-        //mk
-        $msgMK = [
-            'type' => 'sms',
-            'dtac' => [
-                $kwMKDTAC,
-            ],
-            'ais' => [
-                $kwMKAIS,
-            ],
-        ];
-
-        $responseMK = Onesignal::sendNotificationByIds($country, json_encode($msgMK), $playersId, $version);
-        dump('Pushed onesignal subs again - MK, count: ' . count($playersId));
-        dump($responseMK);
-        dump('DTAC - MK');
-        dump($kwMKDTAC);
-        dump('AIS - MK');
-        dump($kwMKDTAC);
-
-        //remove invalid players id
-        ///All included players are not subscribed
-
-        //save history
-        $recordsMK = [];
-        $recordsF2U = [];
-
-        foreach ($playersId as $playerId) {
-            $recordsMK[] = [
-                'player_id' => $playerId,
-                'country' => $country,
-                'provider' => self::KW_MK,
-                'kw_dtac' => json_encode($kwMKDTAC),
-                'kw_ais' => json_encode($kwMKAIS),
-                'created_at' => Common::getCurrentVNTime(),
-            ];
-        }
-
-        \DB::transaction(function () use ($playersId, $recordsMK) {
-            $resultMK = \DB::table('onesignal_push_subs_again_history')->insert($recordsMK);
-
-            //delete players id
-            $resultDelete = \DB::table('onesignal_push_subs_again')->whereIn('player_id', $playersId)->delete();
-
-            dump('- Inserted history MK: result ' . $resultMK);
-            dump('=> Deleted players id: result ' . $resultDelete);
-        });
-
-        dump('Done!');
-    }
-
-
     public static function getCurrentKw($provider, $telco)
     {
         if (empty(self::KEYWORDS_PUSH[strtoupper(trim($provider))][strtoupper(trim($telco))])) {
@@ -287,14 +188,6 @@ class PushSubsAgain
         ];
     }
 
-    /**
-     * Used for case set next kw index
-     *
-     * @param $provider
-     * @param $telco
-     * @param $index
-     * @return null
-     */
     public static function setKwIndex($provider, $telco, $index)
     {
         if (empty(self::KEYWORDS_PUSH[strtoupper(trim($provider))][strtoupper(trim($telco))])) {
@@ -313,21 +206,11 @@ class PushSubsAgain
 
     public static function pickKwMK($telco)
     {
-        //todo: get current kw
-        ///then => push data onesignal
-        /// then => increase index
-        /// => call setKwIndex with new index
-
         return self::pickKw(self::KW_MK, $telco);
     }
 
     public static function pickKwF2U($telco)
     {
-        //todo: get current kw
-        ///then => push data onesignal
-        /// then => increase index
-        /// => call setKwIndex with new index
-
         return self::pickKw(self::KW_F2U, $telco);
     }
 
@@ -345,7 +228,6 @@ class PushSubsAgain
 
         return $kw;
     }
-
 
     private static function getKeyRedisKwIndex($provider, $telco)
     {

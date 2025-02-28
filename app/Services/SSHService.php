@@ -17,10 +17,10 @@ class SSHService
         $this->privateKey = config('services.ssh.ssh_private_key');
     }
 
-    public function runScript($domain)
+    public function runDeleteSiteScript($data)
     {
         try {
-            $script = "bash /binhchay/create_site.sh $domain";
+            $script = "bash /binhchay/delete_site.sh {$data['domain']} {$data['user_ftp']} {$data['db_name']} {$data['db_user']}";
 
             $output = Ssh::create($this->user, $this->server)
                 ->execute($script);
@@ -42,6 +42,18 @@ class SSHService
                 ->getOutput();
 
             return json_decode($jsonData, true);
+        } catch (RequestException $e) {
+            return $this->handleException($e);
+        }
+    }
+
+    public function runCreateSiteScript($script, $data = null)
+    {
+        try {
+            $output = Ssh::create($this->user, $this->server)
+                ->execute($script);
+
+            return $output->getOutput();
         } catch (RequestException $e) {
             return $this->handleException($e);
         }
