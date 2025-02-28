@@ -49,11 +49,11 @@ class UpDomain implements ShouldQueue
         $cloudFlareService = new CloudFlareService();
         $sshService = new SSHService($data['server']);
         $common = new Common;
-        // $sourcePath = `/home/` . $this->domain . `/public_html/wp-content/uploads/2025/02`;
+        $sourcePath = `/home/` . $this->domain . `/public_html/wp-content/uploads/2025/02`;
 
-        // $result = $cloudFlareService->addDomainToCloudflare(
-        //     $data['domain']
-        // );
+        $result = $cloudFlareService->addDomainToCloudflare(
+            $data['domain']
+        );
 
         if (array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -73,9 +73,9 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-        // $result = $goDaddyService->updateNameservers(
-        //     $data['domain']
-        // );
+        $result = $goDaddyService->updateNameservers(
+            $data['domain']
+        );
 
         if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -95,10 +95,10 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-        // $result = $cloudFlareService->updateDnsARecord(
-        //     $data['domain'],
-        //     $data['server']
-        // );
+        $result = $cloudFlareService->updateDnsARecord(
+            $data['domain'],
+            $data['server']
+        );
 
         if (array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -118,9 +118,9 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-        // $result = $sshService->runCreateSiteScript(
-        //     $data['domain']
-        // );
+        $result = $sshService->runCreateSiteScript(
+            $data['domain']
+        );
 
         if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -140,7 +140,9 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-        // $result = $common->renderLogoForDomain($sourcePath);
+        $result = $common->renderLogoForDomain($sourcePath);
+
+        Log::info(json_encode($result));
 
         if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -160,11 +162,11 @@ class UpDomain implements ShouldQueue
             ));
         }
 
-        // $result = $sshService->getOutputResult(
-        //     $data['domain']
-        // );
+        $result = $sshService->getOutputResult(
+            $data['domain']
+        );
 
-        // Log::info(json_encode($result));
+        Log::info(json_encode($result));
 
         if (is_array($result) and array_key_exists('error', $result)) {
             broadcast(new UpDomainDump(
@@ -177,24 +179,24 @@ class UpDomain implements ShouldQueue
             return;
         }
 
-        // $dataInsert = [
-        //     'domain' => $this->domain,
-        //     'admin_username' => $result['admin_username'],
-        //     'admin_password' => $result['admin_password'],
-        //     'db_name' => $result['db_name'],
-        //     'db_user' => $result['db_user'],
-        //     'db_password' => $result['db_password'],
-        //     'public_html' => $result['public_html'],
-        //     'ftp_user' => $result['ftp_user'],
-        //     'server' => config($this->server),
-        //     'status' => 0,
-        //     'provider' => $this->provider,
-        //     'created_at' => $this->date
-        // ];
+        $dataInsert = [
+            'domain' => $this->domain,
+            'admin_username' => $result['admin_username'],
+            'admin_password' => $result['admin_password'],
+            'db_name' => $result['db_name'],
+            'db_user' => $result['db_user'],
+            'db_password' => $result['db_password'],
+            'public_html' => $result['public_html'],
+            'ftp_user' => $result['ftp_user'],
+            'server' => config($this->server),
+            'status' => 0,
+            'provider' => $this->provider,
+            'created_at' => $this->date
+        ];
 
-        // DB::connection('mongodb')
-        //     ->table('domains')
-        //     ->insert($dataInsert);
+        DB::connection('mongodb')
+            ->table('domains')
+            ->insert($dataInsert);
 
         broadcast(new UpDomainDump(
             [
