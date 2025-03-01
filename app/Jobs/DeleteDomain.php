@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
 use App\Services\SSHService;
+use Log;
 
 class DeleteDomain implements ShouldQueue
 {
@@ -42,6 +43,8 @@ class DeleteDomain implements ShouldQueue
         $sshService = new SSHService($data['server']);
         $result = $sshService->runDeleteSiteScript($data);
 
+        Log::info('------- Result run script : ' . json_encode($result));
+
         if (is_array($result) and array_key_exists('error', $result)) {
             dump('Lỗi xóa domain : ' . json_encode($result));
 
@@ -51,6 +54,8 @@ class DeleteDomain implements ShouldQueue
         $result = $cloudFlareService->deleteDomain(
             $domain
         );
+
+        Log::info('------- Result delete domain : ' . json_encode($result));
 
         if (is_array($result) and array_key_exists('error', $result)) {
             dump('Lỗi xóa domain : ' . json_encode($result));
