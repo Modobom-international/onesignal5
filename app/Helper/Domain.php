@@ -23,7 +23,7 @@ class Domain
 
         broadcast(new NotificationSystem(
             [
-                'message' => $message,
+                'message' => $data['message'],
                 'users_id'  => $data['provider'],
                 'status_read' => 0,
                 'id' => $idInsert
