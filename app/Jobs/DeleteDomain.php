@@ -52,7 +52,7 @@ class DeleteDomain implements ShouldQueue
         }
 
         $result = $cloudFlareService->deleteDomain(
-            $domain
+            $this->domain
         );
 
         Log::info('------- Result delete domain : ' . json_encode($result));
