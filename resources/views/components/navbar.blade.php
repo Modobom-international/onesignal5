@@ -1,5 +1,5 @@
 <nav aria-label="primary" x-data="{ open: false, notificationOpen: false }"
-    class="fixed top-0 left-0 right-0 z-50 backdrop-blur flex-none transition-colors duration-300 border-b border-slate-900/10 dark:border-slate-50/[0.06] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-transparent"
+    class="fixed top-0 left-0 right-0 z-50 backdrop-blur flex-none transition-colors duration-300 border-b border-slate-900/10 dark:border-[#30363d] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-[#0d1117]"
     :class="{ '-translate-y-full': scrollingDown, 'translate-y-0': scrollingUp }">
     <div class="h-14 flex items-center justify-between px-4">
         <!-- Left side - Logo and Toggle -->
@@ -38,11 +38,11 @@
                     x-transition:leave="transition ease-in duration-75"
                     x-transition:leave-start="transform opacity-100 scale-100"
                     x-transition:leave-end="transform opacity-0 scale-95"
-                    class="absolute right-0 mt-2 w-80 rounded-lg shadow-lg bg-white dark:bg-slate-800 ring-1 ring-black/5 dark:ring-white/10">
-                    <div class="p-1 divide-y divide-gray-100 dark:divide-gray-700">
+                    class="absolute right-0 mt-2 w-80 rounded-lg shadow-lg bg-white dark:bg-[#161b22] ring-1 ring-black/5 dark:ring-[#30363d]">
+                    <div class="p-1 divide-y divide-gray-100 dark:divide-[#30363d]">
                         <!-- Header -->
                         <div class="px-3 py-2 flex justify-between items-center">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Notifications</h3>
+                            <h3 class="text-sm font-semibold text-gray-900 dark:text-[#c9d1d9]">Notifications</h3>
                             <button x-show="unreadCount > 0" @click="unreadCount = 0"
                                 class="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300">
                                 Mark all as read
@@ -52,17 +52,17 @@
                         <!-- Notification List -->
                         <div class="py-1 max-h-64 overflow-y-auto">
                             @forelse ($notificationSystem as $notification)
-                                <div class="px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer {{ $notification->status_read == 0 ? 'bg-slate-50 dark:bg-slate-700/30' : '' }}"
-                                    @click="$event.target.closest('div').classList.remove('bg-slate-50', 'dark:bg-slate-700/30')">
-                                    <p class="text-sm text-slate-600 dark:text-slate-300">{{ $notification->message }}
+                                <div class="px-3 py-2 hover:bg-slate-50 dark:hover:bg-[#1f2428] cursor-pointer {{ $notification->status_read == 0 ? 'bg-slate-50 dark:bg-[#1c2128]' : '' }}"
+                                    @click="$event.target.closest('div').classList.remove('bg-slate-50', 'dark:bg-[#1c2128]')">
+                                    <p class="text-sm text-slate-600 dark:text-[#c9d1d9]">{{ $notification->message }}
                                     </p>
-                                    <span class="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                                    <span class="text-xs text-slate-400 dark:text-[#8b949e] mt-1">
                                         {{ $notification->created_at->diffForHumans() }}
                                     </span>
                                 </div>
                             @empty
                                 <div class="px-3 py-2">
-                                    <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('No notifications') }}
+                                    <p class="text-sm text-slate-500 dark:text-[#8b949e]">{{ __('No notifications') }}
                                     </p>
                                 </div>
                             @endforelse
@@ -138,7 +138,7 @@
 </nav>
 
 <!-- Mobile Bottom Navigation -->
-<div class="fixed inset-x-0 bottom-0 z-50 flex items-center justify-between h-14 px-4 transition-transform duration-300 bg-white/95 backdrop-blur supports-backdrop-blur:bg-white/60 dark:bg-slate-900/75 border-t border-slate-900/10 dark:border-slate-50/[0.06] md:hidden"
+<div class="fixed inset-x-0 bottom-0 z-50 flex items-center justify-between h-14 px-4 transition-transform duration-300 bg-white/95 backdrop-blur supports-backdrop-blur:bg-white/60 dark:bg-[#0d1117] border-t border-slate-900/10 dark:border-[#30363d] md:hidden"
     :class="{ 'translate-y-full': scrollingDown, 'translate-y-0': scrollingUp }">
     <x-button type="button" icon-only variant="secondary" sr-text="Search"
         class="h-8 w-8 justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200">
