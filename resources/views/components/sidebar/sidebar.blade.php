@@ -7,7 +7,8 @@
         'translate-x-0': isSidebarOpen,
         '-translate-x-full md:translate-x-0': !isSidebarOpen
     }"
-    @mouseover="handleSidebarHover(true)" @mouseleave="handleSidebarHover(false)" @click.outside="isSidebarOpen = false">
+    @mouseover="handleSidebarHover(true)" @mouseleave="handleSidebarHover(false)"
+    @click.outside="window.innerWidth < 768 ? isSidebarOpen = false : null">
     <x-sidebar.header />
     <x-sidebar.content />
     <x-sidebar.footer />
