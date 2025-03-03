@@ -10,7 +10,8 @@
 
     <title>{{ config('app.name', 'Modobom') }} - @yield('title')</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
     <link rel="stylesheet" href="{{ asset('/css/lib/font-awesome/css/font-awesome.min.css') }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
@@ -43,23 +44,39 @@
 <body class="font-sans antialiased">
     <div x-data="mainState" :class="{ dark: isDarkMode }" x-on:resize.window="handleWindowResize" x-cloak>
         <div class="min-h-screen text-gray-900 bg-gray-100 dark:bg-dark-eval-0 dark:text-gray-200">
-            <x-sidebar.sidebar />
-            <div class="flex flex-col min-h-screen" :class="{'lg:ml-64': isSidebarOpen, 'md:ml-16': !isSidebarOpen}" style="transition-property: margin; transition-duration: 150ms;">
+            <!-- Fixed Navbar -->
+            <div class="fixed top-0 left-0 right-0 z-50">
                 <x-navbar />
-                <header>
-                    <div class="p-4 sm:p-6">
-                        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            </div>
+
+            <!-- Main Layout Container -->
+            <div class="flex pt-16"> <!-- pt-16 to offset fixed navbar -->
+                <!-- Sidebar -->
+                <div class="fixed left-0 h-[calc(100vh-4rem)]"
+                    :class="{ 'w-64': isSidebarOpen, 'w-16': !isSidebarOpen }"
+                    style="transition-property: width; transition-duration: 150ms;">
+                    <x-sidebar.sidebar />
+                </div>
+
+                <!-- Main Content -->
+                <div class="flex-1 min-h-[calc(100vh-4rem)] "
+                    :class="{ 'lg:ml-64': isSidebarOpen, 'md:ml-16': !isSidebarOpen }"
+                    style="transition-property: margin; transition-duration: 150ms;">
+                    <header class="p-4 sm:p-6">
+                        <div
+                            class="flex flex-col gap-4 md:flex-row md:items-center container mx-auto md:justify-between">
                             <h2 class="text-xl font-semibold leading-tight">
                                 @yield('title')
                             </h2>
                         </div>
-                    </div>
-                </header>
-                <main class="px-4 sm:px-6 flex-1">
-                    @yield('content')
-                </main>
+                    </header>
 
-                <x-footer />
+                    <main class="px-4 sm:px-6 flex-1 container mx-auto">
+                        @yield('content')
+                    </main>
+
+                    <x-footer />
+                </div>
             </div>
         </div>
     </div>
@@ -93,19 +110,19 @@
         };
 
         <?php if (session('success')) { ?>
-            toastr.success("{{ session('success') }}");
+        toastr.success("{{ session('success') }}");
         <?php } ?>
 
         <?php if (session('error')) { ?>
-            toastr.error("{{ session('error') }}");
+        toastr.error("{{ session('error') }}");
         <?php } ?>
 
         <?php if (session('info')) { ?>
-            toastr.info("{{ session('info') }}");
+        toastr.info("{{ session('info') }}");
         <?php } ?>
 
         <?php if (session('warning')) { ?>
-            toastr.warning("{{ session('warning') }}");
+        toastr.warning("{{ session('warning') }}");
         <?php } ?>
     </script>
 
@@ -120,7 +137,8 @@
                         $('#bell-notification').removeClass('hide');
                     }
 
-                    $("#dropdown-notification").prepend(`<li class="background-grey" id="` + data.id + `"><a class="dropdown-item">` + data.message + `</a></li>`);
+                    $("#dropdown-notification").prepend(`<li class="background-grey" id="` + data.id +
+                        `"><a class="dropdown-item">` + data.message + `</a></li>`);
                     if ($("#dropdown-notification li").length >= 4) {
                         $("#dropdown-notification").last().remove();
                     }
