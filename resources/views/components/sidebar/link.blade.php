@@ -68,10 +68,11 @@
             @endif
         </div>
 
-        <span class="text-sm overflow-hidden transition-all w-52" x-show="isSidebarOpen || isSidebarHovered"
-            x-transition:enter="transition-opacity ease-in-out duration-200" x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-in-out duration-200"
-            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        <span class="text-sm overflow-hidden transition-all w-52 text-nowrap whitespace-nowrap"
+            x-show="isSidebarOpen || isSidebarHovered" x-transition:enter="transition-opacity ease-in-out duration-200"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in-out duration-200" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0">
             {{ $title }}
         </span>
 
