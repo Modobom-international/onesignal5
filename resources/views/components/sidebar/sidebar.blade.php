@@ -2,7 +2,7 @@
 
 <div class="flex">
     <aside
-        class="fixed inset-y-0 z-20 flex flex-col py-4 bg-white border-r border-gray-200 font-sans transition-all duration-300 mt-14"
+        class="fixed inset-y-0 z-20 flex flex-col py-4 bg-white border-r border-gray-200 font-sans transition-all duration-300 mt-7"
         :class="{
             'w-64': isSidebarOpen,
             'w-16 md:w-16': !isSidebarOpen,

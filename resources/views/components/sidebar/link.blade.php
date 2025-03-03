@@ -6,11 +6,11 @@
 
 @php
     $isActiveClasses = $isActive
-        ? 'text-purple-700 bg-purple-50 hover:bg-purple-100 border-l-4 border-purple-700'
+        ? 'text-purple-700 bg-purple-50 hover:bg-purple-100 border-l-2 border-purple-700 '
         : 'text-gray-700 hover:bg-gray-50 border-l-4 border-transparent';
 
     $classes =
-        'flex items-center gap-3 py-2.5 text-sm font-medium transition-all rounded-none relative group ' .
+        'flex items-center gap-1.5 py-2.5 text-sm font-medium transition-all rounded-none relative group ' .
         $isActiveClasses;
 
     if ($collapsible) {
@@ -21,7 +21,7 @@
 @if ($collapsible)
     <button type="button" {{ $attributes->merge(['class' => $classes]) }}>
         <div class="min-w-max"
-            :class="{ 'px-4': isSidebarOpen || isSidebarHovered, 'px-2.5': !isSidebarOpen && !isSidebarHovered }">
+            :class="{ 'px-2': isSidebarOpen || isSidebarHovered, 'px-2': !isSidebarOpen && !isSidebarHovered }">
             @if ($icon ?? false)
                 {{ $icon }}
             @else
@@ -57,7 +57,7 @@
 @else
     <a {{ $attributes->merge(['class' => $classes]) }}>
         <div class="min-w-max"
-            :class="{ 'px-4': isSidebarOpen || isSidebarHovered, 'px-2.5': !isSidebarOpen && !isSidebarHovered }">
+            :class="{ 'px-3': isSidebarOpen || isSidebarHovered, 'px-2': !isSidebarOpen && !isSidebarHovered }">
             @if ($icon ?? false)
                 {{ $icon }}
             @else
