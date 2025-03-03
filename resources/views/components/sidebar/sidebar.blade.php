@@ -2,7 +2,7 @@
 
 <div class="flex">
     <aside
-        class="fixed inset-y-0 z-20 flex flex-col py-4 bg-white border-r border-gray-200 font-sans transition-all duration-300 mt-7"
+        class="fixed inset-y-0 z-20 flex flex-col py-4 bg-white dark:!bg-[#0d1117] border-r border-slate-900/10 dark:border-[#30363d] font-sans transition-all duration-300 mt-7"
         :class="{
             'w-64': isSidebarOpen,
             'w-16 md:w-16': !isSidebarOpen,
@@ -11,7 +11,7 @@
         }"
         @click.outside="window.innerWidth < 768 ? isSidebarOpen = false : null">
         <x-sidebar.content />
-        <x-sidebar.footer />
+
     </aside>
 
     <!-- Toggle Button -->
@@ -28,14 +28,14 @@
 
             <!-- Hover State (Arrow Button) -->
             <div
-                class="hidden group-hover:flex items-center justify-center absolute inset-0 bg-gray-50 border-y border-r border-gray-200 rounded-r">
+                class="hidden group-hover:flex items-center justify-center absolute inset-0 bg-gray-50 border-y border-r border-slate-900/10 dark:border-[#30363d] rounded-r dark:bg-[#161b22] dark:text-white">
                 <!-- Arrow Icon -->
-                <svg x-show="isSidebarOpen" class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
+                <svg x-show="isSidebarOpen" class="w-4 h-4 text-gray-600 dark:text-white" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
-                <svg x-show="!isSidebarOpen" class="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
+                <svg x-show="!isSidebarOpen" class="w-4 h-4 text-gray-600 dark:text-white" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
 
