@@ -13,12 +13,14 @@ class CreateTableUrlPushSystem extends Migration
      */
     public function up()
     {
-        Schema::create('url_push_system', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->text('url');
-            $table->integer('status');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('url_push_system')) {
+            Schema::create('url_push_system', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->text('url');
+                $table->integer('status');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -13,16 +13,18 @@ class CreatePushSystemsGlobalConfigNewTable extends Migration
      */
     public function up()
     {
-        Schema::create('push_systems_global_config_new', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('status');
-            $table->string('type');
-            $table->integer('share');
-            $table->longText('link_web_1');
-            $table->longText('link_web_2');
-            $table->dateTime('created_at')->nullable();
-            $table->dateTime('updated_at')->nullable();
-        });
+        if (!Schema::hasTable('push_systems_global_config_new')) {
+            Schema::create('push_systems_global_config_new', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('status');
+                $table->string('type');
+                $table->integer('share');
+                $table->longText('link_web_1');
+                $table->longText('link_web_2');
+                $table->dateTime('created_at')->nullable();
+                $table->dateTime('updated_at')->nullable();
+            });
+        }
     }
 
     /**
