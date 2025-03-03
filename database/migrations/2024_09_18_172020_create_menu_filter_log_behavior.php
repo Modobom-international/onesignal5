@@ -13,12 +13,14 @@ class CreateMenuFilterLogBehavior extends Migration
      */
     public function up()
     {
-        Schema::create('menu_filter_log_behavior', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('cookie_id');
-            $table->text('menu');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('menu_filter_log_behavior')) {
+            Schema::create('menu_filter_log_behavior', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('cookie_id');
+                $table->text('menu');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

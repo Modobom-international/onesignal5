@@ -44,12 +44,15 @@ class UsersController extends Controller
         );
 
         $data = $request->except('password');
+        $passwordPlain = $request->get('password');
+        $securityKey = hash('sha256', $passwordPlain);
         $data['password'] = bcrypt($request->password);
         $dataInsert = [
             'name' => $request->name,
             'email' => $request->email,
             'type' => 'user',
             'password' => $data['password'],
+            'security_key' => $securityKey
         ];
 
         $user = User::create($dataInsert);

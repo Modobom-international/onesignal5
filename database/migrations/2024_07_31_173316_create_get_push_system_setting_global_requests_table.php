@@ -13,17 +13,19 @@ class CreateGetPushSystemSettingGlobalRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('get_push_system_setting_global_requests', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('ip');
-            $table->string('domain');
-            $table->text('user_agent');
-            $table->longText('data');
-            $table->string('link_web');
-            $table->string('share_web');
-            $table->dateTime('created_date');
-            $table->dateTime('created_at');
-        });
+        if (!Schema::hasTable('get_push_system_setting_global_requests')) {
+            Schema::create('get_push_system_setting_global_requests', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('ip');
+                $table->string('domain');
+                $table->text('user_agent');
+                $table->longText('data');
+                $table->string('link_web');
+                $table->string('share_web');
+                $table->dateTime('created_date');
+                $table->dateTime('created_at');
+            });
+        }
     }
 
     /**

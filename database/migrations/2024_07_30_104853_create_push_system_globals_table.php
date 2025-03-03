@@ -13,15 +13,17 @@ class CreatePushSystemGlobalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('push_system_globals', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('token')->nullable();
-            $table->string('app')->nullable();
-            $table->string('country')->nullable();
-            $table->boolean('status')->nullable();
-            $table->dateTime('created_at')->nullable();
-            $table->dateTime('updated_at')->nullable();
-        });
+        if (!Schema::hasTable('push_system_globals')) {
+            Schema::create('push_system_globals', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('token')->nullable();
+                $table->string('app')->nullable();
+                $table->string('country')->nullable();
+                $table->boolean('status')->nullable();
+                $table->dateTime('created_at')->nullable();
+                $table->dateTime('updated_at')->nullable();
+            });
+        }
     }
 
     /**

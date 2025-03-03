@@ -13,13 +13,15 @@ class CreatePushSystemGlobalUserActiveTable extends Migration
      */
     public function up()
     {
-        Schema::create('push_system_global_user_active', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('token');
-            $table->string('country');
-            $table->dateTime('datetime');
-            $table->date('activated_date');
-        });
+        if (!Schema::hasTable('push_system_global_user_active')) {
+            Schema::create('push_system_global_user_active', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('token');
+                $table->string('country');
+                $table->dateTime('datetime');
+                $table->date('activated_date');
+            });
+        }
     }
 
     /**

@@ -13,13 +13,15 @@ class CreatePushSystemsConfig extends Migration
      */
     public function up()
     {
-        Schema::create('push_systems_config', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('share_web');
-            $table->string('link_web_1');
-            $table->string('link_web_2');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('push_systems_config')) {
+            Schema::create('push_systems_config', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->integer('share_web');
+                $table->string('link_web_1');
+                $table->string('link_web_2');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
