@@ -1,6 +1,13 @@
 <x-sidebar.overlay />
 
-<aside class="fixed inset-y-0 z-20 flex flex-col py-4 space-y-6 shadow-lg dark:bg-dark-eval-1 background-white" :class="{'translate-x-0 w-64': isSidebarOpen || isSidebarHovered, '-translate-x-full w-64 md:w-16 md:translate-x-0': !isSidebarOpen && !isSidebarHovered, }" style="transition-property: width, transform; transition-duration: 150ms;" x-on:mouseenter="handleSidebarHover(true)" x-on:mouseleave="handleSidebarHover(false)">
+<aside class="fixed inset-y-0 z-20 flex flex-col bg-white border-r border-gray-200 font-sans transition-all duration-300"
+    :class="{
+        'w-64': isSidebarOpen || isSidebarHovered,
+        'w-16 md:w-16': !isSidebarOpen && !isSidebarHovered,
+        'translate-x-0': isSidebarOpen,
+        '-translate-x-full md:translate-x-0': !isSidebarOpen
+    }"
+    @mouseover="handleSidebarHover(true)" @mouseleave="handleSidebarHover(false)" @click.outside="isSidebarOpen = false">
     <x-sidebar.header />
     <x-sidebar.content />
     <x-sidebar.footer />
