@@ -6,7 +6,6 @@ use App\Enums\UsersTracking;
 use App\Jobs\StoreUsersTracking;
 use Illuminate\Http\Request;
 use App\Helper\Common;
-use App\Jobs\FetchImageViewPort;
 use App\Jobs\FetchFullPage;
 use App\Jobs\StoreHeatMap;
 use UAParser\Parser;
@@ -66,22 +65,7 @@ class UsersTrackingController extends Controller
             ];
 
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
-            // FetchFullPage::dispatch($dataFetch)->onQueue('fetch_full_page');
-        }
-
-        if ($validatedData['eventName'] == 'scroll') {
-            $dataScroll = [
-                'url' => $url,
-                'domain' => $validatedData['domain'],
-                'path' => $validatedData['path'],
-                'uuid' => $validatedData['uuid'],
-                'x' => $validatedData['eventData']['scrollTop'],
-                'y' => $validatedData['eventData']['scrollLeft'],
-                'width' => $validatedData['user']['screenWidth'],
-                'height' => $validatedData['user']['screenWidth']
-            ];
-
-            // FetchImageViewPort::dispatch($dataScroll)->onQueue('fetch_image_view');
+            FetchFullPage::dispatch($dataFetch)->onQueue('fetch_full_page');
         }
 
         return response()->json(['message' => 'User behavior recorded successfully.']);
