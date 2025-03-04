@@ -1,12 +1,22 @@
 <nav aria-label="primary" x-data="{ open: false, notificationOpen: false }"
-    class="fixed top-0 left-0 right-0 z-50 backdrop-blur flex-none transition-colors duration-300 border-b border-slate-900/10 dark:border-[#30363d] bg-white/95 supports-backdrop-blur:bg-white/60 dark:bg-[#0d1117]"
-    :class="{ '-translate-y-full': scrollingDown, 'translate-y-0': scrollingUp }">
+    class="sticky top-0 left-0 right-0 z-50 backdrop-blur flex-none transition-colors duration-300 border-b border-slate-900/10 dark:border-[#30363d] bg-white/95  dark:bg-[#0d1117]">
     <div class="h-14 flex items-center justify-between px-4">
-        <!-- Left side - Logo and Toggle -->
         <div class="flex items-center gap-3">
-            <!-- Logo -->
-            <div class="flex items-center gap-2">
-                <x-application-logo aria-hidden="true" class="w-6 h-6" />
+            <x-button type="button" icon-only variant="secondary" sr-text="Open main menu"
+                x-on:click="isSidebarOpen = !isSidebarOpen"
+                class="md:hidden h-8 w-8 justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200">
+                <x-heroicon-o-menu x-show="!isSidebarOpen" aria-hidden="true"
+                    class="w-4 h-4 text-slate-600 dark:text-slate-400" />
+                <x-heroicon-o-x x-show="isSidebarOpen" aria-hidden="true"
+                    class="w-4 h-4 text-slate-600 dark:text-slate-400" />
+            </x-button>
+
+            <!-- Left side - Logo and Toggle -->
+            <div class="flex items-center gap-3">
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                    <x-application-logo aria-hidden="true" class="w-6 h-6" />
+                </div>
             </div>
         </div>
 
@@ -136,26 +146,3 @@
         </div>
     </div>
 </nav>
-
-<!-- Mobile Bottom Navigation -->
-<div class="fixed inset-x-0 bottom-0 z-50 flex items-center justify-between h-14 px-4 transition-transform duration-300 bg-white/95 backdrop-blur supports-backdrop-blur:bg-white/60 dark:bg-[#0d1117] border-t border-slate-900/10 dark:border-[#30363d] md:hidden"
-    :class="{ 'translate-y-full': scrollingDown, 'translate-y-0': scrollingUp }">
-    <x-button type="button" icon-only variant="secondary" sr-text="Search"
-        class="h-8 w-8 justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200">
-        <x-heroicon-o-search aria-hidden="true" class="w-4 h-4 text-slate-600 dark:text-slate-400" />
-    </x-button>
-
-    <a href="{{ route('dashboard') }}" class="flex items-center">
-        <x-application-logo aria-hidden="true" class="w-6 h-6" />
-        <span class="sr-only">Dashboard</span>
-    </a>
-
-    <x-button type="button" icon-only variant="secondary" sr-text="Open main menu"
-        x-on:click="isSidebarOpen = !isSidebarOpen"
-        class="h-8 w-8 justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200">
-        <x-heroicon-o-menu x-show="!isSidebarOpen" aria-hidden="true"
-            class="w-4 h-4 text-slate-600 dark:text-slate-400" />
-        <x-heroicon-o-x x-show="isSidebarOpen" aria-hidden="true"
-            class="w-4 h-4 text-slate-600 dark:text-slate-400" />
-    </x-button>
-</div>

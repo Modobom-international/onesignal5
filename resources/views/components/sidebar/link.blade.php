@@ -6,8 +6,8 @@
 
 @php
     $isActiveClasses = $isActive
-        ? 'bg-gray-100/60 text-gray-900 dark:bg-gray-800/40 dark:text-white'
-        : 'text-gray-600 hover:bg-gray-50/40 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800/30 dark:hover:text-white';
+        ? 'bg-gray-100 text-gray-900 dark:bg-gray-800/40 dark:text-white'
+        : 'text-gray-600  hover:bg-[#f2f3f4] dark:text-gray-400 dark:hover:bg-[#1e242a] dark:hover:text-white';
 
     $classes =
         'flex items-center text-nowrap whitespace-nowrap transition-all duration-200 ease-in-out relative cursor-pointer rounded-lg ' .
@@ -18,17 +18,17 @@
 @if ($collapsible)
     <button type="button" {{ $attributes->merge(['class' => $classes]) }} x-data="{ tooltipVisible: false }"
         @mouseenter="tooltipVisible = true" @mouseleave="tooltipVisible = false">
-        <div class="flex items-center w-full transition-all duration-300 ease-in-out"
+        <div class="flex items-center w-full"
             :class="{
-                'justify-center h-8 w-8': !isSidebarOpen && !isSidebarHovered,
+                'justify-center': !isSidebarOpen && !isSidebarHovered,
                 'px-2.5 py-2 gap-3': isSidebarOpen || isSidebarHovered
             }">
             @if ($icon ?? false)
-                <div class="flex items-center justify-center min-w-[24px]">
+                <div class="flex items-center justify-center w-8 h-8">
                     {{ $icon }}
                 </div>
             @else
-                <div class="flex items-center justify-center min-w-[24px]">
+                <div class="flex items-center justify-center w-8 h-8">
                     <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 shrink-0 transition-transform duration-300 ease-in-out"
                         :class="{ 'transform-gpu': !isSidebarOpen && !isSidebarHovered }"
                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -38,7 +38,7 @@
                 </div>
             @endif
 
-            <span class="overflow-hidden transition-all duration-300 ease-in-out"
+            <span class="overflow-hidden "
                 :class="{
                     'w-0 opacity-0': !isSidebarOpen && !isSidebarHovered,
                     'w-auto opacity-100': isSidebarOpen || isSidebarHovered
@@ -47,7 +47,7 @@
             </span>
 
             @if ($collapsible)
-                <span aria-hidden="true" class="ml-auto transition-all duration-300 ease-in-out"
+                <span aria-hidden="true" class="ml-auto "
                     :class="{
                         'w-0 opacity-0': !isSidebarOpen && !isSidebarHovered,
                         'w-auto opacity-100': isSidebarOpen || isSidebarHovered
@@ -77,17 +77,17 @@
 @else
     <a {{ $attributes->merge(['class' => $classes]) }} x-data="{ tooltipVisible: false }" @mouseenter="tooltipVisible = true"
         @mouseleave="tooltipVisible = false">
-        <div class="flex items-center w-full transition-all duration-300 ease-in-out"
+        <div class="flex items-center w-full"
             :class="{
-                'justify-center h-8 w-8': !isSidebarOpen && !isSidebarHovered,
+                'justify-center': !isSidebarOpen && !isSidebarHovered,
                 'px-2.5 py-2 gap-3': isSidebarOpen || isSidebarHovered
             }">
             @if ($icon ?? false)
-                <div class="flex items-center justify-center min-w-[24px]">
+                <div class="flex items-center justify-center w-8 h-8">
                     {{ $icon }}
                 </div>
             @else
-                <div class="flex items-center justify-center min-w-[24px]">
+                <div class="flex items-center justify-center w-8 h-8">
                     <svg class="h-5 w-5 text-gray-500 dark:text-gray-400 shrink-0 transition-transform duration-300 ease-in-out"
                         :class="{ 'transform-gpu': !isSidebarOpen && !isSidebarHovered }"
                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -97,7 +97,7 @@
                 </div>
             @endif
 
-            <span class="overflow-hidden transition-all duration-300 ease-in-out"
+            <span class="overflow-hidden "
                 :class="{
                     'w-0 opacity-0': !isSidebarOpen && !isSidebarHovered,
                     'w-auto opacity-100': isSidebarOpen || isSidebarHovered
