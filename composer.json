@@ -49,6 +49,7 @@
         "symfony/process": "^7.2",
         "ua-parser/uap-php": "^3.9",
         "yajra/laravel-datatables": "^11.0",
+        "yaza/laravel-repository-service": "^5.1",
         "zanysoft/laravel-zip": "^1.0"
     },
     "require-dev": {

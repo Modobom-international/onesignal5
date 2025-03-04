@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('deductions', 10, 2)->default(0);
             $table->decimal('net_salary', 10, 2);
             $table->decimal('social_insurance', 10, 2);
-            $table->date('payment_date');
+            $table->date('payment_date')->nullable();
             $table->timestamps();
         });
     }

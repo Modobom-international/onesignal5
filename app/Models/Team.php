@@ -9,6 +9,7 @@ class Team extends Model
 {
     use HasPermissions;
 
+    protected $table = 'teams';
     protected $fillable = ['name'];
 
     public function users()

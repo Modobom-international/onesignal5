@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Salary\SalaryRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SalaryController extends Controller
 {
-    public function __construct()
+    protected $salaryRepository;
+
+    public function __construct(SalaryRepository $salaryRepository)
     {
-        
+        $this->salaryRepository = $salaryRepository;
     }
 
     public function store(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $salaryValue = $request->input('salary');
         $securityKey = $user->security_key;
 
@@ -28,7 +32,7 @@ class SalaryController extends Controller
             $iv
         );
 
-        $salary = new Salary();
+        $salary = $this->salaryRepository->getSalaryByUserID($user_id);
         $salary->user_id = $user->id;
         $salary->encrypted_salary = base64_encode($encryptedSalary);
         $salary->save();
@@ -38,8 +42,8 @@ class SalaryController extends Controller
 
     public function showSalary()
     {
-        $user = auth()->user();
-        $salary = Salary::where('user_id', $user->id)->first();
+        $user = Auth::user();
+        $salary = $this->salaryRepository->getSalaryByUserID($user_id);
 
         if (!$salary) {
             return redirect()->back()->with('error', 'Không tìm thấy thông tin lương.');

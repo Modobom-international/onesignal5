@@ -59,10 +59,6 @@ Route::post('/push-system/save-config-links', [PushSystemController::class, 'sav
 Route::post('/add-user-active-push-system', [PushSystemController::class, 'addUserActive'])->name('addUserActivePushSystem');
 Route::post('/save-status-link', [PushSystemController::class, 'saveStatusLink'])->name('saveStatusLink');
 
-Route::get('/apk/load-web', [HomeController::class, 'apkLoadWeb'])->name('apkLoadWeb');
-Route::get('/apk/load-web-count', [HomeController::class, 'apkLoadWebCount'])->name('apkLoadWebCount');
-Route::get('/apk/load-web-count-diff', [HomeController::class, 'apkLoadWebCountDiff'])->name('apkLoadWebCountDiff');
-
 Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'])->name('logBehavior');
 Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');

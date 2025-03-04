@@ -17,7 +17,6 @@ return new class extends Migration
                 $table->bigInteger('users_id');
                 $table->string('position');
                 $table->date('joining_date');
-                $table->decimal('salary', 10, 2);
                 $table->timestamps();
             });
         }
