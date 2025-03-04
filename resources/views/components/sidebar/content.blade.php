@@ -1,6 +1,6 @@
-<nav class="flex-1 overflow-y-auto  bg-white dark:!bg-[#0d1117] transition-all duration-300 ease-in-out"
-    :class="{ 'px-2 py-2': !isSidebarOpen && !isSidebarHovered, 'px-3 py-3': isSidebarOpen || isSidebarHovered }">
-    <div class="space-y-1.5">
+<nav class="flex-1 overflow-y-auto  bg-white dark:!bg-[#0d1117] transition-all duration-300 ease-in-out mt-2"
+    :class="{ 'px-2 py-1': !isSidebarOpen && !isSidebarHovered, 'px-2 py-1': isSidebarOpen || isSidebarHovered }">
+    <div class="space-y-2">
         {{-- Dashboard --}}
         <x-sidebar.link title="Dashboard" href="{{ route('dashboard') }}" :isActive="request()->routeIs('dashboard')">
             <x-slot name="icon">
