@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Team;
 
 class User extends Authenticatable
 {
@@ -49,11 +50,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function isAdmin()    {
+    public function isAdmin()
+    {
         return $this->type === self::ADMIN_TYPE;
     }
 
-    public function isUser()   {
+    public function isUser()
+    {
         return $this->type === self::USER_TYPE;
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'user_team', 'user_id', 'team_id');
     }
 }
