@@ -2,7 +2,7 @@
     :class="{ 'px-2 py-1': !isSidebarOpen && !isSidebarHovered, 'px-2 py-1': isSidebarOpen || isSidebarHovered }">
     <div class="space-y-2">
         {{-- Dashboard --}}
-        <x-sidebar.link title="Dashboard" href="{{ route('dashboard') }}" :isActive="request()->routeIs('dashboard')">
+        <x-sidebar.link title="{{ __('Dashboard') }}" href="{{ route('dashboard') }}" :isActive="request()->routeIs('dashboard')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -14,7 +14,7 @@
         </x-sidebar.link>
 
         {{-- Users Tracking --}}
-        <x-sidebar.link title="Users Tracking" href="{{ url('/admin/users-tracking') }}" :isActive="request()->routeIs('viewUsersTracking')">
+        <x-sidebar.link title="{{ __('Theo dõi người dùng') }}" href="{{ url('/admin/users-tracking') }}" :isActive="request()->routeIs('viewUsersTracking')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -26,7 +26,7 @@
         </x-sidebar.link>
 
         {{-- Log Behavior --}}
-        <x-sidebar.link title="Log Behavior" href="{{ url('/admin/log-behavior') }}" :isActive="request()->routeIs('viewLogBehavior')">
+        <x-sidebar.link title="{{ __('Nhật ký hành vi') }}" href="{{ url('/admin/log-behavior') }}" :isActive="request()->routeIs('viewLogBehavior')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -39,7 +39,7 @@
 
         @if (auth()->user()->hasRole('super-admin|user-ads|manager-file'))
         {{-- HTML Source --}}
-        <x-sidebar.link title="HTML Source" href="{{ url('/admin/html-source') }}" :isActive="request()->routeIs('listHtmlSource')">
+        <x-sidebar.link title="{{ __('Mã nguồn HTML') }}" href="{{ url('/admin/html-source') }}" :isActive="request()->routeIs('listHtmlSource')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -53,7 +53,7 @@
 
         @if (auth()->user()->hasRole('super-admin|user-ads'))
         {{-- Domain --}}
-        <x-sidebar.link title="Domain" href="{{ url('/admin/list-domain') }}" :isActive="request()->routeIs('listDomain')">
+        <x-sidebar.link title="{{ __('Tên miền') }}" href="{{ url('/admin/list-domain') }}" :isActive="request()->routeIs('listDomain')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -67,7 +67,7 @@
 
         @if (auth()->user()->hasRole('super-admin'))
         {{-- Push System --}}
-        <x-sidebar.link title="Push System" href="{{ url('/admin/push-system') }}" :isActive="request()->routeIs('listPushSystem')">
+        <x-sidebar.link title="{{ __('Đẩy hệ thống') }}" href="{{ url('/admin/push-system') }}" :isActive="request()->routeIs('listPushSystem')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -79,7 +79,7 @@
         </x-sidebar.link>
 
         {{-- Users --}}
-        <x-sidebar.link title="Users" href="{{ url('/admin/users') }}" :isActive="request()->routeIs('list.users')">
+        <x-sidebar.link title="{{ __('Người dùng') }}" href="{{ url('/admin/users') }}" :isActive="request()->routeIs('list.users')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -92,7 +92,7 @@
         @endif
 
         {{-- Human Resources --}}
-        <x-sidebar.link title="Nhân viên" href="{{ url('/admin/employee') }}" :isActive="request()->routeIs('list.employee')">
+        <x-sidebar.link title="{{ __('Nhân viên') }}" href="{{ url('/admin/employee') }}" :isActive="request()->routeIs('list.employee')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
