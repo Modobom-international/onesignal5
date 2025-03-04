@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    <div class="p-6 overflow-hidden container mx-auto bg-white rounded-md shadow-md dark:bg-dark-eval-1 row">
+    <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1 row">
         <div class="col-xl-3 metrics-item ml-3">
             <div class="white_card card_height_100 mb_30">
                 <div class="white_card_header">
