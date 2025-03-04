@@ -9,7 +9,7 @@
             'translate-x-0': isSidebarOpen,
             '-translate-x-full md:translate-x-0': !isSidebarOpen
         }"
-        @click.outside="window.innerWidth < 768 ? isSidebarOpen = false : null">
+        @click.outside="if (window.innerWidth < 768) { isSidebarOpen = false; setSidebarState(false); }">
         <x-sidebar.content />
 
     </aside>
@@ -22,7 +22,7 @@
         }"
         style="top: 50%;">
         <button type="button" class="group relative flex items-center justify-center w-6 h-12 -mr-px focus:outline-none"
-            x-on:click="isSidebarOpen = !isSidebarOpen">
+            x-on:click="toggleSidebar()">
             <!-- Default State (Line) -->
             <div class="w-px h-8 bg-gray-300 group-hover:hidden"></div>
 
