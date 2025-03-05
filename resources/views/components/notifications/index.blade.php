@@ -1,38 +1,5 @@
 @props(['notificationSystem'])
 
-@php
-    // Fake notifications data for testing
-    $testNotifications = collect([
-        (object)[
-            'id' => 2,
-            'message' => __('Cập nhật hệ thống: Các tính năng mới đã được thêm vào bảng điều khiển'),
-            'created_at' => now()->subHours(2),
-            'status_read' => 0
-        ],
-        (object)[
-            'id' => 3,
-            'message' => __('Cảnh báo bảo mật: Phát hiện đăng nhập bất thường từ IP 192.168.1.1'),
-            'created_at' => now()->subHours(5),
-            'status_read' => 0
-        ],
-        (object)[
-            'id' => 4,
-            'message' => __('Bảo trì theo lịch trình vào ngày 20 tháng 5 năm 2024 lúc 02:00 UTC'),
-            'created_at' => now()->subDay(),
-            'status_read' => 1
-        ],
-        (object)[
-            'id' => 5,
-            'message' => __('Chào mừng đến với bảng điều khiển mới! Khám phá các tính năng mới nhất của chúng tôi'),
-            'created_at' => now()->subDays(2),
-            'status_read' => 1
-        ]
-    ]);
-
-    // Use test notifications instead of passed data
-    $notificationSystem = $testNotifications;
-@endphp
-
 <div class="relative" x-data="{ unreadCount: {{ count($notificationSystem->where('status_read', 0)) }}, notificationOpen: false, selected: 'unread' }"
     @click.outside="if (!$event.target.closest('.notification-dropdown')) notificationOpen = false">
     <x-button type="button"

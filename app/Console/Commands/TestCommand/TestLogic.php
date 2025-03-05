@@ -4,6 +4,8 @@ namespace App\Console\Commands\TestCommand;
 
 use Illuminate\Console\Command;
 use App\Events\NotificationSystem;
+use Illuminate\Support\Facades\DB;
+use App\Helper\Common;
 use Auth;
 
 class TestLogic extends Command
@@ -29,7 +31,6 @@ class TestLogic extends Command
      */
     public function handle()
     {
-
         //run hàm này ở thư mục root project : php artisan test:logic
 
         $data = [
@@ -37,13 +38,26 @@ class TestLogic extends Command
             'provider' => 1 //điền id của tài khoản em đăng nhập vào đây
         ];
 
-        broadcast(new NotificationSystem(
-            [
-                'message' => $data['message'],
-                'users_id'  => $data['provider'],
-                'status_read' => 0,
-                'id' => 1
-            ],
-        ));
+        // Store in MongoDB first
+        $notificationData = [
+            'message' => $data['message'],
+            'users_id' => $data['provider'],
+            'created_at' => now(),
+            'status_read' => 0
+        ];
+
+        $id = DB::connection('mongodb')
+            ->table('notification_system')
+            ->insertGetId($notificationData);
+
+        // Then broadcast with the MongoDB ID
+        broadcast(new NotificationSystem([
+            'message' => $data['message'],
+            'users_id' => $data['provider'],
+            'status_read' => 0,
+            'id' => $id
+        ]));
+
+        $this->info('Notification sent successfully!');
     }
 }
