@@ -6,5 +6,5 @@ use LaravelEasyRepository\Repository;
 
 interface UserRepository extends Repository
 {
-    public function getUserId($id);
+    
 }
