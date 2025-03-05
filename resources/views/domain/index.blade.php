@@ -33,46 +33,46 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalDetailDomainLabel">Thông tin chi tiết</h5>
+                <h5 class="modal-title" id="modalDetailDomainLabel">{{ __('Thông tin chi tiết') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="padding: 10px 30px;">
                 <ul class="area-domain-detail">
                     <li>
-                        <p class="fw-bold">Domain : <span id="domain-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Tên miền') }} : <span id="domain-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Username admin : <span id="admin_username-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Tài khoản đăng nhập') }} : <span id="admin_username-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Password admin : <span id="admin_password-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Mật khẩu đăng nhập') }} : <span id="admin_password-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Ngày tạo : <span id="created_at-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Ngày tạo') }} : <span id="created_at-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">DB name : <span id="db_name-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Tên cơ sở dữ liệu') }} : <span id="db_name-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">DB username : <span id="db_user-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Tài khoản cơ sở dữ liệu') }} : <span id="db_user-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">DB password : <span id="db_password-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Mật khẩu cơ sở dữ liệu') }} : <span id="db_password-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Người dùng FTP : <span id="ftp_user-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Người dùng FTP') }} : <span id="ftp_user-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Người quản lý : <span id="email-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Người quản lý') }} : <span id="email-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Thư mục domain : <span id="public_html-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Thư mục gốc') }} : <span id="public_html-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Server : <span id="server-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Máy chủ') }} : <span id="server-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                     <li>
-                        <p class="fw-bold">Trạng thái : <span id="status-modal" class="ml-2 fw-normal"></span></p>
+                        <p class="fw-bold">{{ __('Trạng thái') }} : <span id="status-modal" class="ml-2 fw-normal"></span></p>
                     </li>
                 </ul>
             </div>
@@ -84,17 +84,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalDeleteDomainLabel">Xác nhận xóa <span id="domain-in-title"></span></h5>
+                <h5 class="modal-title" id="modalDeleteDomainLabel">{{ __('Xác nhận xóa') }} <span id="domain-in-title"></span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Bạn có chắc chắn xóa domain <span id="domain-in-body"></span> không ? </p>
-                <p class="fw-bold fst-italic text-danger text-decoration-underline mt-3">Lựa chọn này sẽ bao gồm cả xóa tất cả dữ liệu liên quan, thư mục và điều chỉnh trên server và cloudflare.</p>
+                <p>{{ __('Bạn có chắc chắn xóa domain') }} <span id="domain-in-body"></span> {{ __('không ?') }} </p>
+                <p class="fw-bold fst-italic text-danger text-decoration-underline mt-3">{{ __('Lựa chọn này sẽ bao gồm cả xóa tất cả dữ liệu liên quan, thư mục và điều chỉnh trên máy chủ.') }}</p>
                 <input type="hidden" id="domain-in-hidden">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="removeDomain()" data-bs-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Đóng') }}</button>
+                <button type="button" class="btn btn-primary" onclick="removeDomain()" data-bs-dismiss="modal">{{ __('Lưu thông tin') }}</button>
             </div>
         </div>
     </div>
@@ -174,7 +174,7 @@
                 domain: domain
             },
             success: function(response) {
-                
+
             }
         });
     }
