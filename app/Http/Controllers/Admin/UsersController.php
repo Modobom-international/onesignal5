@@ -3,23 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\Permission\PermissionRepository;
+use App\Repositories\Team\TeamRepository;
 use App\Repositories\User\UserRepository;
-use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
     protected $userRepository;
+    protected $permissionRepository;
+    protected $teamRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, PermissionRepository $permissionRepository, TeamRepository $teamRepository)
     {
         $this->userRepository = $userRepository;
+        $this->permissionRepository = $permissionRepository;
+        $this->teamRepository = $teamRepository;
     }
 
     public function index(Request $request)
     {
         $keyword = $request->get('search');
-        $perPage = 15;
 
         if (!empty($keyword)) {
             $users = $this->userRepository->getUserByNameOrEmail($keyword);
@@ -32,9 +36,9 @@ class UsersController extends Controller
 
     public function create()
     {
-        $roles = Role::get();
+        $teams = $this->teamRepository->getTeams();
 
-        return view('admin.users.create', compact('roles'));
+        return view('admin.users.create', compact('teams'));
     }
 
     public function store(Request $request)
@@ -44,6 +48,8 @@ class UsersController extends Controller
                 'name' => 'required',
                 'email' => 'required|string|email|max:255|unique:users,email',
                 'password' => 'required',
+                'address' => 'required|string',
+                'phone_number' => 'required',
             ]
         );
 
@@ -63,16 +69,16 @@ class UsersController extends Controller
 
         $user = $this->userRepository->create($dataInsert);
 
+        $permission->routes()->sync($request->route_ids);
         $user->syncRoles($request->get('roles'));
 
-        return redirect('admin/users')->with('success', __('Thêm nhân viên thành công!'));
+        return redirect()->route('users.list')->with('success', __('Thêm nhân viên thành công!'));
     }
 
     public function edit($id)
     {
         $user = $this->userRepository->findOrFail($id);
         $userRole = $user->roles->pluck('name')->toArray();
-        $roles = Role::get();
 
         return view('admin.users.edit', [
             'user' => $user,

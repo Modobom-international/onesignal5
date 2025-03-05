@@ -140,6 +140,13 @@
     visibility: hidden;
 }
 
+.note-in-text {
+    font-size: small;
+    font-style: italic;
+    font-weight: bold;
+    color: red;
+}
+
 @-webkit-keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);

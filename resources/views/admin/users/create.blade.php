@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="form-group mt-3">
-                            <label for="id" class="form-label">{{ __('Mật khẩu') }}</label>
+                            <label for="id" class="form-label">{{ __('Mật khẩu') }} <span class="note-in-text">( {{ __('Mặc định mật khẩu là modobom@123') }} )</span></label>
                             <input autocomplete="off" value="modobom@123" name="password" type="password" id="id" class="form-control" style="background-color: #e9ecef !important;" disabled>
                             @if ($errors->has('password'))
                             <span class="text-danger">{{ $errors->first('password') }}</span>
@@ -64,15 +64,15 @@
                         </div>
 
                         <div class="form-group mt-3">
-                            <label for="roles" class="form-label">{{ __('Đội') }}</label>
-                            <select class="form-control" id="roles" name="roles">
-                                @foreach($roles as $role)
-                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                            <label for="teams" class="form-label">{{ __('Đội') }}</label>
+                            <select class="form-control" id="teams" name="teams">
+                                @foreach($teams as $team)
+                                <option value="{{ $team->id }}">{{ $team->name }}</option>
                                 @endforeach
                             </select>
 
-                            @if ($errors->has('roles'))
-                            <span class="text-danger">{{ $errors->first('roles') }}</span>
+                            @if ($errors->has('teams'))
+                            <span class="text-danger">{{ $errors->first('teams') }}</span>
                             @endif
                         </div>
 
