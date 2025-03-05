@@ -62,14 +62,7 @@
                 <div class="flex-1 min-h-[calc(100vh-4rem)] "
                     :class="{ 'lg:ml-64': isSidebarOpen, 'md:ml-16': !isSidebarOpen }"
                     style="transition-property: margin; transition-duration: 150ms;">
-                    <header class="p-4 sm:p-6">
-                        <div
-                            class="flex flex-col gap-4 md:flex-row md:items-center container mx-auto md:justify-between">
-                            <h2 class="text-xl font-semibold leading-tight">
-                                @yield('title')
-                            </h2>
-                        </div>
-                    </header>
+
 
                     <main class="px-4 sm:px-6 flex-1 container mx-auto">
                         @yield('content')
