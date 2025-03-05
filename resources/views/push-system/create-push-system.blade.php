@@ -31,7 +31,7 @@ Create push system
                 <div class="card-body">
                     <ul class="nav flex-column" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" href="{{ route('listPushSystem') }}">Push System</a>
+                            <a class="nav-link" href="{{ route('push.system.list') }}">Push System</a>
                         </li>
                     </ul>
                 </div>
@@ -41,7 +41,7 @@ Create push system
         <div class="col-md-10">
             <div class="card">
                 <div class="card-header">Edit Config</div>
-                <div class="card-body"><a href="{{ route('listPushSystem') }}" title="Back">
+                <div class="card-body"><a href="{{ route('push.system.list') }}" title="Back">
                         <button class="btn btn-warning btn-sm"><i aria-hidden="true" class="fa fa-arrow-left"></i> Back</button>
                     </a> <br> <br>
                     <form method="POST" method="POST" action="{{ route('saveSystemConfigGlobal') }}" enctype="multipart/form-data">

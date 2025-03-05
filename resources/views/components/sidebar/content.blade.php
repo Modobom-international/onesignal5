@@ -14,7 +14,7 @@
         </x-sidebar.link>
 
         {{-- Users Tracking --}}
-        <x-sidebar.link title="{{ __('Theo dõi người dùng') }}" href="{{ url('/admin/users-tracking') }}" :isActive="request()->routeIs('viewUsersTracking')">
+        <x-sidebar.link title="{{ __('Theo dõi người dùng') }}" href="{{ url('/admin/users-tracking') }}" :isActive="request()->routeIs('users.tracking.list')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -26,7 +26,7 @@
         </x-sidebar.link>
 
         {{-- Log Behavior --}}
-        <x-sidebar.link title="{{ __('Nhật ký hành vi') }}" href="{{ url('/admin/log-behavior') }}" :isActive="request()->routeIs('viewLogBehavior')">
+        <x-sidebar.link title="{{ __('Nhật ký hành vi') }}" href="{{ url('/admin/log-behavior') }}" :isActive="request()->routeIs('log.behavior.list')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -38,7 +38,7 @@
         </x-sidebar.link>
 
         {{-- HTML Source --}}
-        <x-sidebar.link title="{{ __('Mã nguồn HTML') }}" href="{{ url('/admin/html-source') }}" :isActive="request()->routeIs('listHtmlSource')">
+        <x-sidebar.link title="{{ __('Mã nguồn HTML') }}" href="{{ url('/admin/html-source') }}" :isActive="request()->routeIs('html.source.list')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -50,7 +50,7 @@
         </x-sidebar.link>
 
         {{-- Domain --}}
-        <x-sidebar.link title="{{ __('Tên miền') }}" href="{{ url('/admin/list-domain') }}" :isActive="request()->routeIs('listDomain')">
+        <x-sidebar.link title="{{ __('Tên miền') }}" href="{{ url('/admin/list-domain') }}" :isActive="request()->routeIs('domain.list')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -62,7 +62,7 @@
         </x-sidebar.link>
 
         {{-- Push System --}}
-        <x-sidebar.link title="{{ __('Hệ thống đẩy') }}" href="{{ url('/admin/push-system') }}" :isActive="request()->routeIs('listPushSystem')">
+        <x-sidebar.link title="{{ __('Hệ thống đẩy') }}" href="{{ url('/admin/push-system') }}" :isActive="request()->routeIs('push.system.list')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

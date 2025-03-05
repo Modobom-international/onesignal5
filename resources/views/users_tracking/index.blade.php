@@ -201,7 +201,7 @@ Users tracking
         $('#basic-info-modal').hide();
 
         $.ajax({
-            url: '{{ route("getDetailTracking") }}',
+            url: '{{ route("users.tracking.detail") }}',
             type: 'GET',
             data: {
                 uuid: uuid
@@ -262,7 +262,7 @@ Users tracking
         var event = $('#event-heat-map-modal').val();
 
         $.ajax({
-            url: '{{ route("getHeatMap") }}',
+            url: '{{ route("users.tracking.heat.map") }}',
             type: 'GET',
             data: {
                 domain: domain,
@@ -324,7 +324,7 @@ Users tracking
         $('.area-heat-map').hide();
         $('#path-heat-map-modal').empty();
         $.ajax({
-            url: '{{ route("getLinkForHeatMap") }}',
+            url: '{{ route("users.tracking.link.heat.map") }}',
             type: 'GET',
             data: {
                 domain: domain,

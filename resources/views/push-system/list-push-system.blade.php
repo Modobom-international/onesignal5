@@ -13,7 +13,7 @@ List Push System
     <div class="card">
         <div class="card-header">
             <p>Push System</p>
-            <a href="{{ route('addConfigSystemLink') }}" class="btn btn-primary btn-sm" title="Config links push">
+            <a href="{{ route('push.system.config.link') }}" class="btn btn-primary btn-sm" title="Config links push">
                 <i class="fa fa-gear" aria-hidden="true"></i> Config links push
             </a>
         </div>
@@ -148,7 +148,7 @@ List Push System
 
     function loadUsersActive() {
         $.ajax({
-            url: '{{ route("listUserActiveAjax") }}',
+            url: '{{ route("push.system.list.user.active.ajax") }}',
             type: 'GET',
             success: function(data) {
                 $('#users_active').text(new Intl.NumberFormat().format(data.total));

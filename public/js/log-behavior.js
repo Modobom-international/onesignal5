@@ -163,7 +163,7 @@ $(function () {
         e.preventDefault();
         $(this).prop('disabled', true);
         let id = $(this).attr('data-id');
-        let url = '{{ route("deleteAppInListForCheck") }}';
+        let url = '{{ route("log.behavior.delete.app.in.check.list") }}';
         let idLoader = '#loader-' + id;
         $(idLoader).removeClass('hide');
         $.ajax({
@@ -229,7 +229,7 @@ $(function () {
         });
     });
     $('#save-change-option').on('click', function () {
-        let url = '{{ route("storeConfigFilterLogBehavior") }}';
+        let url = '{{ route("log.behavior.store.config.filter") }}';
         let checkedCountry = $('.check-box-country:checkbox:checked');
         let checkedPlatform = $('.check-box-platform:checkbox:checked');
         let checkedApp = $('.check-box-app:checkbox:checked');
@@ -258,7 +258,7 @@ $(function () {
         });
     });
     $('#reset-btn').on('click', function () {
-        let url = '{{ route("resetConfigFilterLogBehavior") }}';
+        let url = '{{ route("log.behavior.reset.config.filter") }}';
         window.location.href = url;
     });
     $('#compare-date-btn').on('click', function () {
@@ -320,7 +320,7 @@ $(function () {
             }, 3000);
             return;
         }
-        let url = '{{ route("compareDate") }}';
+        let url = '{{ route("log.behavior.compare.date") }}';
         let app = $('#app-name').val();
         let country = $('#country').val();
         let platform = $('#platform').val();
@@ -380,7 +380,7 @@ function addAppToList() {
     let platform = $('#platform-modal').val();
     let app = $('#app-name-modal').val();
     let assigned = $('#assigned-modal').val();
-    let url = '{{ route("saveListAppForCheck") }}';
+    let url = '{{ route("log.behavior.save.app.in.checklist") }}';
     $.ajax({
         url: url,
         type: 'GET',
@@ -499,7 +499,7 @@ function search() {
 }
 
 function getDataChart() {
-    let url = '{{ route("getDataChartLogBehavior") }}';
+    let url = '{{ route("log.behavior.chart") }}';
     let app = $('#app-name-report').val();
     let country = $('#country-report').val();
     let platform = $('#platform-report').val();
@@ -547,7 +547,7 @@ function getDataChart() {
 }
 
 function searchActivity() {
-    let url = '{{ route("getActivityUid") }}';
+    let url = '{{ route("log.behavior.activity.uid") }}';
     let uid = $('#uid-activity').val();
     $("#pre-loader-activity").attr("style", "display: block !important");
     $("#empty-result").attr("style", "display: none !important");

@@ -18,7 +18,7 @@ Detail HTML Source
     <div class="card">
         <div class="card-header">{{ __('Chi tiết nguồn HTML') }} {{ $dataHtmlSource->id }}</div>
         <div class="card-body">
-            <a href="{{ route('listHtmlSource') }}" title="Back">
+            <a href="{{ route('html.source.list') }}" title="Back">
                 <button class="btn btn-warning btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i>
                     {{ __('Quay lại') }}
                 </button>

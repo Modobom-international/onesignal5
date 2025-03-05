@@ -43,10 +43,10 @@ Show Config
             <div class="card">
                 <div class="card-header">Show Config</div>
                 <div class="card-body">
-                    <a href="{{ route('listPushSystem') }}" title="Back">
+                    <a href="{{ route('push.system.list') }}" title="Back">
                         <button class="btn btn-warning btn-sm"><i aria-hidden="true" class="fa fa-arrow-left"></i> Back</button>
                     </a>
-                    <a href="{{ route('PushSystemConfigLinksPush') }}" title="Back">
+                    <a href="{{ route('push.system.edit.config.link') }}" title="Back">
                         <button class="btn btn-primary btn-sm"><i aria-hidden="true"></i> Edit Config</button>
                     </a>
                     <br> <br>
