@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-body">
                 <input class="form-control" type="text" id="domain" placeholder="Nhập domain">
-                <button class="btn btn-primary mt-3" onclick="checkDomain()">Kiểm tra</button>
+                <button class="btn btn-primary mt-3" onclick="checkDomain()">{{ __('Kiểm tra') }}</button>
             </div>
         </div>
 
@@ -21,16 +21,16 @@
             <div class="card-body">
                 <div class="form-group">
                     <div class="mb-3">
-                        <label for="server" class="form-label">Chọn server</label>
+                        <label for="server" class="form-label">{{ __('Chọn máy chủ') }}</label>
                         <select class="form-control" id="server">
-                            <option value="services.ip_server.wp1">Server IP1</option>
-                            <option value="services.ip_server.wp2">Server IP2</option>
-                            <option value="services.ip_server.wp3">Server IP3</option>
+                            <option value="services.ip_server.wp1">{{ __('Máy chủ WP1') }}</option>
+                            <option value="services.ip_server.wp2">{{ __('Máy chủ WP2') }}</option>
+                            <option value="services.ip_server.wp3">{{ __('Máy chủ WP3') }}</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <button class="btn btn-success" id="up-domain">Up domain</button>
+                        <button class="btn btn-success" id="up-domain">{{ __('Tạo tên miền') }}</button>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="upDomainModalLabel">Tiến hành up domain</h5>
+                <h5 class="modal-title" id="upDomainModalLabel">{{ __('Tiến hành khởi tạo tên miền') }}</h5>
                 <div id="pre-loader" class="ml-4">
                     @include('components.pre-loader')
                 </div>
@@ -127,7 +127,7 @@
             } else {
                 logEntry.html(data.message);
             }
-            
+
             nextLogEntry.removeClass('hide');
             $("#area-log").scrollTop($("#area-log")[0].scrollHeight);
         });

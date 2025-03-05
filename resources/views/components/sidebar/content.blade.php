@@ -2,7 +2,7 @@
     :class="{ 'px-2 py-1': !isSidebarOpen && !isSidebarHovered, 'px-2 py-1': isSidebarOpen || isSidebarHovered }">
     <div class="space-y-2">
         {{-- Dashboard --}}
-        <x-sidebar.link title="{{ __('Dashboard') }}" href="{{ route('dashboard') }}" :isActive="request()->routeIs('dashboard')">
+        <x-sidebar.link title="{{ __('Bảng điều khiển') }}" href="{{ route('dashboard') }}" :isActive="request()->routeIs('dashboard')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -67,7 +67,7 @@
 
         @if (auth()->user()->hasRole('super-admin'))
         {{-- Push System --}}
-        <x-sidebar.link title="{{ __('Đẩy hệ thống') }}" href="{{ url('/admin/push-system') }}" :isActive="request()->routeIs('listPushSystem')">
+        <x-sidebar.link title="{{ __('Hệ thống đẩy') }}" href="{{ url('/admin/push-system') }}" :isActive="request()->routeIs('listPushSystem')">
             <x-slot name="icon">
                 <svg class="h-5 w-5 text-gray-500 transition-colors duration-200 dark:text-gray-400"
                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
