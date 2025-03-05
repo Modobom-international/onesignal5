@@ -56,6 +56,8 @@ class UsersController extends Controller
             'email' => $request->email,
             'type' => 'user',
             'password' => $data['password'],
+            'address' => $request->address,
+            'phone_number' => $request->phone_number,
             'security_key' => $securityKey
         ];
 
@@ -66,9 +68,9 @@ class UsersController extends Controller
         return redirect('admin/users')->with('success', __('Thêm nhân viên thành công!'));
     }
 
-    public function edit()
+    public function edit($id)
     {
-        $user = $user;
+        $user = $this->userRepository->findOrFail($id);
         $userRole = $user->roles->pluck('name')->toArray();
         $roles = Role::get();
 
@@ -93,7 +95,7 @@ class UsersController extends Controller
             $data['password'] = bcrypt($request->password);
         }
 
-        $user = User::findOrFail($id);
+        $user = $this->userRepository->findOrFail($id);
         $user->update($data);
         $user->syncRoles($request->get('roles'));
 
@@ -102,7 +104,7 @@ class UsersController extends Controller
 
     public function destroy($id)
     {
-        User::destroy($id);
+        $this->userRepository->destroy($id);
 
         return redirect('admin/users')->with('success', __('Xóa nhân viên thành công!'));
     }

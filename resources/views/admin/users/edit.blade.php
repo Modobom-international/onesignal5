@@ -8,11 +8,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <br />
-                    <br />
                     <form method="PATCH" action="{{ route('users.update', $user->id)}}" enctype="multipart/form-data">
                         @csrf
-
                         <div class="form-group">
                             <label for="id" class="form-label">{{ __('Tên') }}</label>
                             <input autocomplete="off" name="name" type="text" id="id" class="form-control" value="{{ $user->name }}">
@@ -70,7 +67,7 @@
                             <label for="roles" class="form-label">{{ __('Đội') }}</label>
                             <select class="form-control" id="roles" name="roles">
                                 @foreach($roles as $role)
-                                <option value="{{ $role->id }}" {{ $user->role == $role_id ? 'selected' : '' }}>{{ $role->name }}</option>
+                                <option value="{{ $role['id'] }}" {{ $user->role == $role['id'] ? 'selected' : '' }}>{{ $role['name'] }}</option>
                                 @endforeach
                             </select>
 

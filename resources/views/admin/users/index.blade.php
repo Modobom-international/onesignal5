@@ -44,30 +44,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($users as $item)
+                                @foreach($users as $user)
                                 <tr>
-                                    <td><a href="{{ url('/admin/users', $item->id) }}">{{ $item->name }}</a></td>
-                                    <td>{{ $item->title ?? '' }}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>
-                                        @if (!empty($item->getRoleNames()))
-                                        @foreach ($item->getRoleNames() as $rolename)
-                                        <label class="badge bg-primary mx-1" style="color: white">{{ $rolename }}</label>
-                                        @endforeach
-                                        @endif
-                                    </td>
-                                    <td>{{ $item->phone_number }}</td>
+                                    <td>{{ $user->name }}</td>
+                                    <td>{{ $user->title ?? '' }}</td>
+                                    <td>{{ $user->email }}</td>
+                                    <td>{{ isset($user->role) ? $user->role->name : '' }}</td>
+                                    <td>{{ $user->phone_number }}</td>
                                     <td>
                                         <a href="" title="View User"><button class="btn btn-info btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
-                                        <a href="{{ url('/admin/users/' . $item->id . '/edit') }}" title="Edit User"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
+                                        <a href="{{ url('/admin/users/' . $user->id . '/edit') }}" title="Edit User"><button class="btn btn-primary btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="pagination"> {!! $users->appends(['search' => Request::get('search')])->render() !!} </div>
+                        <div class="pagination"> {{ $users->links() }} </div>
                     </div>
-
                 </div>
             </div>
         </div>

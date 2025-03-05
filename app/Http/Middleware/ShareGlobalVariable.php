@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Enums\Title;
+use App\Enums\Role;
 use App\Enums\Language;
 use Closure;
 use Illuminate\Http\Request;
@@ -35,9 +35,9 @@ class ShareGlobalVariable
             View::share('notificationSystem', $notificationSystem);
 
             if (Language::LIST_LANGUAGE[app()->getLocale()] == 'English') {
-                $listTitle = Title::LIST_TITLE_EN;
+                $listTitle = Role::LIST_EN;
             } else {
-                $listTitle = Title::LIST_TITLE_VN;
+                $listTitle = Role::LIST_VN;
             }
 
             View::share('listTitle', $listTitle);

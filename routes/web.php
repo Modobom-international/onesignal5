@@ -18,15 +18,12 @@ use App\Http\Controllers\HtmlSourceController;
 use App\Http\Controllers\UsersTrackingController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Admin\RolesController;
-use App\Http\Controllers\Admin\PermissionsController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogBehaviorController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Authenticate;
-use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\ShareGlobalVariable;
 
 require __DIR__ . '/auth.php';
@@ -63,36 +60,29 @@ Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'
 Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
 
-Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(function () {
-    Route::group(['middleware' => ['auth', 'role_or_permission:super-admin|check-log-count-data|manager-file']], function () {
-        Route::get('/', [AdminController::class, 'index'])->name('dashboard')->middleware(ShareGlobalVariable::class);
+Route::middleware(Authenticate::class)->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard')->middleware(ShareGlobalVariable::class);
+    Route::get('/fetch-horizon-dashboard', [AdminController::class, 'fetchHorizonDashboard'])->name('fetchHorizonDashboard');
+    Route::get('/change-status-notification', [AdminController::class, 'changeStatusNotification'])->name('changeStatusNotification');
+    Route::get('/lang/{locale}', [AdminController::class, 'setLocale'])->name('lang.switch');
 
-        Route::get('/log-behavior', [LogBehaviorController::class, 'viewLogBehavior'])->name('viewLogBehavior')->middleware(ShareGlobalVariable::class);
-        Route::get('/get-data-chart-log-behavior', [LogBehaviorController::class, 'getDataChartLogBehavior'])->name('getDataChartLogBehavior');
-        Route::get('/store-config-filter-log-behavior', [LogBehaviorController::class, 'storeConfigFilterLogBehavior'])->name('storeConfigFilterLogBehavior');
-        Route::get('/reset-config-filter-log-behavior', [LogBehaviorController::class, 'resetConfigFilterLogBehavior'])->name('resetConfigFilterLogBehavior');
-        Route::get('/compare-date', [LogBehaviorController::class, 'compareDate'])->name('compareDate');
-        Route::get('/save-list-app-for-check', [LogBehaviorController::class, 'saveListAppForCheck'])->name('saveListAppForCheck');
-        Route::get('/delete-app-in-list-for-check', [LogBehaviorController::class, 'deleteAppInListForCheck'])->name('deleteAppInListForCheck');
-        Route::get('/get-activity-uid', [LogBehaviorController::class, 'getActivityUid'])->name('getActivityUid');
+    Route::get('/log-behavior', [LogBehaviorController::class, 'viewLogBehavior'])->name('viewLogBehavior')->middleware(ShareGlobalVariable::class);
+    Route::get('/get-data-chart-log-behavior', [LogBehaviorController::class, 'getDataChartLogBehavior'])->name('getDataChartLogBehavior');
+    Route::get('/store-config-filter-log-behavior', [LogBehaviorController::class, 'storeConfigFilterLogBehavior'])->name('storeConfigFilterLogBehavior');
+    Route::get('/reset-config-filter-log-behavior', [LogBehaviorController::class, 'resetConfigFilterLogBehavior'])->name('resetConfigFilterLogBehavior');
+    Route::get('/compare-date', [LogBehaviorController::class, 'compareDate'])->name('compareDate');
+    Route::get('/save-list-app-for-check', [LogBehaviorController::class, 'saveListAppForCheck'])->name('saveListAppForCheck');
+    Route::get('/delete-app-in-list-for-check', [LogBehaviorController::class, 'deleteAppInListForCheck'])->name('deleteAppInListForCheck');
+    Route::get('/get-activity-uid', [LogBehaviorController::class, 'getActivityUid'])->name('getActivityUid');
 
-        Route::get('/push-system', [PushSystemController::class, 'listPushSystem'])->name('listPushSystem')->middleware(ShareGlobalVariable::class);
-        Route::get('/config-link/add', [PushSystemController::class, 'addConfigSystemLink'])->name('addConfigSystemLink');
-    });
+    Route::get('/push-system', [PushSystemController::class, 'listPushSystem'])->name('listPushSystem')->middleware(ShareGlobalVariable::class);
+    Route::get('/config-link/add', [PushSystemController::class, 'addConfigSystemLink'])->name('addConfigSystemLink');
 
-    Route::group(['middleware' => ['role:super-admin']], function () {
-        Route::resource('users', UsersController::class)->name('index', 'list.users')->middleware(ShareGlobalVariable::class);
-        Route::get('/change-password', [UsersController::class, 'changePassword'])->name('changePassword')->middleware(ShareGlobalVariable::class);
-        Route::post('/update-password', [UsersController::class, 'updatePassword'])->name('updatePassword');
-    });
+    Route::resource('users', UsersController::class)->name('index', 'list.users')->middleware(ShareGlobalVariable::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit')->middleware(ShareGlobalVariable::class);
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('/fetch-horizon-dashboard', [AdminController::class, 'fetchHorizonDashboard'])->name('fetchHorizonDashboard');
-    Route::resource('roles', RolesController::class);
-    Route::resource('permissions', PermissionsController::class);
 
     Route::get('/html-source', [HtmlSourceController::class, 'listHtmlSource'])->name('listHtmlSource')->middleware(ShareGlobalVariable::class);
     Route::get('/html-source/{id}', [HtmlSourceController::class, 'showHtmlSource'])->name('showHtmlSource');
@@ -108,7 +98,4 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/up-domain', [DomainController::class, 'upDomain'])->name('domain.up');
     Route::get('/search-domain', [DomainController::class, 'searchDomain'])->name('domain.search');
     Route::get('/delete-domain', [DomainController::class, 'deleteDomain'])->name('domain.delete');
-
-    Route::get('/change-status-notification', [AdminController::class, 'changeStatusNotification'])->name('changeStatusNotification');
-    Route::get('/lang/{locale}', [AdminController::class, 'setLocale'])->name('lang.switch');
 });
