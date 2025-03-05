@@ -55,28 +55,28 @@
                 </div>
 
                 <div class="col-lg-2 col-md-12">
-                    <button type="button" class="btn btn-primary" style="margin-top: 30px; margin-bottom: 30px;" id="search-report">Tìm kiếm</button>
+                    <button type="button" class="btn btn-primary" style="margin-top: 30px; margin-bottom: 30px;" id="search-report">{{ __('Tìm kiếm') }}</button>
                 </div>
             </div>
 
             <div>
-                <b>Total: <span style="color: red;">{{ $count }}</span></b>
+                <b>{{ __('Tổng') }} : <span style="color: red;">{{ $count }}</span></b>
             </div>
             <div class="table-responsive">
                 <table class="table table-responsive" id="item-table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>URL</th>
-                            <th>Country</th>
-                            <th>Platform</th>
-                            <th>Device</th>
-                            <th>Source</th>
-                            <th>App ID</th>
-                            <th>Version</th>
-                            <th>Create Date</th>
-                            <th>Note</th>
-                            <th>Action</th>
+                            <th>{{ __('Đường dẫn') }}</th>
+                            <th>{{ __('Quốc gia') }}</th>
+                            <th>{{ __('Nền tảng') }}</th>
+                            <th>{{ __('Thiết bị') }}</th>
+                            <th>{{ __('Nguồn') }}</th>
+                            <th>{{ __('ID ứng dụng') }}</th>
+                            <th>{{ __('Phiên bản') }}</th>
+                            <th>{{ __('Ngày tạo') }}</th>
+                            <th>{{ __('Ghi chú') }}</th>
+                            <th>{{ __('Hành động') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,7 +87,7 @@
                             <td>{{ $source->country ?? "" }}</td>
                             <td>{{ $source->platform ?? "" }}</td>
                             <td>{{ $source->device_id ?? "" }}</td>
-                            <td id="source-with-{{$source->id }}"><button data-type="email" id="element_html" class="email">{{$source->source}}</button>
+                            <td id="source-with-{{ $source->id }}"><button data-type="email" id="element_html" class="email">{{ $source->source }}</button>
                                 {{ Str::limit($source->source, 100) }}
                                 @if($source->source != null)
                                 <span data-type="copy" class="msgRow copy-to-clipboard"><img src="{{ asset('img/copy.png') }}" width="15" height="15">
@@ -99,7 +99,7 @@
                             <td>{{ $source->created_at }}</td>
                             <td>{{ $source->note }}</td>
                             <td class="d-flex" style="gap: 5px">
-                                <a href="javascript:void(0)" id="show-user" data-url="{{ route('showHtmlSource', $source->id) }}" class="btn btn-info">Show</a>
+                                <a href="javascript:void(0)" id="show-user" data-url="{{ route('showHtmlSource', $source->id) }}" class="btn btn-info">{{ __('Chi tiết') }}</a>
                             </td>
                         </tr>
                         @endforeach
@@ -122,23 +122,23 @@
     <div class="modal-dialog" id="set-width">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="userShowModalLabel">Show HTML Source</h5>
+                <h5 class="modal-title" id="userShowModalLabel">{{ __('Chi tiết nguồn HTML') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>ID:</strong> <span id="user-id"></span></p>
-                <p><strong>URL:</strong> <span id="url"></span></p>
-                <p><strong>Country:</strong> <span id="country"></span></p>
-                <p><strong>Platform:</strong> <span id="platform"></span></p>
-                <p><strong>Device:</strong> <span id="device"></span></p>
-                <p><strong>Source:</strong> <span id="source"></span></p>
-                <p><strong>App:</strong> <span id="app_id"></span></p>
-                <p><strong>Version:</strong> <span id="version"></span></p>
-                <p><strong>Create Date:</strong> <span id="created_at"></span></p>
-                <p><strong>Note:</strong> <span id="note"></span></p>
+                <p><strong>ID :</strong> <span id="user-id"></span></p>
+                <p><strong>{{ __('Đường dẫn') }} :</strong> <span id="url"></span></p>
+                <p><strong>{{ __('Quốc gia') }} :</strong> <span id="country"></span></p>
+                <p><strong>{{ __('Nền tảng') }} :</strong> <span id="platform"></span></p>
+                <p><strong>{{ __('Thiết bị') }} :</strong> <span id="device"></span></p>
+                <p><strong>{{ __('Nguồn') }} :</strong> <span id="source"></span></p>
+                <p><strong>{{ __('Ứng dụng') }} :</strong> <span id="app_id"></span></p>
+                <p><strong>{{ __('Phiên bản') }} :</strong> <span id="version"></span></p>
+                <p><strong>{{ __('Ngày tạo') }} :</strong> <span id="created_at"></span></p>
+                <p><strong>{{ __('Ghi chú') }} :</strong> <span id="note"></span></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Đóng') }}</button>
             </div>
         </div>
     </div>

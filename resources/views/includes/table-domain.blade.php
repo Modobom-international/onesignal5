@@ -2,13 +2,13 @@
     <table class="table table-bordered table-hover table-striped">
         <thead>
             <tr>
-                <th>Domain</th>
-                <th>Server</th>
-                <th>Tài khoản</th>
-                <th>Mật khẩu</th>
-                <th>Quản lý</th>
-                <th>Ngày tạo</th>
-                <th>Hành động</th>
+                <th>{{ __('Tên miền') }}</th>
+                <th>{{ __('Máy chủ') }}</th>
+                <th>{{ __('Tài khoản') }}</th>
+                <th>{{ __('Mật khẩu') }}</th>
+                <th>{{ __('Quản lý') }}</th>
+                <th>{{ __('Ngày tạo') }}</th>
+                <th>{{ __('Hành động') }}</th>
             </tr>
         </thead>
         <tbody>

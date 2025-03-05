@@ -14,7 +14,7 @@
                 @if(Auth::user()->email == 'vutuan.modobom@gmail.com' or Auth::user()->email == 'tranlinh.modobom@gmail.com')
                 <div class="d-flex mt-3 mb-3 justify-between">
                     <div>
-                        <a href="{{ route('domain.create') }}" class="btn btn-success">Thêm domain</a>
+                        <a href="{{ route('domain.create') }}" class="btn btn-success">{{ __('Thêm tên miền') }}</a>
                     </div>
 
                     <div>

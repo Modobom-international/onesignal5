@@ -156,18 +156,23 @@ class LogBehaviorController extends Controller
         if (!isset($app)) {
             $app = 'all';
         }
+
         if (!isset($country)) {
             $country = 'all';
         }
+
         if (!isset($platform)) {
             $platform = 'all';
         }
+
         if (!isset($network)) {
             $network = 'all';
         }
+
         if (!isset($install)) {
             $install = 'all';
         }
+
         $getCache = DB::connection('mongodb')
             ->table('log_behavior_cache')
             ->where('key', $keyCacheMenuCountry)
@@ -181,24 +186,30 @@ class LogBehaviorController extends Controller
             if ($value->key == $keyCacheMenuCountry) {
                 $countries = $value->data;
             }
+
             if ($value->key == $keyCacheMenuPlatform) {
                 $platforms = $value->data;
             }
+
             if ($value->key == $keyCacheMenuNetwork) {
                 $networks = $value->data;
             }
+
             if ($value->key == $keyCacheMenuApp) {
                 $apps = collect($value->data)->sort();
             }
+
             if ($value->key == $keyCacheKeyword) {
                 $keywords = $value->data;
             }
+
             if ($value->key == $keyCacheDate) {
                 $stringQuery .= $value->data;
                 $totalPath = $value->totalPath;
                 $countPath++;
             }
         }
+
         $query = json_decode($stringQuery);
         $getCookieMenu = Cookie::get('menu_log_behavior');
         $getMenuInDB = DB::table('menu_filter_log_behavior')->where('cookie_id', $getCookieMenu)->first();
@@ -225,6 +236,7 @@ class LogBehaviorController extends Controller
                     });
                 }
             }
+
             if (isset($country)) {
                 if ($country != 'all') {
                     $query = $query->filter(function ($item) use ($country) {
@@ -232,6 +244,7 @@ class LogBehaviorController extends Controller
                     });
                 }
             }
+
             if (isset($platform)) {
                 if ($platform != 'all') {
                     $query = $query->filter(function ($item) use ($platform) {
@@ -239,6 +252,7 @@ class LogBehaviorController extends Controller
                     });
                 }
             }
+
             if (isset($network)) {
                 if ($network != 'all' and $network != 'other') {
                     $query = $query->filter(function ($item) use ($network) {
@@ -251,6 +265,7 @@ class LogBehaviorController extends Controller
                     });
                 }
             }
+
             if (isset($install)) {
                 if ($install == 'install') {
                     $query = $query->filter(function ($item) {
@@ -258,6 +273,7 @@ class LogBehaviorController extends Controller
                             strpos($item->behavior, 'INSTALL') !== false;
                     });
                 }
+
                 if ($install == 'country') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -268,6 +284,7 @@ class LogBehaviorController extends Controller
                             strpos($item->behavior, 'google-Pixel 5-11') === false;
                     });
                 }
+
                 if ($install == 'network') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -278,6 +295,7 @@ class LogBehaviorController extends Controller
                             strpos($item->behavior, 'google-Pixel 5-11') === false;
                     });
                 }
+
                 if ($install == 'test') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -286,6 +304,7 @@ class LogBehaviorController extends Controller
                                 strpos($item->behavior, 'google-Pixel 5-11'));
                     });
                 }
+
                 if ($install == 'sub') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -296,6 +315,7 @@ class LogBehaviorController extends Controller
                             strpos($item->behavior, 'google-Pixel 5-11') === false;
                     });
                 }
+
                 if ($install == 'real') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -308,21 +328,25 @@ class LogBehaviorController extends Controller
             }
         } else {
             $query = DB::connection('mongodb')->table('log_behavior');
+
             if (!empty($app)) {
                 if ($app != 'all') {
                     $query = $query->where('app', 'LIKE', $app);
                 }
             }
+
             if (!empty($country)) {
                 if ($country != 'all') {
                     $query = $query->where('country', $country);
                 }
             }
+
             if (!empty($platform)) {
                 if ($platform != 'all') {
                     $query = $query->where('platform', $platform);
                 }
             }
+
             if (!empty($network)) {
                 if ($network != 'all' and $network != 'other') {
                     $query = $query->where('network', $network);
@@ -331,10 +355,12 @@ class LogBehaviorController extends Controller
                     $query = $query->where('network', null)->orWhere('network', '');
                 }
             }
+
             if (!empty($install)) {
                 if ($install == 'install') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%');
                 }
+
                 if ($install == 'country') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where('behavior', 'LIKE', '%SAI_COUNTRY%')
@@ -342,6 +368,7 @@ class LogBehaviorController extends Controller
                         ->where('behavior', 'NOT LIKE', '%OnePlus8Pro%')
                         ->where('behavior', 'NOT LIKE', '%google-Pixel 5-11%');
                 }
+
                 if ($install == 'network') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where('behavior', 'NOT LIKE', '%SAI_COUNTRY%')
@@ -349,6 +376,7 @@ class LogBehaviorController extends Controller
                         ->where('behavior', 'NOT LIKE', '%OnePlus8Pro%')
                         ->where('behavior', 'NOT LIKE', '%google-Pixel 5-11%');
                 }
+
                 if ($install == 'test') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where(function ($query) {
@@ -356,6 +384,7 @@ class LogBehaviorController extends Controller
                                 ->orWhere('behavior', 'LIKE', '%google-Pixel 5-11%');
                         });
                 }
+
                 if ($install == 'sub') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where('behavior', 'NOT LIKE', '%SAI_COUNTRY%')
@@ -363,6 +392,7 @@ class LogBehaviorController extends Controller
                         ->where('behavior', 'NOT LIKE', '%OnePlus8Pro%')
                         ->where('behavior', 'NOT LIKE', '%google-Pixel 5-11%');
                 }
+
                 if ($install == 'real') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where('behavior', 'NOT LIKE', '%SAI_COUNTRY%')
@@ -370,6 +400,7 @@ class LogBehaviorController extends Controller
                         ->where('behavior', 'NOT LIKE', '%google-Pixel 5-11%');
                 }
             }
+
             $dateEstimate1 = $dateFormat . ' 00:00:00';
             $dateEstimate2 = $dateFormat . ' 23:59:59';
             $fromQuery = Common::covertDateTimeToMongoBSONDateGMT7($dateEstimate1);
@@ -404,6 +435,7 @@ class LogBehaviorController extends Controller
                         $arrInstall[] = $record->uid;
                     }
                 }
+
                 if (
                     strpos($record->behavior, '"INSTALL"') and
                     strpos($record->behavior, '"SAI_COUNTRY"') and
@@ -415,6 +447,7 @@ class LogBehaviorController extends Controller
                         $arrWrongCountry[] = $record->uid;
                     }
                 }
+
                 if (
                     strpos($record->behavior, '"INSTALL"') and strpos($record->behavior, '"NGOAI_MANG"') and
                     strpos($record->behavior, '"SAI_COUNTRY"') === false and
@@ -425,6 +458,7 @@ class LogBehaviorController extends Controller
                         $arrWrongNetWork[] = $record->uid;
                     }
                 }
+
                 if (
                     strpos($record->behavior, '"INSTALL"') and
                     (strpos($record->behavior, 'OnePlus8Pro') or strpos($record->behavior, 'google-Pixel 5-11'))
@@ -433,6 +467,7 @@ class LogBehaviorController extends Controller
                         $arrDeviceTest[] = $record->uid;
                     }
                 }
+
                 if (
                     strpos($record->behavior, '"INSTALL"') and
                     strpos($record->behavior, '"SAI_COUNTRY"') === false and
@@ -444,6 +479,7 @@ class LogBehaviorController extends Controller
                         $arrUserSub[] = $record->uid;
                     }
                 }
+
                 if (strpos($record->behavior, 'OnePlus8Pro') === false) {
                     $decodeBehavior = json_decode($record->behavior, true);
                     foreach ($decodeBehavior as $keyBehavior => $behavior) {
@@ -475,6 +511,7 @@ class LogBehaviorController extends Controller
                     }
                 }
             }
+
             if (!isset($record->date_install)) {
                 if (is_object($record->date)) {
                     $record->date_install = $record->date->setTimezone('UTC')->format('Y-m-d H:i:s');
@@ -492,6 +529,7 @@ class LogBehaviorController extends Controller
                     $record->date_install = $explodeDate[0] . ' ' . $explodeHours[0];
                 }
             }
+
             if (is_object($record->date)) {
                 $record->date = $record->date->setTimezone('UTC')->format('Y-m-d H:i:s');
             } else {
@@ -502,6 +540,7 @@ class LogBehaviorController extends Controller
             $query[$keyQuery] = $record;
         }
         $textShowContent = 'Nội dung : ';
+
         if ($country == 'Thailand' or $country == 'Malaysia') {
             foreach ($showContent as $keyContent => $content) {
                 $textShowContent .= '( ' . $keyContent . ' - ' . $content . ' ) ';
@@ -509,12 +548,14 @@ class LogBehaviorController extends Controller
         } else {
             $textShowContent .= $showContent . ' thành công';
         }
+
         if ($query instanceof Collection) {
             $query = $query->sortByDesc('date');
         } else {
             $query = (collect($query))->sortByDesc('date');
         }
         $statusPaginate = true;
+
         if (!empty($showInPage)) {
             if ($showInPage == 'all') {
                 $dataPaginate = $query;
@@ -525,6 +566,7 @@ class LogBehaviorController extends Controller
         } else {
             $dataPaginate = Common::paginate($query, 50);
         }
+
         $listAppCheck = DB::connection('mongodb')
             ->table('app_install')
             ->get();
@@ -539,6 +581,7 @@ class LogBehaviorController extends Controller
         ];
         $today = date('Y-m-d');
         $prevToday = date('Y-m-d', strtotime('-1 day'));
+
         return view('log_behavior.log_behavior', [
             'data' => $dataPaginate,
             'countries' => $countries,
@@ -590,6 +633,7 @@ class LogBehaviorController extends Controller
             'assigned' => $assigned,
             'time_queue' => date('H:i')
         ];
+
         if (empty($getCheck)) {
             $data['last_install'] = $lastInstall;
             $idAppInstall = DB::connection('mongodb')
@@ -600,6 +644,7 @@ class LogBehaviorController extends Controller
         } else {
             $data['status'] = false;
         }
+
         $data['count'] = $count;
         return response()->json($data);
     }
@@ -613,6 +658,7 @@ class LogBehaviorController extends Controller
         $data = [
             'status' => true
         ];
+
         return response()->json($data);
     }
     public function searchAppInListForCheck(Request $request)
@@ -626,15 +672,19 @@ class LogBehaviorController extends Controller
         if ($country != 'all') {
             $query = $query->where('country', strtolower($country));
         }
+
         if ($app != 'all') {
             $query = $query->where('app', strtolower($app));
         }
+
         if ($platform != 'all') {
             $query = $query->where('platform', strtolower($platform));
         }
+
         if ($assigned != 'all') {
             $query = $query->where('assigned', $assigned);
         }
+
         $query = $query->get();
         $response = [];
         foreach ($query as $record) {
@@ -646,6 +696,7 @@ class LogBehaviorController extends Controller
             $record['_id'] = (string) new \MongoDB\BSON\ObjectId($record['_id']);
             $response[] = $record;
         }
+
         $response = collect($response);
         return response()->json($response);
     }
@@ -655,13 +706,16 @@ class LogBehaviorController extends Controller
         $dataUpdate = [
             'lock' => $request->get('lock')
         ];
+
+        $data = [
+            'status' => true,
+        ];
+
         DB::connection('mongodb')
             ->table('app_install')
             ->where('id', $id)
             ->update($dataUpdate);
-        $data = [
-            'status' => true,
-        ];
+
         return response()->json($data);
     }
     public function storeConfigFilterLogBehavior(Request $request)
@@ -677,6 +731,7 @@ class LogBehaviorController extends Controller
             'platforms' => $platforms,
             'apps' => $apps
         ];
+
         if (empty($getCookie)) {
             $data = [
                 'cookie_id' => $cookie_id,
@@ -689,14 +744,17 @@ class LogBehaviorController extends Controller
             ];
             DB::table('menu_filter_log_behavior')->where('cookie_id', $cookie_id)->update($data);
         }
+
         Cookie::queue(Cookie::make('menu_log_behavior', $cookie_id));
         return 'success';
     }
+
     public function resetConfigFilterLogBehavior()
     {
         $cookieMenu = Cookie::forget('menu_log_behavior');
         return back()->withCookie($cookieMenu);
     }
+
     public function getDataChartLogBehavior(Request $request)
     {
         $data = [];
@@ -734,6 +792,7 @@ class LogBehaviorController extends Controller
             $data['labels'][] = $date;
             $install = 0;
             $send = 0;
+
             if (!is_array($totalData)) {
                 $query = json_decode($totalData);
                 if (isset($network)) {
@@ -748,6 +807,7 @@ class LogBehaviorController extends Controller
                         });
                     }
                 }
+
                 if (isset($country)) {
                     if ($country != 'all') {
                         $query = $query->filter(function ($item) use ($country) {
@@ -755,6 +815,7 @@ class LogBehaviorController extends Controller
                         });
                     }
                 }
+
                 if (isset($platform)) {
                     if ($platform != 'all') {
                         $query = $query->filter(function ($item) use ($platform) {
@@ -762,6 +823,7 @@ class LogBehaviorController extends Controller
                         });
                     }
                 }
+
                 if (isset($app)) {
                     if ($app != 'all') {
                         $query = $query->filter(function ($item) use ($app) {
@@ -769,6 +831,7 @@ class LogBehaviorController extends Controller
                         });
                     }
                 }
+
                 if (isset($keyword)) {
                     if ($keyword != 'all') {
                         $query = $query->filter(function ($item) use ($keyword) {
@@ -776,6 +839,7 @@ class LogBehaviorController extends Controller
                         });
                     }
                 }
+
                 foreach ($query as $value) {
                     if (strpos($value->behavior, 'INSTALL') !== false) {
                         $install++;
@@ -826,26 +890,31 @@ class LogBehaviorController extends Controller
                 }
             } else {
                 $query = DB::connection('mongodb');
+
                 if (strtotime($dateFormat) == strtotime(date('Y-m-d'))) {
                     $query = $query->table('log_behavior');
                 } else {
                     $query = $query->table('log_behavior_history');
                 }
+
                 if (!empty($app)) {
                     if ($app != 'all') {
                         $query = $query->where('app', 'LIKE', $app);
                     }
                 }
+
                 if (!empty($country)) {
                     if ($country != 'all') {
                         $query = $query->where('country', $country);
                     }
                 }
+
                 if (!empty($platform)) {
                     if ($platform != 'all') {
                         $query = $query->where('platform', $platform);
                     }
                 }
+
                 if (!empty($network)) {
                     if ($network != 'all' and $network != 'other') {
                         $query = $query->where('network', $network);
@@ -854,6 +923,7 @@ class LogBehaviorController extends Controller
                         $query = $query->where('network', null)->orWhere('network', '');
                     }
                 }
+
                 if (!empty($install)) {
                     if ($install == 'install') {
                         $query = $query->where('behavior', 'LIKE', '%INSTALL%');
@@ -893,6 +963,7 @@ class LogBehaviorController extends Controller
                             ->where('behavior', 'NOT LIKE', '%google-Pixel 5-11%');
                     }
                 }
+
                 $dateEstimate1 = $dateFormat . ' 00:00:00';
                 $dateEstimate2 = $dateFormat . ' 23:59:59';
                 $fromQuery = Common::covertDateTimeToMongoBSONDateGMT7($dateEstimate1);
@@ -950,6 +1021,7 @@ class LogBehaviorController extends Controller
             $arrTotal[] = $install;
             $arrSend[] = $send;
         }
+
         $sumTotal = array_sum($arrTotal);
         $sumSend = array_sum($arrSend);
         $data['datasets'][] = (object)[
@@ -960,6 +1032,7 @@ class LogBehaviorController extends Controller
             'pointRadius' => 10,
             'pointHoverRadius' => 15,
         ];
+
         $data['datasets'][] = (object)[
             'label' => 'Tổng lượt gửi',
             'data' => $arrSend,
@@ -968,17 +1041,21 @@ class LogBehaviorController extends Controller
             'pointRadius' => 10,
             'pointHoverRadius' => 15,
         ];
+
         $data['sum'] = [
             'total' => $sumTotal,
             'send' => $sumSend
         ];
+
         return \response()->json($data);
     }
+
     public function quickRandom($length = 16)
     {
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
     }
+
     public function compareDate(Request $request)
     {
         $datePrevious = $request->get('datePrevious');
@@ -1006,16 +1083,19 @@ class LogBehaviorController extends Controller
                     $query = $query->where('app', 'LIKE', $app);
                 }
             }
+
             if (!empty($country)) {
                 if ($country != 'all') {
                     $query = $query->where('country', $country);
                 }
             }
+
             if (!empty($platform)) {
                 if ($platform != 'all') {
                     $query = $query->where('platform', $platform);
                 }
             }
+
             if (!empty($network)) {
                 if ($network != 'all' and $network != 'other') {
                     $query = $query->where('network', $network);
@@ -1028,6 +1108,7 @@ class LogBehaviorController extends Controller
                 if ($install == 'install') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%');
                 }
+
                 if ($install == 'country') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where('behavior', 'LIKE', '%SAI_COUNTRY%')
@@ -1035,6 +1116,7 @@ class LogBehaviorController extends Controller
                         ->where('behavior', 'NOT LIKE', '%OnePlus8Pro%')
                         ->where('behavior', 'NOT LIKE', '%google-Pixel 5-11%');
                 }
+
                 if ($install == 'network') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where('behavior', 'NOT LIKE', '%SAI_COUNTRY%')
@@ -1042,6 +1124,7 @@ class LogBehaviorController extends Controller
                         ->where('behavior', 'NOT LIKE', '%OnePlus8Pro%')
                         ->where('behavior', 'NOT LIKE', '%google-Pixel 5-11%');
                 }
+
                 if ($install == 'test') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where(function ($query) {
@@ -1049,6 +1132,7 @@ class LogBehaviorController extends Controller
                                 ->orWhere('behavior', 'LIKE', '%google-Pixel 5-11%');
                         });
                 }
+
                 if ($install == 'sub') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where('behavior', 'NOT LIKE', '%SAI_COUNTRY%')
@@ -1056,6 +1140,7 @@ class LogBehaviorController extends Controller
                         ->where('behavior', 'NOT LIKE', '%OnePlus8Pro%')
                         ->where('behavior', 'NOT LIKE', '%google-Pixel 5-11%');
                 }
+
                 if ($install == 'real') {
                     $query = $query->where('behavior', 'LIKE', '%INSTALL%')
                         ->where('behavior', 'NOT LIKE', '%SAI_COUNTRY%')
@@ -1119,6 +1204,7 @@ class LogBehaviorController extends Controller
                             strpos($item->behavior, 'INSTALL') !== false;
                     });
                 }
+
                 if ($install == 'country') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -1129,6 +1215,7 @@ class LogBehaviorController extends Controller
                             strpos($record->behavior, 'google-Pixel 5-11') === false;
                     });
                 }
+
                 if ($install == 'network') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -1139,6 +1226,7 @@ class LogBehaviorController extends Controller
                             strpos($record->behavior, 'google-Pixel 5-11') === false;
                     });
                 }
+
                 if ($install == 'test') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -1147,6 +1235,7 @@ class LogBehaviorController extends Controller
                                 strpos($record->behavior, 'google-Pixel 5-11'));
                     });
                 }
+
                 if ($install == 'sub') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -1157,6 +1246,7 @@ class LogBehaviorController extends Controller
                             strpos($record->behavior, 'google-Pixel 5-11') === false;
                     });
                 }
+
                 if ($install == 'real') {
                     $query = $query->filter(function ($item) {
                         return isset($item->behavior) and
@@ -1214,6 +1304,7 @@ class LogBehaviorController extends Controller
             }
             $query[$keyQuery] = $record;
         }
+
         $response = [
             'total-id-previous' => count($query),
             'total-install-previous' => count($arrInstall),
@@ -1223,6 +1314,7 @@ class LogBehaviorController extends Controller
             'user-sub-previous' => count($arrUserSub),
             'true-install-previous' => count($arrUserSub) + count($arrWrongNetWork)
         ];
+
         return \response()->json($response);
     }
     public function getActivityUid(Request $request)
@@ -1232,11 +1324,13 @@ class LogBehaviorController extends Controller
             ->table('log_behavior_activity')
             ->where('uid', $uid)
             ->get();
+
         foreach ($getActivity as $activity) {
             $phpDate = $activity->date->toDateTime();
             $phpDate->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
             $activity->date = $phpDate->format('Y-m-d H:i:s');
         }
+
         return \response()->json($getActivity);
     }
 }
