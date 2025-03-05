@@ -30,6 +30,14 @@
             <!-- Notification Component -->
             <x-notifications.index :notificationSystem="$notificationSystem" />
 
+            <div>
+                @if(\App\Enums\Language::LIST_LANGUAGE[app()->getLocale()] == 'English')
+                <x-flag.en></x-flag.en>
+                @else
+                <x-flag.vn></x-flag.vn>
+                @endif
+            </div>
+
             <!-- Theme Toggle -->
             <x-button type="button"
                 class="h-8 w-8 justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200"

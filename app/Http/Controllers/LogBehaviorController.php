@@ -33,22 +33,26 @@ class LogBehaviorController extends Controller
                 'success' => false,
                 'message' => 'Store log successful!'
             ];
+
             if (count($request->all()) == 0) {
                 $response['message'] = 'Param is empty';
                 return \response()->json($response);
             }
+
             if (empty($request->get('id'))) {
                 $response['message'] = 'Id is required!';
                 return \response()->json($response);
             } else {
                 $data['uid'] = $request->get('id');
             }
+
             $info = [
                 'uid' => $data['uid'],
                 'message' => 'Api call : /create-log-behavior',
                 'data' => json_encode($param),
                 'date' => Common::covertDateTimeToMongoBSONDateGMT7(Common::getCurrentVNTime())
             ];
+
             BehaviorStoreLogJob::dispatch($info)->onQueue('behavior_store_log');
             foreach ($param as $key => $value) {
                 if ($key == 'CONTENT_OTP' and strpos($value, 'partner.u.com.my') !== false) {
@@ -71,6 +75,7 @@ class LogBehaviorController extends Controller
                 }
                 $arrBehavior[$key] = $value;
             }
+
             if ($isInstall) {
                 if (empty($request->get('app'))) {
                     $response['message'] = 'App is required!';
@@ -97,20 +102,25 @@ class LogBehaviorController extends Controller
                     $data['network'] = $request->get('network');
                 }
             }
+
             if (array_key_exists('CONTENT_OTP', $cloneParam)) {
                 unset($cloneParam['CONTENT_OTP']);
             }
+
             if ($statusNotifyMY) {
                 $encodeParam = str_replace('_', '-', json_encode($cloneParam));
                 NotifyTelegramPartnerMyJob::dispatch($encodeParam, $export, 'otp', 'Malaysia - Partner')->onQueue(LinodeStorageObject::getQueueDefault());
             }
+
             if ($statusNotifyDenmark) {
                 $encodeParam = str_replace('_', '-', json_encode($cloneParam));
                 NotifyTelegramPartnerMyJob::dispatch($encodeParam, $export, 'otp', 'Denmark')->onQueue(LinodeStorageObject::getQueueDefault());
             }
+
             if ($request->get('date')) {
                 $data['timeutc'] = $request->get('date');
             }
+
             $data['date'] = Common::covertDateTimeToMongoBSONDateGMT7(Common::getCurrentVNTime());
             $data['behavior'] = json_encode($arrBehavior);
             StoreLogBehaviorJob::dispatch($data, $isInstall)->onQueue('create_log_behavior');
@@ -121,10 +131,12 @@ class LogBehaviorController extends Controller
                 'data' => '',
                 'date' => Common::covertDateTimeToMongoBSONDateGMT7(Common::getCurrentVNTime())
             ];
+
             BehaviorStoreLogJob::dispatch($info)->onQueue('behavior_store_log');
             $response['message'] = 'Error store log behavior!';
             return \response()->json($response);
         }
+
         $response['success'] = true;
         return \response()->json($response);
     }
@@ -221,12 +233,14 @@ class LogBehaviorController extends Controller
                 $listArrayApp[] = $appItem;
             }
         }
+
         if (!empty($getMenuInDB)) {
             $menu = json_decode($getMenuInDB->menu, true);
             $listArrayPlatform = $menu['platforms'];
             $listArrayCountry = $menu['countries'];
             $listArrayApp = $menu['apps'];
         }
+
         if (is_array($query) and count($query) > 0 and $totalPath == $countPath) {
             $query = collect($query);
             if (isset($app)) {
@@ -415,16 +429,19 @@ class LogBehaviorController extends Controller
         if (Auth::user()->email == 'vytt@gmail.com' and $country == 'Malaysia') {
             $totalForThaoVy = 0;
         }
+
         if ($country == 'Thailand' or $country == 'Malaysia') {
             $showContent = [];
         } else {
             $showContent = 0;
         }
+
         if ($country == 'Thailand') {
             $queryPatten = 'SUB_OK';
         } else {
             $queryPatten = 'SUB_OK_Confirm';
         }
+        
         foreach ($query as $keyQuery => $record) {
             if (!isset($record->uid)) {
                 continue;
@@ -1148,6 +1165,7 @@ class LogBehaviorController extends Controller
                         ->where('behavior', 'NOT LIKE', '%google-Pixel 5-11%');
                 }
             }
+
             $dateEstimate1 = $dateFormatPrevious . ' 00:00:00';
             $dateEstimate2 = $dateFormatPrevious . ' ' . $time;
             $fromQuery = Common::covertDateTimeToMongoBSONDateGMT7($dateEstimate1);

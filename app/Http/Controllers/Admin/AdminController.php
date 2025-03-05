@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Language;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Laravel\Horizon\Contracts\WorkloadRepository;
@@ -117,5 +118,15 @@ class AdminController extends Controller
             ]);
 
         return response()->json(['message' => 'Successful!']);
+    }
+
+    public function setLocale(Request $request)
+    {
+        $locale = $request->input('locale');
+        if (in_array($locale, array_keys(Language::LIST_LANGUAGE))) {
+            $request->session()->put('locale', $locale);
+        }
+
+        return redirect()->back();
     }
 }

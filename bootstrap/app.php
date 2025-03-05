@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\SetLocale::class,
         ]);
 
         $middleware->alias([
@@ -28,7 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'can' => \Illuminate\Auth\Middleware\Authorize::class,
             'Html' => Spatie\Html\Facades\Html::class,
             'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-            'share-global-variable' => \App\Http\Middleware\ShareGlobalVariable::class,
+            'share-global-variable' => \App\Http\Middleware\ShareGlobalVariable::class
         ]);
 
         $middleware->validateCsrfTokens(except: [
