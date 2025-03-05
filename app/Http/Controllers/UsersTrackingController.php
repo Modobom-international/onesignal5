@@ -38,7 +38,6 @@ class UsersTrackingController extends Controller
         ]);
 
         $validatedData['user']['ip'] = $ip;
-        $url = 'https://' . $validatedData['domain'] . $validatedData['path'];
         $validatedData['timestamp'] = Common::covertDateTimeToMongoBSONDateGMT7($validatedData['timestamp']);
         StoreUsersTracking::dispatch($validatedData)->onQueue('create_users_tracking');
 
@@ -131,7 +130,7 @@ class UsersTrackingController extends Controller
 
             if ($tracking->event_name == 'scroll') {
                 $event_data[] = 'Cuộn xuống tọa độ x là ' . $tracking->event_data['scrollTop'] . ' và y là ' . $tracking->event_data['scrollLeft'];
-                // $file = 'browsershot_viewport_' . $this->data['x'] . '_' . $this->data['y'] . '_' . $this->data['width'] . '_' . $this->data['height'] . '_' . $this->data['domain'] . '_' . str_replace('/', '_', $this->data['path']) . '.png';
+                $file = 'browsershot_viewport_' . $this->data['x'] . '_' . $this->data['y'] . '_' . $this->data['width'] . '_' . $this->data['height'] . '_' . $this->data['domain'] . '_' . str_replace('/', '_', $this->data['path']) . '.png';
             }
 
             if ($tracking->event_name == 'beforeunload') {

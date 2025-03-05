@@ -142,8 +142,6 @@ class DomainController extends Controller
     {
         $domain = $request->get('domain');
 
-        dd($domain);
-
         DeleteDomain::dispatch($domain)->onQueue('delete-domain');
 
         return response()->json([

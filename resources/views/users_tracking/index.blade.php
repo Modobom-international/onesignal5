@@ -14,7 +14,7 @@ Users tracking
         <div class="card-body">
             <div class="row">
                 <div class="col-3 form-group mt-3">
-                    <label class="form-label badge text-bg-primary" for="domain">Chọn domain</label>
+                    <label class="form-label badge text-bg-primary" for="domain">{{ __('Chọn tên miền') }}</label>
                     <select class="form-control" id="domain">
                         <option value="apkafe.com">apkafe.com</option>
                         <option value="vnitourist.com">vnitourist.com</option>
@@ -25,17 +25,17 @@ Users tracking
                 </div>
 
                 <div class="col-3 form-group mt-3 mb-3">
-                    <label class="form-label badge text-bg-primary" for="date">Chọn ngày</label>
+                    <label class="form-label badge text-bg-primary" for="date">{{ __('Chọn ngày') }}</label>
                     <input type="date" class="form-control" id="date" value="{{ date('Y-m-d') }}">
                 </div>
 
                 <div class="col-3 form-group d-flex align-items-center margin-top-1-7">
-                    <button class="btn btn-primary" onclick="handleListUsers()">Tìm</button>
+                    <button class="btn btn-primary" onclick="handleListUsers()">{{ __('Tìm') }}</button>
                 </div>
             </div>
 
             <div class="form-group mt-3 mb-3">
-                <button class="btn btn-success" id="btn-heat-map" data-bs-toggle="modal" data-bs-target="#heatMapModal">Xem heat map</button>
+                <button class="btn btn-success" id="btn-heat-map" data-bs-toggle="modal" data-bs-target="#heatMapModal">{{ __('Xem bản đồ nhiệt') }}</button>
             </div>
 
             <hr>
@@ -45,10 +45,10 @@ Users tracking
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
-                            <th scope="col">Thời gian cuối cùng</th>
-                            <th scope="col">Địa chỉ IP</th>
-                            <th scope="col">Thiết bị</th>
-                            <th scope="col">Hành động</th>
+                            <th scope="col">{{ __('Thời gian cuối cùng') }}</th>
+                            <th scope="col">{{ __('Địa chỉ IP') }}</th>
+                            <th scope="col">{{ __('Thiết bị') }}</th>
+                            <th scope="col">{{ __('Hành động') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,20 +84,20 @@ Users tracking
     <div class="modal-dialog modal-xl" id="set-width">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title fw-bold" id="detailModalLabel">Detail <span id="uuid-modal"></span></h3>
+                <h3 class="modal-title fw-bold" id="detailModalLabel">{{ __('Chi tiết') }} <span id="uuid-modal"></span></h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="card" id="basic-info-modal">
                     <div class="card-body">
-                        <h5 class="fw-bold">Thông tin cơ bản</h5>
+                        <h5 class="fw-bold">{{ __('Thông tin cơ bản') }}</h5>
                         <div class="form-group">
                             <p>Địa chỉ IP : <span id="ip-modal"></span></p>
-                            <p>Trình duyệt : <span id="browser-modal"></span></p>
-                            <p>Hệ thống : <span id="os-modal"></span></p>
-                            <p>Thiết bị : <span id="device-modal"></span></p>
-                            <p>Click vào internal link : <span id="internal-modal"></span></p>
-                            <p>Click vào lasso button : <span id="lasso-modal"></span></p>
+                            <p>{{ __('Trình duyệt') }} : <span id="browser-modal"></span></p>
+                            <p>{{ __('Hệ thống') }} : <span id="os-modal"></span></p>
+                            <p>{{ __('Thiết bị') }} : <span id="device-modal"></span></p>
+                            <p>{{ __('Nhấp vào đường dẫn nội bộ') }} : <span id="internal-modal"></span></p>
+                            <p>{{ __('Nhấp vào nút lasso') }} : <span id="lasso-modal"></span></p>
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@ Users tracking
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Đóng') }}</button>
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@ Users tracking
     <div class="modal-dialog modal-xl" id="set-width">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title fw-bold" id="heatMapModalLabel">Heat map</h3>
+                <h3 class="modal-title fw-bold" id="heatMapModalLabel">{{ __('Bản đồ nhiệt') }}</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -130,7 +130,7 @@ Users tracking
                     <div class="card-body">
                         <div class="row">
                             <div class="col-3 form-group mt-3">
-                                <label class="form-label badge text-bg-primary" for="domain-heat-map-modal">Chọn domain</label>
+                                <label class="form-label badge text-bg-primary" for="domain-heat-map-modal">{{ __('Chọn tên miền') }}</label>
                                 <select class="form-control" id="domain-heat-map-modal">
                                     <option value="apkafe.com">apkafe.com</option>
                                     <option value="vnitourist.com">vnitourist.com</option>
@@ -141,26 +141,26 @@ Users tracking
                             </div>
 
                             <div class="col-3 form-group mt-3">
-                                <label class="form-label badge text-bg-primary" for="path-heat-map-modal">Chọn path</label>
+                                <label class="form-label badge text-bg-primary" for="path-heat-map-modal">{{ __('Chọn đường dẫn') }}</label>
                                 <select class="form-control" id="path-heat-map-modal">
                                 </select>
                             </div>
 
                             <div class="col-3 form-group mt-3 mb-3">
-                                <label class="form-label badge text-bg-primary" for="date-heat-map-modal">Chọn ngày</label>
+                                <label class="form-label badge text-bg-primary" for="date-heat-map-modal">{{ __('Chọn ngày') }}</label>
                                 <input type="date" class="form-control" id="date-heat-map-modal" value="{{ date('Y-m-d') }}">
                             </div>
 
                             <div class="col-3 form-group mt-3">
-                                <label class="form-label badge text-bg-primary" for="event-heat-map-modal">Chọn sự kiện</label>
+                                <label class="form-label badge text-bg-primary" for="event-heat-map-modal">{{ __('Chọn sự kiện') }}</label>
                                 <select class="form-control" id="event-heat-map-modal">
-                                    <option value="mousemove">Mouse move</option>
-                                    <option value="click">Click</option>
+                                    <option value="mousemove">{{ __('Di chuột') }}</option>
+                                    <option value="click">{{ __('Nhấp') }}</option>
                                 </select>
                             </div>
 
                             <div class="col-3 form-group d-flex align-items-center margin-top-1-7">
-                                <button class="btn btn-primary" id="choose-heat-map">Chọn</button>
+                                <button class="btn btn-primary" id="choose-heat-map">{{ __('Chọn') }}</button>
                             </div>
                         </div>
                     </div>
@@ -176,7 +176,7 @@ Users tracking
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Đóng') }}</button>
                 </div>
             </div>
         </div>
