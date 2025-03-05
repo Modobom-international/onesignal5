@@ -112,4 +112,5 @@ Route::middleware(Authenticate::class, IsAdmin::class)->prefix('admin')->group(f
     Route::get('/delete-domain', [DomainController::class, 'deleteDomain'])->name('domain.delete');
 
     Route::get('/change-status-notification', [AdminController::class, 'changeStatusNotification'])->name('changeStatusNotification');
+    Route::get('/lang/{locale}', [AdminController::class, 'setLocale'])->name('lang.switch');
 });
