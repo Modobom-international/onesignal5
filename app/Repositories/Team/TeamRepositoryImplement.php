@@ -22,7 +22,7 @@ class TeamRepositoryImplement extends Eloquent implements TeamRepository
 
     public function getTeams()
     {
-        $query = $this->model->get();
+        $query = $this->model->with('permissions')->get();
 
         return $query;
     }

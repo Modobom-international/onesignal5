@@ -84,14 +84,18 @@ class UsersController extends Controller
 
     public function edit($id)
     {
-        $user = $this->userRepository->findOrFail($id);
-        $userRole = $user->roles->pluck('name')->toArray();
+        $user = $this->userRepository->findUsers($id);
+        $teams = $this->teamRepository->getTeams();
+        $getPermission = $this->permissionRepository->getPermissions();
+        $permissions = [];
+        foreach ($getPermission as $permission) {
+            $explode = explode('/', $permission->prefix);
+            $prefix = $explode[1];
 
-        return view('admin.users.edit', [
-            'user' => $user,
-            'userRole' => $userRole,
-            'roles' => $roles
-        ]);
+            $permissions[$prefix][] = $permission;
+        }
+
+        return view('admin.users.edit', compact('user', 'teams', 'permissions'));
     }
 
     public function update(Request $request, $id)
@@ -112,13 +116,13 @@ class UsersController extends Controller
         $user->update($data);
         $user->syncRoles($request->get('roles'));
 
-        return redirect('admin/users')->with('success', __('Cập nhật thông tin nhân viên thành công!'));
+        return redirect()->route('users.list')->with('success', __('Cập nhật thông tin nhân viên thành công!'));
     }
 
     public function destroy($id)
     {
-        $this->userRepository->destroy($id);
+        $this->userRepository->destroy([$id]);
 
-        return redirect('admin/users')->with('success', __('Xóa nhân viên thành công!'));
+        return redirect()->route('users.list')->with('success', __('Xóa nhân viên thành công!'));
     }
 }

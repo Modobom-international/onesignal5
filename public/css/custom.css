@@ -125,10 +125,6 @@
     padding: .3rem !important;
 }
 
-.background-grey {
-    background-color: #e3e2e2;
-}
-
 #dropdown-notification {
     position: absolute;
     inset: 0px 0px auto auto;

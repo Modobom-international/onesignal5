@@ -20,6 +20,14 @@ class UserRepositoryImplement extends Eloquent implements UserRepository
         $this->model = $model;
     }
 
+    public function getUsers()
+    {
+        $query = $this->model->latest()
+            ->paginate();
+
+        return $query;
+    }
+
     public function getUserByNameOrEmail($keyword)
     {
         $query = $this->model->where('name', 'LIKE', "%$keyword%")
@@ -30,10 +38,8 @@ class UserRepositoryImplement extends Eloquent implements UserRepository
         return $query;
     }
 
-    public function getUsers()
-    {
-        $query = $this->model->latest()
-            ->paginate();
+    public function findUsers($id) {
+        $query = $this->model->with('teams', 'permissions')->where('id', $id)->first();
 
         return $query;
     }

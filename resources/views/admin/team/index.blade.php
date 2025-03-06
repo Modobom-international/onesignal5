@@ -46,6 +46,7 @@
             <x-table.header>
                 <x-table.row>
                     <x-table.head>{{ __('Tên') }}</x-table.head>
+                    <x-table.head>{{ __('Quyền') }}</x-table.head>
                     <x-table.head class="text-right">{{ __('Hành động') }}</x-table.head>
                 </x-table.row>
             </x-table.header>
@@ -58,20 +59,26 @@
                             {{ $team->name }}
                         </div>
                     </x-table.cell>
+
+                    <x-table.cell>
+                        <div class="flex items-center">
+                            {{ $team->prefix_permissions }}
+                        </div>
+                    </x-table.cell>
                     <x-table.cell class="text-right">
                         <div class="flex justify-end space-x-2">
                             <a href="{{ route('team.edit', $team->id) }}"
                                 class="text-gray-400 hover:text-gray-500"
-                                title="{{ __('Sửa') }}">
+                                title="{{ __('Sửa phòng ban') }}">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                             </a>
                             <a href="{{ route('team.delete', $team->id) }}"
                                 class="text-gray-400 hover:text-gray-500"
-                                title="{{ __('Xóa') }}">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                title="{{ __('Xóa phòng ban') }}">
+                                <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd" />
                                 </svg>
                             </a>
                         </div>

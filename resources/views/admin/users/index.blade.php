@@ -19,14 +19,14 @@
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                {{ __('Thêm người dùng') }}
+                {{ __('Thêm nhân viên') }}
             </a>
         </div>
     </div>
 
     <div class="mt-8 ">
         <div class="py-4 border-b border-gray-200">
-            <form method="GET" action="{{ url('/admin/users') }}" class="max-w-lg flex gap-4">
+            <form method="GET" action="{{ route('users.list') }}" class="max-w-lg flex gap-4">
                 <div class="flex-1">
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -54,21 +54,20 @@
             </x-table.header>
 
             <x-table.body>
-                @foreach($users as $item)
-                    <x-table.row>
-                        <x-table.cell class="font-mono text-xs">{{ $item->id }}</x-table.cell>
-                        <x-table.cell>
-                            <div class="flex items-center">
-                                <div class="h-8 w-8 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center">
-                                    <span class="text-sm font-medium text-gray-600">{{ __(mb_substr($item->name, 0, 2, 'UTF-8')) }}</span>
-                                </div>
-                                <div class="ml-4">
-                                    <a href="{{ url('/admin/users', $item->id) }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-900">{{ $item->name }}</a>
-                                </div>
+                @foreach($users as $user)
+                <x-table.row>
+                    <x-table.cell class="font-mono text-xs">{{ $user->id }}</x-table.cell>
+                    <x-table.cell>
+                        <div class="flex items-center">
+                            <div class="h-8 w-8 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center">
+                                <span class="text-sm font-medium text-gray-600">{{ __(mb_substr($user->name, 0, 2, 'UTF-8')) }}</span>
+                            </div>
+                            <div class="ml-4">
+                                {{ $user->name }}
                             </div>
                         </div>
                     </x-table.cell>
-                    <x-table.cell>{{ $item->email }}</x-table.cell>
+                    <x-table.cell>{{ $user->email }}</x-table.cell>
                     <x-table.cell>
                         <div class="flex flex-wrap gap-1">
 
@@ -76,19 +75,18 @@
                     </x-table.cell>
                     <x-table.cell class="text-right">
                         <div class="flex justify-end space-x-2">
-                            <a href="{{ url('/admin/users/' . $item->id) }}"
+                            <a href="{{ route('users.edit', $user->id) }}"
                                 class="text-gray-400 hover:text-gray-500"
-                                title="{{ __('View User') }}">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                </svg>
-                            </a>
-                            <a href="{{ url('/admin/users/' . $item->id . '/edit') }}"
-                                class="text-gray-400 hover:text-gray-500"
-                                title="{{ __('Edit User') }}">
+                                title="{{ __('Sửa nhân viên') }}">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                            </a>
+                            <a href="{{ route('users.delete', $user->id) }}"
+                                class="text-gray-400 hover:text-gray-500"
+                                title="{{ __('Xóa nhân viên') }}">
+                                <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" clip-rule="evenodd" />
                                 </svg>
                             </a>
                         </div>
