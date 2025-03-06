@@ -41,6 +41,7 @@
         "spatie/browsershot": "^5.0",
         "spatie/image": "^3.7",
         "spatie/laravel-html": "^3.11",
+        "spatie/laravel-permission": "^6.16",
         "spatie/ssh": "^1.13",
         "symfony/css-selector": "^7.2",
         "symfony/dom-crawler": "^7.2",

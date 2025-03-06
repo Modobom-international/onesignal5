@@ -56,12 +56,16 @@
 
             <x-table.body>
                 @foreach($users as $item)
-                <x-table.row>
-                    <x-table.cell class="font-mono text-xs">{{ $item->id }}</x-table.cell>
-                    <x-table.cell>
-                        <div class="flex items-center">
-                            <div class="h-8 w-8 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center">
-                                <span class="text-sm font-medium text-gray-600">{{ substr($item->name, 0, 2) }}</span>
+                    <x-table.row>
+                        <x-table.cell class="font-mono text-xs">{{ $item->id }}</x-table.cell>
+                        <x-table.cell>
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <span class="text-sm font-medium text-gray-600">{{ __(mb_substr($item->name, 0, 2, 'UTF-8')) }}</span>
+                                </div>
+                                <div class="ml-4">
+                                    <a href="{{ url('/admin/users', $item->id) }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-900">{{ $item->name }}</a>
+                                </div>
                             </div>
                             <div class="ml-4">
                                 <a href="{{ url('/admin/users', $item->id) }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-900">{{ $item->name }}</a>

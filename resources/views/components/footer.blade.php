@@ -1,9 +1,15 @@
-<footer class="flex-shrink-0 px-6 py-4">
-    <p class="flex items-center justify-center gap-1 text-sm text-gray-600 dark:text-gray-400">
-        <span>Made with</span>
-        <span>
-            <x-heroicon-s-heart class="w-6 h-6 text-red-500" />
-        </span>
-        <span>by binhchay</span>
-    </p>
+{{-- Footer positioned within content area --}}
+<footer class="relative w-full bg-background">
+    <div class="container mx-auto px-6 py-3">
+        <div class="flex items-center justify-between">
+            <div class="text-sm text-muted-foreground">
+                © {{ date('Y') }} {{ __('Modobom.inc') }}. {{ __('All rights reserved') }}.
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-sm text-muted-foreground ">{{ __('Made with') }}</span>
+                <x-heroicon-s-heart class="w-4 h-4 text-red-500" />
+                <span class="text-sm text-muted-foreground ">{{ __('by Modobom') }}</span>
+            </div>
+        </div>
+    </div>
 </footer>
