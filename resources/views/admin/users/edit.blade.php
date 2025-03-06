@@ -72,7 +72,7 @@
                                            {{ in_array($role->name, $userRole) ? 'checked' : '' }}>
                                     <label for="role_{{ $role->name }}"
                                            class="ml-3 block text-sm text-gray-600 select-none cursor-pointer">
-                                        {{ $role->name }}
+                                        {{ __(Str::title(str_replace('-', ' ', $role->name))) }}
                                     </label>
                                 </div>
                             @endforeach
@@ -81,10 +81,7 @@
                 </div>
 
                 <div class="px-8 py-4 bg-gray-50 rounded-b-lg flex items-center justify-end space-x-3">
-                    <button type="reset"
-                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                        {{ __('Reset') }}
-                    </button>
+
                     <button type="submit"
                             class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
                         {{ __('Save Changes') }}
@@ -97,15 +94,6 @@
     </div>
 </div>
 
-@push('scripts')
-<script>
-    document.getElementById('all_permission').onclick = function() {
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        for (var checkbox of checkboxes) {
-            checkbox.checked = this.checked;
-        }
-    }
-</script>
-@endpush
+
 
 @endsection

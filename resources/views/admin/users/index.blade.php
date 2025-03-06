@@ -10,21 +10,22 @@
             <p class="mt-2 text-sm text-gray-700">{{ __('Manage user accounts and their roles') }}</p>
         </div>
         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none space-x-2">
+            <a href="{{ url('/admin/roles') }}"
+            class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+             {{ __('Chức vụ') }}
+         </a>
+         <a href="{{ url('/admin/permissions') }}"
+            class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
+             {{ __('Quyền') }}
+         </a>
             <a href="{{ url('/admin/users/create') }}"
                class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
-                {{ __('Add New User') }}
+                {{ __('Thêm người dùng') }}
             </a>
-            <a href="{{ url('/admin/roles') }}"
-               class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
-                {{ __('Roles') }}
-            </a>
-            <a href="{{ url('/admin/permissions') }}"
-               class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
-                {{ __('Permissions') }}
-            </a>
+
         </div>
     </div>
 
@@ -77,7 +78,7 @@
                                 @if (!empty($item->getRoleNames()))
                                     @foreach ($item->getRoleNames() as $rolename)
                                         <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
-                                            {{ $rolename }}
+                                            {{ __(Str::title(str_replace('-', ' ', $rolename))) }}
                                         </span>
                                     @endforeach
                                 @endif
