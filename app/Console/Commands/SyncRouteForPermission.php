@@ -39,18 +39,21 @@ class SyncRouteForPermission extends Command
                 continue;
             }
 
-            $prefix = $route->getPrefix();
-            if ($prefix == '/admin') {
+            $getPrefix = $route->getPrefix();
+            if ($getPrefix == '/admin') {
                 continue;
             }
 
+            $explode = explode('/', $getPrefix);
+            $prefix = $explode[1];
+
             Permission::updateOrCreate(
                 ['name' => $route->getName()],
-                ['prefix' => $route->getPrefix()],
+                ['prefix' => $prefix],
                 ['description' => $route->getActionName()],
             );
-
-            dump('Sync thành công..........');
         }
+
+        dump('Sync thành công..........');
     }
 }

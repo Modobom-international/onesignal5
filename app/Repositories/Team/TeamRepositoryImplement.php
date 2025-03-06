@@ -26,4 +26,11 @@ class TeamRepositoryImplement extends Eloquent implements TeamRepository
 
         return $query;
     }
+
+    public function findTeam($id)
+    {
+        $query = $this->model->with('permissions')->where('id', $id)->first();
+
+        return $query;
+    }
 }

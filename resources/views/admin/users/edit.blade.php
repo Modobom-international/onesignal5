@@ -101,9 +101,9 @@
                     <div>
                         <label for="team" class="block text-sm font-medium text-gray-700">{{ __('Phòng ban') }}</label>
                         <div class="mt-1.5">
-                            <select class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors" value="">
+                            <select id="team" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
                                 @foreach($teams as $team)
-                                @if(array_key_exists('id', $user->teams) and $team->id == $user->teams['id'])
+                                @if($user->teams->has('id') and $team->id == $user->teams['id'])
                                 <option value="{{ $team->name }}" selected>{{ $team->name }}</option>
                                 @else
                                 <option value="{{ $team->name }}">{{ $team->name }}</option>
@@ -164,11 +164,46 @@
                 <div class="px-8 py-4 bg-gray-50 rounded-b-lg flex items-center justify-end space-x-3">
                     <button type="submit"
                         class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                        {{ __('Tạo nhân viên') }}
+                        {{ __('Cập nhật nhân viên') }}
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    // const team = <?php ?>;
+    $(document).ready(function() {
+        $('input[id^="permission_"]').on('change', function() {
+            let permissionId = $(this).attr('id').replace('permission_', '');
+            let isChecked = $(this).prop('checked');
+
+            $(`input[id^="${permissionId}_path_"]`).each(function(index) {
+                setTimeout(() => {
+                    $(this).prop('checked', isChecked);
+                }, index * 50);
+            });
+        });
+
+        $('input[id*="_path_"]').on('change', function() {
+            handleCheckboxParent();
+        });
+
+        handleCheckboxParent();
+    });
+
+    function handleCheckboxParent() {
+        $('input[id^="permission_"]').each(function() {
+            let permissionId = $(this).attr('id').replace('permission_', '');
+            let totalCheckboxes = $(`input[id^="${permissionId}_path_"]`).length;
+            let checkedCheckboxes = $(`input[id^="${permissionId}_path_"]:checked`).length;
+
+            $(this).prop('checked', totalCheckboxes === checkedCheckboxes);
+            $(this).prop('indeterminate', checkedCheckboxes > 0 && checkedCheckboxes < totalCheckboxes);
+        });
+    }
+</script>
 @endsection
