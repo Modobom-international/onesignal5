@@ -69,8 +69,7 @@ class UsersController extends Controller
 
         $user = $this->userRepository->create($dataInsert);
 
-        $permission->routes()->sync($request->route_ids);
-        $user->syncRoles($request->get('roles'));
+        $user->permission()->sync($request->route_ids);
 
         return redirect()->route('users.list')->with('success', __('Thêm nhân viên thành công!'));
     }

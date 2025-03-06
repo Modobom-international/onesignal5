@@ -7,12 +7,12 @@
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">
-            {{ __('Sorry, the page you are looking for could not be found.') }}
+            {{ __('Xin lỗi, trang này không được tìm thấy!') }}
         </div>
 
         <div>
             <a href="{{ route('dashboard') }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200">
-                {{ __('Go back to dashboard') }}
+                {{ __('Quay lại trang bảng điều khiển') }}
             </a>
         </div>
     </x-auth-card>
