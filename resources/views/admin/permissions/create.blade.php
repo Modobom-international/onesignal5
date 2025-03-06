@@ -1,41 +1,50 @@
 @extends('layouts.app')
 
-@section('title', 'Create Permission')
+@section('title', __('Create Permission'))
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">Create Permission</div>
-                <div class="card-body">
-                    <a href="{{ url('/admin/permissions') }}" title="Back"><button class="btn btn-warning"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button></a>
-                    <br />
-                    <br />
-                    <form method="POST" action="{{ route('permissions.store') }}" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-3">
-                            <label>Permission Name</label>
-                            <select name="name" class="form-control" id="device-name">
-                                <option selected>Choose permission</option>
-                                <option value="check-log-count-data">Check Log and Count report</option>
-                                <option value="manager-file">Manager file</option>
-                                <option value="manager-push-system">Manager PushSystem</option>
-                            </select>
-                            @if ($errors->has('name'))
-                            <span class="text-danger">{{ $errors->first('name') }}</span>
-                            @endif
-                        </div>
-
-                        <div class="mb-3">
-                            <input value="web" type="hidden" class="form-control" name="guard_name" placeholder="Guard Name" readonly required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save permission</button>
-                    </form>
-
-                </div>
-            </div>
+<div class="py-8">
+    <div class="sm:flex sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-900">{{ __('Create New Permission') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __('Add a new permission to the system') }}</p>
         </div>
+        <div>
+            <a href="{{ url('/admin/permissions') }}">
+                <button type="button" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    {{ __('Back') }}
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <div class="mt-8">
+        <form method="POST" action="{{ route('permissions.store') }}" class="space-y-6">
+            @csrf
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">{{ __('Permission Name') }}</label>
+                <select name="name" id="device-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <option selected disabled>{{ __('Choose permission') }}</option>
+                    <option value="check-log-count-data">{{ __('Check Log and Count report') }}</option>
+                    <option value="manager-file">{{ __('Manager file') }}</option>
+                    <option value="manager-push-system">{{ __('Manager PushSystem') }}</option>
+                </select>
+                @if ($errors->has('name'))
+                    <p class="mt-2 text-sm text-red-600">{{ $errors->first('name') }}</p>
+                @endif
+            </div>
+
+            <input value="web" type="hidden" name="guard_name">
+
+            <div class="flex justify-end">
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    {{ __('Save Permission') }}
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection
