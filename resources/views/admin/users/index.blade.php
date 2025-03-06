@@ -66,9 +66,6 @@
                                     <a href="{{ url('/admin/users', $item->id) }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-900">{{ $item->name }}</a>
                                 </div>
                             </div>
-                            <div class="ml-4">
-                                <a href="{{ url('/admin/users', $item->id) }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-900">{{ $item->name }}</a>
-                            </div>
                         </div>
                     </x-table.cell>
                     <x-table.cell>{{ $item->email }}</x-table.cell>

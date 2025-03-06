@@ -102,20 +102,26 @@
         };
 
         <?php if (session('success')) { ?>
-        toastr.success("{{ session('success') }}");
+            toastr.success("{{ session('success') }}");
         <?php } ?>
 
         <?php if (session('error')) { ?>
-        toastr.error("{{ session('error') }}");
+            toastr.error("{{ session('error') }}");
         <?php } ?>
 
         <?php if (session('info')) { ?>
-        toastr.info("{{ session('info') }}");
+            toastr.info("{{ session('info') }}");
         <?php } ?>
 
         <?php if (session('warning')) { ?>
-        toastr.warning("{{ session('warning') }}");
+            toastr.warning("{{ session('warning') }}");
         <?php } ?>
+
+        <?php if ($errors->any()) {
+            foreach ($errors->all() as $error) { ?>
+                toastr.error("{{ $error }}");
+        <?php }
+        } ?>
     </script>
 
     <script>

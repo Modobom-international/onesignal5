@@ -13,6 +13,6 @@ class Team extends Model
 
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class, 'user_team', 'user_id', 'team_id');
+        return $this->belongsToMany(Permission::class, 'team_permission', 'team_id', 'permission_id');
     }
 }

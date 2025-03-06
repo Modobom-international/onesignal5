@@ -33,10 +33,35 @@ class TeamController extends Controller
         foreach ($getPermission as $permission) {
             $explode = explode('/', $permission->prefix);
             $prefix = $explode[1];
-            
+
             $permissions[$prefix][] = $permission;
         }
 
         return view('admin.team.create', compact('permissions'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'permissions' => 'array',
+        ]);
+
+        $getPermission = $request->get('permissions');
+        $permissions = array();
+
+        foreach($getPermission as $permission => $tick) {
+            $permissions[] = $permission;
+        }
+
+        $team = $this->teamRepository->create([
+            'name' => $request->name
+        ]);
+
+        if (!empty($permissions)) {
+            $team->permissions()->sync($permissions);
+        }
+
+        return redirect()->route('team.list')->with('success', __('Thêm phòng ban thành công!'));
     }
 }

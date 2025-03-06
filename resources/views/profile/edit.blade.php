@@ -34,7 +34,7 @@
                             <!-- Role Badge -->
                             <div class="mt-4 flex justify-center">
                                 <span class="px-3 py-1 text-xs font-medium text-indigo-600 bg-indigo-100 rounded-full dark:bg-indigo-900 dark:text-indigo-200">
-                                    {{ Str::title(str_replace('-', ' ', auth()->user()->getRoleNames()->first())) ?? __('Nhân viên') }}
+                                    {{ Str::title(str_replace('-', ' ', auth()->user()->title)) ?? __('Nhân viên') }}
                                 </span>
                             </div>
                         </div>
