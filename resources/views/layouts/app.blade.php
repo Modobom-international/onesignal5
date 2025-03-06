@@ -59,10 +59,9 @@
                 </div>
 
                 <!-- Main Content -->
-                <div class="flex-1 min-h-[calc(100vh-4rem)] "
+                <div class="flex-1 min-h-[calc(100vh-4rem)] flex flex-col"
                     :class="{ 'lg:ml-64': isSidebarOpen, 'md:ml-16': !isSidebarOpen }"
                     style="transition-property: margin; transition-duration: 150ms;">
-
 
                     <main class="px-4 sm:px-6 flex-1 container mx-auto">
                         @yield('content')
