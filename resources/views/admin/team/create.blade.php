@@ -20,7 +20,7 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <form method="POST" action="{{ route('users.store')}}" class="divide-y divide-gray-200">
+            <form method="POST" action="{{ route('team.store')}}" class="divide-y divide-gray-200">
                 @csrf
                 <div class="p-8 space-y-8">
                     <div>

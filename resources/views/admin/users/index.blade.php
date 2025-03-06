@@ -21,7 +21,6 @@
                 </svg>
                 {{ __('Thêm người dùng') }}
             </a>
-
         </div>
     </div>
 
