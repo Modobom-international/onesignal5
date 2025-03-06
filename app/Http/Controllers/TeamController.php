@@ -50,7 +50,7 @@ class TeamController extends Controller
         $permissions = [];
         foreach ($getPermission as $permission) {
             $explode = explode('/', $permission->prefix);
-            $prefix = $explode[1];
+            $prefix = $explode[1] ?? null;
 
             $permissions[$prefix][] = $permission;
         }

@@ -1,1067 +1,806 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Modobom</title>
+    <title>{{ config('app.name', 'MODOBOM') }} - {{ __('Giải pháp quản lý nhân sự toàn diện') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Styles / Scripts -->
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @else
+
+    <!-- Styles -->
+    @livewireStyles
+
     <style>
-        /* ! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com */
-        *,
-        ::after,
-        ::before {
-            box-sizing: border-box;
-            border-width: 0;
-            border-style: solid;
-            border-color: #e5e7eb
+        .nav-dropdown {
+            transform-origin: top;
+            transition: all 0.2s ease-out;
         }
-
-        ::after,
-        ::before {
-            --tw-content: ''
+        .nav-link-active::after {
+            content: '';
+            position: absolute;
+            bottom: -1.5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: theme('colors.indigo.600');
+            transform: scaleX(0);
+            transition: transform 0.2s ease;
         }
-
-        :host,
-        html {
-            line-height: 1.5;
-            -webkit-text-size-adjust: 100%;
-            -moz-tab-size: 4;
-            tab-size: 4;
-            font-family: Figtree, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-            font-feature-settings: normal;
-            font-variation-settings: normal;
-            -webkit-tap-highlight-color: transparent
+        .nav-link-active:hover::after {
+            transform: scaleX(1);
         }
-
-        body {
-            margin: 0;
-            line-height: inherit
-        }
-
-        hr {
-            height: 0;
-            color: inherit;
-            border-top-width: 1px
-        }
-
-        abbr:where([title]) {
-            -webkit-text-decoration: underline dotted;
-            text-decoration: underline dotted
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-size: inherit;
-            font-weight: inherit
-        }
-
-        a {
-            color: inherit;
-            text-decoration: inherit
-        }
-
-        b,
-        strong {
-            font-weight: bolder
-        }
-
-        code,
-        kbd,
-        pre,
-        samp {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            font-feature-settings: normal;
-            font-variation-settings: normal;
-            font-size: 1em
-        }
-
-        small {
-            font-size: 80%
-        }
-
-        sub,
-        sup {
-            font-size: 75%;
-            line-height: 0;
-            position: relative;
-            vertical-align: baseline
-        }
-
-        sub {
-            bottom: -.25em
-        }
-
-        sup {
-            top: -.5em
-        }
-
-        table {
-            text-indent: 0;
-            border-color: inherit;
-            border-collapse: collapse
-        }
-
-        button,
-        input,
-        optgroup,
-        select,
-        textarea {
-            font-family: inherit;
-            font-feature-settings: inherit;
-            font-variation-settings: inherit;
-            font-size: 100%;
-            font-weight: inherit;
-            line-height: inherit;
-            color: inherit;
-            margin: 0;
-            padding: 0
-        }
-
-        button,
-        select {
-            text-transform: none
-        }
-
-        [type=button],
-        [type=reset],
-        [type=submit],
-        [type=button],
-        [type=reset],
-        [type=submit],
-        button {
-            -webkit-appearance: button;
-            appearance: button;
-            background-color: transparent;
-            background-image: none
-        }
-
-        :-moz-focusring {
-            outline: auto
-        }
-
-        :-moz-ui-invalid {
-            box-shadow: none
-        }
-
-        progress {
-            vertical-align: baseline
-        }
-
-        ::-webkit-inner-spin-button,
-        ::-webkit-outer-spin-button {
-            height: auto
-        }
-
-        [type=search] {
-            outline-offset: -2px
-        }
-
-        ::-webkit-search-decoration {
-            -webkit-appearance: none
-        }
-
-        ::-webkit-file-upload-button {
-            -webkit-appearance: button;
-            font: inherit
-        }
-
-        summary {
-            display: list-item
-        }
-
-        blockquote,
-        dd,
-        dl,
-        figure,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        hr,
-        p,
-        pre {
-            margin: 0
-        }
-
-        fieldset {
-            margin: 0;
-            padding: 0
-        }
-
-        legend {
-            padding: 0
-        }
-
-        menu,
-        ol,
-        ul {
-            list-style: none;
-            margin: 0;
-            padding: 0
-        }
-
-        dialog {
-            padding: 0
-        }
-
-        textarea {
-            resize: vertical
-        }
-
-        input::placeholder,
-        textarea::placeholder {
+        .nav-item:hover .nav-dropdown {
             opacity: 1;
-            color: #9ca3af
+            transform: rotateX(0deg);
+            visibility: visible;
         }
 
-        [role=button],
-        button {
-            cursor: pointer
-        }
-
-        :disabled {
-            cursor: default
-        }
-
-        audio,
-        canvas,
-        embed,
-        iframe,
-        img,
-        object,
-        svg,
-        audio,
-        canvas,
-        embed,
-        iframe,
-        img,
-        object,
-        svg,
-        video {
-            display: inline-block;
-            vertical-align: middle
-        }
-
-        img,
-        video {
-            max-width: 100%;
-            height: auto
-        }
-
-        [hidden] {
-            display: none
-        }
-
-        *,
-        ::before,
-        ::after {
-            --tw-border-spacing-x: 0;
-            --tw-border-spacing-y: 0;
-            --tw-translate-x: 0;
-            --tw-translate-y: 0;
-            --tw-rotate: 0;
-            --tw-skew-x: 0;
-            --tw-skew-y: 0;
-            --tw-scale-x: 1;
-            --tw-scale-y: 1;
-            --tw-pan-x: ;
-            --tw-pan-y: ;
-            --tw-pinch-zoom: ;
-            --tw-scroll-snap-strictness: proximity;
-            --tw-gradient-from-position: ;
-            --tw-gradient-via-position: ;
-            --tw-gradient-to-position: ;
-            --tw-ordinal: ;
-            --tw-slashed-zero: ;
-            --tw-numeric-figure: ;
-            --tw-numeric-spacing: ;
-            --tw-numeric-fraction: ;
-            --tw-ring-inset: ;
-            --tw-ring-offset-width: 0px;
-            --tw-ring-offset-color: #fff;
-            --tw-ring-color: rgb(59 130 246 / 0.5);
-            --tw-ring-offset-shadow: 0 0 #0000;
-            --tw-ring-shadow: 0 0 #0000;
-            --tw-shadow: 0 0 #0000;
-            --tw-shadow-colored: 0 0 #0000;
-            --tw-blur: ;
-            --tw-brightness: ;
-            --tw-contrast: ;
-            --tw-grayscale: ;
-            --tw-hue-rotate: ;
-            --tw-invert: ;
-            --tw-saturate: ;
-            --tw-sepia: ;
-            --tw-drop-shadow: ;
-            --tw-backdrop-blur: ;
-            --tw-backdrop-brightness: ;
-            --tw-backdrop-contrast: ;
-            --tw-backdrop-grayscale: ;
-            --tw-backdrop-hue-rotate: ;
-            --tw-backdrop-invert: ;
-            --tw-backdrop-opacity: ;
-            --tw-backdrop-saturate: ;
-            --tw-backdrop-sepia:
-        }
-
-        ::backdrop {
-            --tw-border-spacing-x: 0;
-            --tw-border-spacing-y: 0;
-            --tw-translate-x: 0;
-            --tw-translate-y: 0;
-            --tw-rotate: 0;
-            --tw-skew-x: 0;
-            --tw-skew-y: 0;
-            --tw-scale-x: 1;
-            --tw-scale-y: 1;
-            --tw-pan-x: ;
-            --tw-pan-y: ;
-            --tw-pinch-zoom: ;
-            --tw-scroll-snap-strictness: proximity;
-            --tw-gradient-from-position: ;
-            --tw-gradient-via-position: ;
-            --tw-gradient-to-position: ;
-            --tw-ordinal: ;
-            --tw-slashed-zero: ;
-            --tw-numeric-figure: ;
-            --tw-numeric-spacing: ;
-            --tw-numeric-fraction: ;
-            --tw-ring-inset: ;
-            --tw-ring-offset-width: 0px;
-            --tw-ring-offset-color: #fff;
-            --tw-ring-color: rgb(59 130 246 / 0.5);
-            --tw-ring-offset-shadow: 0 0 #0000;
-            --tw-ring-shadow: 0 0 #0000;
-            --tw-shadow: 0 0 #0000;
-            --tw-shadow-colored: 0 0 #0000;
-            --tw-blur: ;
-            --tw-brightness: ;
-            --tw-contrast: ;
-            --tw-grayscale: ;
-            --tw-hue-rotate: ;
-            --tw-invert: ;
-            --tw-saturate: ;
-            --tw-sepia: ;
-            --tw-drop-shadow: ;
-            --tw-backdrop-blur: ;
-            --tw-backdrop-brightness: ;
-            --tw-backdrop-contrast: ;
-            --tw-backdrop-grayscale: ;
-            --tw-backdrop-hue-rotate: ;
-            --tw-backdrop-invert: ;
-            --tw-backdrop-opacity: ;
-            --tw-backdrop-saturate: ;
-            --tw-backdrop-sepia:
-        }
-
-        .absolute {
-            position: absolute
-        }
-
-        .relative {
-            position: relative
-        }
-
-        .-left-20 {
-            left: -5rem
-        }
-
-        .top-0 {
-            top: 0px
-        }
-
-        .-bottom-16 {
-            bottom: -4rem
-        }
-
-        .-left-16 {
-            left: -4rem
-        }
-
-        .-mx-3 {
-            margin-left: -0.75rem;
-            margin-right: -0.75rem
-        }
-
-        .mt-4 {
-            margin-top: 1rem
-        }
-
-        .mt-6 {
-            margin-top: 1.5rem
-        }
-
-        .flex {
-            display: flex
-        }
-
-        .grid {
-            display: grid
-        }
-
-        .hidden {
-            display: none
-        }
-
-        .aspect-video {
-            aspect-ratio: 16 / 9
-        }
-
-        .size-12 {
-            width: 3rem;
-            height: 3rem
-        }
-
-        .size-5 {
-            width: 1.25rem;
-            height: 1.25rem
-        }
-
-        .size-6 {
-            width: 1.5rem;
-            height: 1.5rem
-        }
-
-        .h-12 {
-            height: 3rem
-        }
-
-        .h-40 {
-            height: 10rem
-        }
-
-        .h-full {
-            height: 100%
-        }
-
-        .min-h-screen {
-            min-height: 100vh
-        }
-
-        .w-full {
-            width: 100%
-        }
-
-        .w-\[calc\(100\%\+8rem\)\] {
-            width: calc(100% + 8rem)
-        }
-
-        .w-auto {
-            width: auto
-        }
-
-        .max-w-\[877px\] {
-            max-width: 877px
-        }
-
-        .max-w-2xl {
-            max-width: 42rem
-        }
-
-        .flex-1 {
-            flex: 1 1 0%
-        }
-
-        .shrink-0 {
-            flex-shrink: 0
-        }
-
-        .grid-cols-2 {
-            grid-template-columns: repeat(2, minmax(0, 1fr))
-        }
-
-        .flex-col {
-            flex-direction: column
-        }
-
-        .items-start {
-            align-items: flex-start
-        }
-
-        .items-center {
-            align-items: center
-        }
-
-        .items-stretch {
-            align-items: stretch
-        }
-
-        .justify-end {
-            justify-content: flex-end
-        }
-
-        .justify-center {
-            justify-content: center
-        }
-
-        .gap-2 {
-            gap: 0.5rem
-        }
-
-        .gap-4 {
-            gap: 1rem
-        }
-
-        .gap-6 {
-            gap: 1.5rem
-        }
-
-        .self-center {
-            align-self: center
-        }
-
-        .overflow-hidden {
-            overflow: hidden
-        }
-
-        .rounded-\[10px\] {
-            border-radius: 10px
-        }
-
-        .rounded-full {
-            border-radius: 9999px
-        }
-
-        .rounded-lg {
-            border-radius: 0.5rem
-        }
-
-        .rounded-md {
-            border-radius: 0.375rem
-        }
-
-        .rounded-sm {
-            border-radius: 0.125rem
-        }
-
-        .bg-\[\#FF2D20\]\/10 {
-            background-color: rgb(255 45 32 / 0.1)
-        }
-
-        .bg-white {
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 255 255 / var(--tw-bg-opacity))
-        }
-
-        .bg-gradient-to-b {
-            background-image: linear-gradient(to bottom, var(--tw-gradient-stops))
-        }
-
-        .from-transparent {
-            --tw-gradient-from: transparent var(--tw-gradient-from-position);
-            --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
-            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to)
-        }
-
-        .via-white {
-            --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
-            --tw-gradient-stops: var(--tw-gradient-from), #fff var(--tw-gradient-via-position), var(--tw-gradient-to)
-        }
-
-        .to-white {
-            --tw-gradient-to: #fff var(--tw-gradient-to-position)
-        }
-
-        .stroke-\[\#FF2D20\] {
-            stroke: #FF2D20
-        }
-
-        .object-cover {
-            object-fit: cover
-        }
-
-        .object-top {
-            object-position: top
-        }
-
-        .p-6 {
-            padding: 1.5rem
-        }
-
-        .px-6 {
-            padding-left: 1.5rem;
-            padding-right: 1.5rem
-        }
-
-        .py-10 {
-            padding-top: 2.5rem;
-            padding-bottom: 2.5rem
-        }
-
-        .px-3 {
-            padding-left: 0.75rem;
-            padding-right: 0.75rem
-        }
-
-        .py-16 {
-            padding-top: 4rem;
-            padding-bottom: 4rem
-        }
-
-        .py-2 {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem
-        }
-
-        .pt-3 {
-            padding-top: 0.75rem
-        }
-
-        .text-center {
-            text-align: center
-        }
-
-        .font-sans {
-            font-family: Figtree, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji
-        }
-
-        .text-sm {
-            font-size: 0.875rem;
-            line-height: 1.25rem
-        }
-
-        .text-sm\/relaxed {
-            font-size: 0.875rem;
-            line-height: 1.625
-        }
-
-        .text-xl {
-            font-size: 1.25rem;
-            line-height: 1.75rem
-        }
-
-        .font-semibold {
-            font-weight: 600
-        }
-
-        .text-black {
-            --tw-text-opacity: 1;
-            color: rgb(0 0 0 / var(--tw-text-opacity))
-        }
-
-        .text-white {
-            --tw-text-opacity: 1;
-            color: rgb(255 255 255 / var(--tw-text-opacity))
-        }
-
-        .underline {
-            -webkit-text-decoration-line: underline;
-            text-decoration-line: underline
-        }
-
-        .antialiased {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale
-        }
-
-        .shadow-\[0px_14px_34px_0px_rgba\(0\2c 0\2c 0\2c 0\.08\)\] {
-            --tw-shadow: 0px 14px 34px 0px rgba(0, 0, 0, 0.08);
-            --tw-shadow-colored: 0px 14px 34px 0px var(--tw-shadow-color);
-            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)
-        }
-
-        .ring-1 {
-            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)
-        }
-
-        .ring-transparent {
-            --tw-ring-color: transparent
-        }
-
-        .ring-white\/\[0\.05\] {
-            --tw-ring-color: rgb(255 255 255 / 0.05)
-        }
-
-        .drop-shadow-\[0px_4px_34px_rgba\(0\2c 0\2c 0\2c 0\.06\)\] {
-            --tw-drop-shadow: drop-shadow(0px 4px 34px rgba(0, 0, 0, 0.06));
-            filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
-        }
-
-        .drop-shadow-\[0px_4px_34px_rgba\(0\2c 0\2c 0\2c 0\.25\)\] {
-            --tw-drop-shadow: drop-shadow(0px 4px 34px rgba(0, 0, 0, 0.25));
-            filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
-        }
-
-        .transition {
-            transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
-            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 150ms
-        }
-
-        .duration-300 {
-            transition-duration: 300ms
-        }
-
-        .selection\:bg-\[\#FF2D20\] *::selection {
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 45 32 / var(--tw-bg-opacity))
-        }
-
-        .selection\:text-white *::selection {
-            --tw-text-opacity: 1;
-            color: rgb(255 255 255 / var(--tw-text-opacity))
-        }
-
-        .selection\:bg-\[\#FF2D20\]::selection {
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 45 32 / var(--tw-bg-opacity))
-        }
-
-        .selection\:text-white::selection {
-            --tw-text-opacity: 1;
-            color: rgb(255 255 255 / var(--tw-text-opacity))
-        }
-
-        .hover\:text-black:hover {
-            --tw-text-opacity: 1;
-            color: rgb(0 0 0 / var(--tw-text-opacity))
-        }
-
-        .hover\:text-black\/70:hover {
-            color: rgb(0 0 0 / 0.7)
-        }
-
-        .hover\:ring-black\/20:hover {
-            --tw-ring-color: rgb(0 0 0 / 0.2)
-        }
-
-        .focus\:outline-none:focus {
-            outline: 2px solid transparent;
-            outline-offset: 2px
-        }
-
-        .focus-visible\:ring-1:focus-visible {
-            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)
-        }
-
-        .focus-visible\:ring-\[\#FF2D20\]:focus-visible {
-            --tw-ring-opacity: 1;
-            --tw-ring-color: rgb(255 45 32 / var(--tw-ring-opacity))
-        }
-
-        .title-main {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        @media (min-width: 640px) {
-            .sm\:size-16 {
-                width: 4rem;
-                height: 4rem
+        /* Hero Section Animations */
+        @keyframes blob {
+            0% {
+                transform: translate(0px, 0px) scale(1);
             }
-
-            .sm\:size-6 {
-                width: 1.5rem;
-                height: 1.5rem
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
             }
-
-            .sm\:pt-5 {
-                padding-top: 1.25rem
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+            100% {
+                transform: translate(0px, 0px) scale(1);
             }
         }
-
-        @media (min-width: 768px) {
-            .md\:row-span-3 {
-                grid-row: span 3 / span 3
-            }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+            animation-delay: 4s;
         }
 
-        @media (min-width: 1024px) {
-            .lg\:col-start-2 {
-                grid-column-start: 2
+        /* Dashboard Animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
             }
-
-            .lg\:h-16 {
-                height: 4rem
+            50% {
+                transform: translateY(-10px);
             }
-
-            .lg\:max-w-7xl {
-                max-width: 80rem
-            }
-
-            .lg\:grid-cols-3 {
-                grid-template-columns: repeat(3, minmax(0, 1fr))
-            }
-
-            .lg\:grid-cols-2 {
-                grid-template-columns: repeat(2, minmax(0, 1fr))
-            }
-
-            .lg\:flex-col {
-                flex-direction: column
-            }
-
-            .lg\:items-end {
-                align-items: flex-end
-            }
-
-            .lg\:justify-center {
-                justify-content: center
-            }
-
-            .lg\:gap-8 {
-                gap: 2rem
-            }
-
-            .lg\:p-10 {
-                padding: 2.5rem
-            }
-
-            .lg\:pb-10 {
-                padding-bottom: 2.5rem
-            }
-
-            .lg\:pt-0 {
-                padding-top: 0px
-            }
-
-            .lg\:text-\[\#FF2D20\] {
-                --tw-text-opacity: 1;
-                color: rgb(255 45 32 / var(--tw-text-opacity))
+            100% {
+                transform: translateY(0px);
             }
         }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
 
-        @media (prefers-color-scheme: dark) {
-            .dark\:block {
-                display: block
+        /* Gradient Animation */
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
             }
-
-            .dark\:hidden {
-                display: none
+            50% {
+                background-position: 100% 50%;
             }
-
-            .dark\:bg-black {
-                --tw-bg-opacity: 1;
-                background-color: rgb(0 0 0 / var(--tw-bg-opacity))
+            100% {
+                background-position: 0% 50%;
             }
-
-            .dark\:bg-zinc-900 {
-                --tw-bg-opacity: 1;
-                background-color: rgb(24 24 27 / var(--tw-bg-opacity))
-            }
-
-            .dark\:via-zinc-900 {
-                --tw-gradient-to: rgb(24 24 27 / 0) var(--tw-gradient-to-position);
-                --tw-gradient-stops: var(--tw-gradient-from), #18181b var(--tw-gradient-via-position), var(--tw-gradient-to)
-            }
-
-            .dark\:to-zinc-900 {
-                --tw-gradient-to: #18181b var(--tw-gradient-to-position)
-            }
-
-            .dark\:text-white\/50 {
-                color: rgb(255 255 255 / 0.5)
-            }
-
-            .dark\:text-white {
-                --tw-text-opacity: 1;
-                color: rgb(255 255 255 / var(--tw-text-opacity))
-            }
-
-            .dark\:text-white\/70 {
-                color: rgb(255 255 255 / 0.7)
-            }
-
-            .dark\:ring-zinc-800 {
-                --tw-ring-opacity: 1;
-                --tw-ring-color: rgb(39 39 42 / var(--tw-ring-opacity))
-            }
-
-            .dark\:hover\:text-white:hover {
-                --tw-text-opacity: 1;
-                color: rgb(255 255 255 / var(--tw-text-opacity))
-            }
-
-            .dark\:hover\:text-white\/70:hover {
-                color: rgb(255 255 255 / 0.7)
-            }
-
-            .dark\:hover\:text-white\/80:hover {
-                color: rgb(255 255 255 / 0.8)
-            }
-
-            .dark\:hover\:ring-zinc-700:hover {
-                --tw-ring-opacity: 1;
-                --tw-ring-color: rgb(63 63 70 / var(--tw-ring-opacity))
-            }
-
-            .dark\:focus-visible\:ring-\[\#FF2D20\]:focus-visible {
-                --tw-ring-opacity: 1;
-                --tw-ring-color: rgb(255 45 32 / var(--tw-ring-opacity))
-            }
-
-            .dark\:focus-visible\:ring-white:focus-visible {
-                --tw-ring-opacity: 1;
-                --tw-ring-color: rgb(255 255 255 / var(--tw-ring-opacity))
-            }
+        }
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
         }
     </style>
-    @endif
 </head>
 
-<body class="font-sans antialiased dark:bg-black dark:text-white/50">
-    <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-        <img id="background" class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" alt="Laravel background" />
-        <div class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
-            <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3" style="padding-bottom: 10px;">
-                    <div class="flex lg:justify-center lg:col-start-2">
-                        <img src="{{ asset('img/logo-modobom-resize-dark.png') }}" alt="Logo modobom">
+<body class="font-sans antialiased bg-white">
+    <!-- Header -->
+    <header x-data="{ mobileMenuOpen: false }"
+            class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-200"
+            @scroll.window="$el.classList.toggle('shadow-sm', window.scrollY > 0)">
+        <div class="relative">
+            <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="/" class="flex items-center space-x-2">
+                            <svg class="h-8 w-8 text-indigo-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="text-xl font-bold text-gray-900">Modobom</span>
+                        </a>
                     </div>
-                    @if (Route::has('login'))
-                    <nav class="-mx-3 flex flex-1 justify-end">
-                        @auth
-                        <a
-                            href="{{ route('dashboard') }}"
-                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                            Dashboard
-                        </a>
-                        @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                            Log in
-                        </a>
 
-                        @if (Route::has('register'))
-                        <a
-                            href="{{ route('register') }}"
-                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                            Register
-                        </a>
-                        @endif
-                        @endauth
-                    </nav>
-                    @endif
-                </header>
-
-                <main>
-                    <div style="text-align: center; margin-bottom: 20px;">
-                        <h1 class="text-4xl font-semibold text-black dark:text-white">Welcome to Modobom CMS</h1>
-                    </div>
-                    <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                        <a
-                            href="https://modobom.com/"
-                            id="docs-card"
-                            class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]">
-                            <div id="screenshot-container" class="relative flex w-full flex-1 items-stretch">
-                                <img
-                                    src="{{ asset('img/modobom-website.png') }}"
-                                    alt="Modobom website"
-                                    class="aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.06)] dark:hidden"
-                                    onerror="
-                                            document.getElementById('screenshot-container').classList.add('!hidden');
-                                            document.getElementById('docs-card').classList.add('!row-span-1');
-                                            document.getElementById('docs-card-content').classList.add('!flex-row');
-                                            document.getElementById('background').classList.add('!hidden');
-                                        " />
-                                <img
-                                    src="https://laravel.com/assets/img/welcome/docs-dark.svg"
-                                    alt="Laravel documentation screenshot"
-                                    class="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block" />
-                                <div
-                                    class="absolute -bottom-16 -left-16 h-40 w-[calc(100%+8rem)] bg-gradient-to-b from-transparent via-white to-white dark:via-zinc-900 dark:to-zinc-900"></div>
-                            </div>
-
-                            <div class="relative flex items-center gap-6 lg:items-end">
-                                <div id="docs-card-content" class="flex items-start gap-6 lg:flex-col">
-                                    <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                        <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path fill="#FF2D20" d="M23 4a1 1 0 0 0-1.447-.894L12.224 7.77a.5.5 0 0 1-.448 0L2.447 3.106A1 1 0 0 0 1 4v13.382a1.99 1.99 0 0 0 1.105 1.79l9.448 4.728c.14.065.293.1.447.1.154-.005.306-.04.447-.105l9.453-4.724a1.99 1.99 0 0 0 1.1-1.789V4ZM3 6.023a.25.25 0 0 1 .362-.223l7.5 3.75a.251.251 0 0 1 .138.223v11.2a.25.25 0 0 1-.362.224l-7.5-3.75a.25.25 0 0 1-.138-.22V6.023Zm18 11.2a.25.25 0 0 1-.138.224l-7.5 3.75a.249.249 0 0 1-.329-.099.249.249 0 0 1-.033-.12V9.772a.251.251 0 0 1 .138-.224l7.5-3.75a.25.25 0 0 1 .362.224v11.2Z" />
-                                            <path fill="#FF2D20" d="m3.55 1.893 8 4.048a1.008 1.008 0 0 0 .9 0l8-4.048a1 1 0 0 0-.9-1.785l-7.322 3.706a.506.506 0 0 1-.452 0L4.454.108a1 1 0 0 0-.9 1.785H3.55Z" />
-                                        </svg>
+                    <!-- Navigation Links - Desktop -->
+                    <div class="hidden lg:flex lg:items-center lg:space-x-8">
+                        <!-- Products Dropdown -->
+                        <div class="nav-item relative" x-data="{ open: false }">
+                            <button @mouseenter="open = true" @mouseleave="open = false"
+                                class="group inline-flex items-center text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
+                                {{ __('Sản phẩm') }}
+                                <svg class="ml-1.5 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div x-show="open" @mouseenter="open = true" @mouseleave="open = false"
+                                class="nav-dropdown absolute -ml-4 mt-0 w-screen max-w-md transform px-2 opacity-0 invisible transform-gpu"
+                                style="perspective: 2000px; transform: rotateX(-15deg);">
+                                <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
+                                    <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                                        <a href="#" class="flex items-start p-3 -m-3 rounded-lg hover:bg-gray-50 transition ease-in-out duration-150">
+                                            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-indigo-600 text-white sm:h-12 sm:w-12">
+                                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                                </svg>
+                                            </div>
+                                            <div class="ml-4">
+                                                <p class="text-base font-medium text-gray-900">{{ __('Tính năng') }}</p>
+                                                <p class="mt-1 text-sm text-gray-500">{{ __('Khám phá các tính năng mạnh mẽ của chúng tôi') }}</p>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="flex items-start p-3 -m-3 rounded-lg hover:bg-gray-50 transition ease-in-out duration-150">
+                                            <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-indigo-600 text-white sm:h-12 sm:w-12">
+                                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </div>
+                                            <div class="ml-4">
+                                                <p class="text-base font-medium text-gray-900">{{ __('Bảng giá') }}</p>
+                                                <p class="mt-1 text-sm text-gray-500">{{ __('Lựa chọn gói phù hợp với bạn') }}</p>
+                                            </div>
+                                        </a>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                    <div class="pt-3 sm:pt-5 lg:pt-0">
-                                        <h2 class="text-xl font-semibold text-black dark:text-white">WHY CHOOSE MODOBOM?</h2>
+                        <a href="#" class="relative nav-link-active text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
+                            {{ __('Giải pháp') }}
+                        </a>
+                        <a href="#" class="relative nav-link-active text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
+                            {{ __('Nhà phát triển') }}
+                        </a>
+                        <a href="#" class="relative nav-link-active text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
+                            {{ __('Công ty') }}
+                        </a>
+                    </div>
 
-                                        <p class="mt-4 text-sm/relaxed">
-                                            A performance marketing approach that offers a risk-free environment to drive e-commerce conversions by rewarding affiliates only after a mobile conversion has taken place such as an app download, a purchase, a registration or another defined action. We can help you propel more profitable sales and leads through our end-to-end affiliate performance marketing solution, so you only pay for results.
-                                        </p>
+                    <!-- Right Navigation -->
+                    <div class="hidden lg:flex lg:items-center lg:space-x-6">
+                        <a href="{{ route('login') }}" class="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
+                            {{ __('Đăng nhập') }}
+                        </a>
+                        <a href="#" class="group inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow">
+                            {{ __('Dùng thử miễn phí') }}
+                            <svg class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <div class="flex items-center lg:hidden">
+                        <button type="button" @click="mobileMenuOpen = !mobileMenuOpen"
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 transition-colors"
+                            :aria-expanded="mobileMenuOpen">
+                            <span class="sr-only">Open main menu</span>
+                            <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <svg x-show="mobileMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Mobile menu -->
+            <div x-show="mobileMenuOpen"
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 -translate-y-1"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-150"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 -translate-y-1"
+                class="lg:hidden absolute inset-x-0 transform shadow-lg bg-white border-b border-gray-200">
+                <div class="pt-2 pb-3 space-y-1">
+                    <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50">{{ __('Sản phẩm') }}</a>
+                    <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50">{{ __('Giải pháp') }}</a>
+                    <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50">{{ __('Nhà phát triển') }}</a>
+                    <a href="#" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50">{{ __('Công ty') }}</a>
+                </div>
+                <div class="pt-4 pb-3 border-t border-gray-200">
+                    <div class="space-y-1">
+                        <a href="{{ route('login') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50">{{ __('Đăng nhập') }}</a>
+                        <a href="#" class="block px-4 py-2 text-base font-medium text-indigo-600 hover:text-indigo-700 hover:bg-gray-50">{{ __('Dùng thử miễn phí') }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative">
+        <!-- Hero Section -->
+        <div class="relative overflow-hidden">
+            <!-- Background Pattern -->
+            <div class="absolute inset-0">
+                <div class="absolute inset-0 bg-gradient-to-r from-indigo-50 via-white to-white"></div>
+                <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
+            </div>
+
+            <!-- Floating Elements -->
+            <div class="absolute top-0 left-0 -translate-x-40 -translate-y-40">
+                <div class="w-[500px] h-[500px] rounded-full bg-gradient-to-br from-indigo-200/40 to-purple-200/40 blur-3xl"></div>
+            </div>
+            <div class="absolute bottom-0 right-0 translate-x-32 translate-y-32">
+                <div class="w-[500px] h-[500px] rounded-full bg-gradient-to-br from-indigo-200/40 to-purple-200/40 blur-3xl"></div>
+            </div>
+
+            <!-- Main Hero Content -->
+            <div class="relative">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+                    <!-- Announcement Banner -->
+                    <div class="text-center mb-8">
+                        <a href="#" class="inline-flex items-center gap-x-2 bg-gray-900/5 px-3 py-1 rounded-full text-sm text-gray-900 ring-1 ring-gray-900/10 hover:ring-gray-900/20 transition duration-150 ease-in-out group">
+                            <span class="font-medium">{{ __('Ra mắt tính năng mới') }}</span>
+                            <span class="bg-indigo-500 rounded-full px-2 py-0.5 text-xs text-white font-semibold">{{ __('Mới') }}</span>
+                            <svg class="h-4 w-4 text-gray-600 group-hover:text-gray-900" viewBox="0 0 16 16" fill="none">
+                                <path d="M6.75 3.25L10.75 8L6.75 12.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Hero Header -->
+                    <div class="text-center max-w-4xl mx-auto">
+                        <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
+                            <span class="inline-block">{{ __('Nền tảng') }}</span>
+                            <span class="inline-block text-indigo-600">{{ __('quản lý nhân sự') }}</span>
+                            <span class="inline-block">{{ __('thông minh') }}</span>
+                        </h1>
+                        <p class="mt-6 text-lg leading-8 text-gray-600 max-w-2xl mx-auto">
+                            {{ __('Giải pháp HR toàn diện giúp doanh nghiệp tự động hóa quy trình, tối ưu hiệu suất và phát triển đội ngũ. Tất cả trong một nền tảng duy nhất.') }}
+                        </p>
+                        <div class="mt-10 flex items-center justify-center gap-x-6">
+                            <a href="#" class="rounded-full px-8 py-4 text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
+                                {{ __('Bắt đầu miễn phí') }}
+                            </a>
+                            <a href="#" class="flex items-center text-base font-semibold text-gray-900 hover:text-indigo-600 transition-colors duration-200">
+                                {{ __('Xem demo') }}
+                                <svg class="ml-2 w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Preview -->
+                    <div class="mt-16 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-full h-72 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-20 blur-3xl"></div>
+                        </div>
+
+                        <div class="relative mx-auto max-w-5xl">
+                            <!-- Browser Window Frame -->
+                            <div class="rounded-2xl shadow-2xl ring-1 ring-gray-900/10 overflow-hidden backdrop-blur-sm">
+                                <!-- Browser Header -->
+                                <div class="bg-gradient-to-r from-gray-900 to-gray-800 px-6 py-4">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                        <div class="ml-4 flex-1 flex justify-center">
+                                            <div class="flex items-center space-x-2 px-3 py-1 bg-gray-700/50 rounded-lg">
+                                                <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                </svg>
+                                                <span class="text-sm text-gray-300">hr.modobom.com</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <svg class="size-6 shrink-0 stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                                </svg>
-                            </div>
-                        </a>
+                                <!-- Dashboard Content -->
+                                <div class="bg-white">
+                                    <div class="grid grid-cols-12 gap-6 p-6">
+                                        <!-- Sidebar -->
+                                        <div class="col-span-3 bg-gray-50 rounded-xl p-4">
+                                            <div class="space-y-4">
+                                                <div class="p-2 bg-white rounded-lg shadow-sm">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                                                            <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                                            </svg>
+                                                        </div>
+                                                        <span class="text-sm font-medium text-gray-900">{{ __('Tổng quan') }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="p-2 hover:bg-white rounded-lg transition-colors">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                                                            <svg class="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                            </svg>
+                                                        </div>
+                                                        <span class="text-sm font-medium text-gray-600">{{ __('Nhân viên') }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                        <div class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]">
-                            <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <g fill="#FF2D20">
-                                        <path
-                                            d="M16.597 12.635a.247.247 0 0 0-.08-.237 2.234 2.234 0 0 1-.769-1.68c.001-.195.03-.39.084-.578a.25.25 0 0 0-.09-.267 8.8 8.8 0 0 0-4.826-1.66.25.25 0 0 0-.268.181 2.5 2.5 0 0 1-2.4 1.824.045.045 0 0 0-.045.037 12.255 12.255 0 0 0-.093 3.86.251.251 0 0 0 .208.214c2.22.366 4.367 1.08 6.362 2.118a.252.252 0 0 0 .32-.079 10.09 10.09 0 0 0 1.597-3.733ZM13.616 17.968a.25.25 0 0 0-.063-.407A19.697 19.697 0 0 0 8.91 15.98a.25.25 0 0 0-.287.325c.151.455.334.898.548 1.328.437.827.981 1.594 1.619 2.28a.249.249 0 0 0 .32.044 29.13 29.13 0 0 0 2.506-1.99ZM6.303 14.105a.25.25 0 0 0 .265-.274 13.048 13.048 0 0 1 .205-4.045.062.062 0 0 0-.022-.07 2.5 2.5 0 0 1-.777-.982.25.25 0 0 0-.271-.149 11 11 0 0 0-5.6 2.815.255.255 0 0 0-.075.163c-.008.135-.02.27-.02.406.002.8.084 1.598.246 2.381a.25.25 0 0 0 .303.193 19.924 19.924 0 0 1 5.746-.438ZM9.228 20.914a.25.25 0 0 0 .1-.393 11.53 11.53 0 0 1-1.5-2.22 12.238 12.238 0 0 1-.91-2.465.248.248 0 0 0-.22-.187 18.876 18.876 0 0 0-5.69.33.249.249 0 0 0-.179.336c.838 2.142 2.272 4 4.132 5.353a.254.254 0 0 0 .15.048c1.41-.01 2.807-.282 4.117-.802ZM18.93 12.957l-.005-.008a.25.25 0 0 0-.268-.082 2.21 2.21 0 0 1-.41.081.25.25 0 0 0-.217.2c-.582 2.66-2.127 5.35-5.75 7.843a.248.248 0 0 0-.09.299.25.25 0 0 0 .065.091 28.703 28.703 0 0 0 2.662 2.12.246.246 0 0 0 .209.037c2.579-.701 4.85-2.242 6.456-4.378a.25.25 0 0 0 .048-.189 13.51 13.51 0 0 0-2.7-6.014ZM5.702 7.058a.254.254 0 0 0 .2-.165A2.488 2.488 0 0 1 7.98 5.245a.093.093 0 0 0 .078-.062 19.734 19.734 0 0 1 3.055-4.74.25.25 0 0 0-.21-.41 12.009 12.009 0 0 0-10.4 8.558.25.25 0 0 0 .373.281 12.912 12.912 0 0 1 4.826-1.814ZM10.773 22.052a.25.25 0 0 0-.28-.046c-.758.356-1.55.635-2.365.833a.25.25 0 0 0-.022.48c1.252.43 2.568.65 3.893.65.1 0 .2 0 .3-.008a.25.25 0 0 0 .147-.444c-.526-.424-1.1-.917-1.673-1.465ZM18.744 8.436a.249.249 0 0 0 .15.228 2.246 2.246 0 0 1 1.352 2.054c0 .337-.08.67-.23.972a.25.25 0 0 0 .042.28l.007.009a15.016 15.016 0 0 1 2.52 4.6.25.25 0 0 0 .37.132.25.25 0 0 0 .096-.114c.623-1.464.944-3.039.945-4.63a12.005 12.005 0 0 0-5.78-10.258.25.25 0 0 0-.373.274c.547 2.109.85 4.274.901 6.453ZM9.61 5.38a.25.25 0 0 0 .08.31c.34.24.616.561.8.935a.25.25 0 0 0 .3.127.631.631 0 0 1 .206-.034c2.054.078 4.036.772 5.69 1.991a.251.251 0 0 0 .267.024c.046-.024.093-.047.141-.067a.25.25 0 0 0 .151-.23A29.98 29.98 0 0 0 15.957.764a.25.25 0 0 0-.16-.164 11.924 11.924 0 0 0-2.21-.518.252.252 0 0 0-.215.076A22.456 22.456 0 0 0 9.61 5.38Z" />
-                                    </g>
-                                </svg>
-                            </div>
+                                        <!-- Main Content -->
+                                        <div class="col-span-9 space-y-6">
+                                            <!-- Stats Row -->
+                                            <div class="grid grid-cols-3 gap-6">
+                                                <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6">
+                                                    <div class="text-sm font-medium text-indigo-600">{{ __('Tổng nhân viên') }}</div>
+                                                    <div class="mt-2 flex items-baseline">
+                                                        <span class="text-3xl font-bold text-gray-900">2,420</span>
+                                                        <span class="ml-2 text-sm text-green-500">+12</span>
+                                                    </div>
+                                                </div>
+                                                <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6">
+                                                    <div class="text-sm font-medium text-green-600">{{ __('Tỷ lệ hài lòng') }}</div>
+                                                    <div class="mt-2 flex items-baseline">
+                                                        <span class="text-3xl font-bold text-gray-900">95.8%</span>
+                                                        <span class="ml-2 text-sm text-green-500">+2.4%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6">
+                                                    <div class="text-sm font-medium text-purple-600">{{ __('Hiệu suất') }}</div>
+                                                    <div class="mt-2 flex items-baseline">
+                                                        <span class="text-3xl font-bold text-gray-900">94.2%</span>
+                                                        <span class="ml-2 text-sm text-green-500">+1.2%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                            <div class="pt-3 sm:pt-5">
-                                <h2 class="text-xl font-semibold text-black dark:text-white">SIMPLICITY</h2>
-
-                                <p class="mt-4 text-sm/relaxed">
-                                    The operators already have a billing relationship with the consumers; the payment will be added to their bill. The consumer does not need to register or provide any personal information. The consumer does not need to have a credit card or bank account.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]">
-                            <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                <x-icons.seo class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
-                            </div>
-
-                            <div class="pt-3 sm:pt-5">
-                                <h2 class="text-xl font-semibold text-black dark:text-white">SEO Optimized</h2>
-
-                                <p class="mt-4 text-sm/relaxed">
-                                    In today’s highly competitive digital landscape, having a robust online presence is crucial for businesses to thrive. At Modobom, we specialize in providing top-notch SEO-optimized services tailored for foreign companies operating in Vietnam. Our goal is to enhance your visibility on search engines, drive organic traffic, and ultimately, boost your business growth.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]">
-                            <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                <x-icons.code class="flex-shrink-0 w-6 h-6" aria-hidden="true" />
-                            </div>
-
-                            <div class="pt-3 sm:pt-5">
-                                <h2 class="text-xl font-semibold text-black dark:text-white">Quality Code</h2>
-
-                                <p class="mt-4 text-sm/relaxed">
-                                    Quality is not an Act – It’s a habit. We have a preeminent technical team to provide standard codes. We are committed to delivering the best quality services to our clients. We are always ready to provide the best services to our clients. We are always ready to provide the best services to our clients.
-                                </p>
+                                            <!-- Chart -->
+                                            <div class="bg-white rounded-xl border border-gray-200 p-6">
+                                                <div class="flex items-center justify-between mb-4">
+                                                    <h3 class="text-base font-semibold text-gray-900">{{ __('Hoạt động tuyển dụng') }}</h3>
+                                                    <div class="flex items-center space-x-2">
+                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                            +18.2%
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="h-48">
+                                                    <div class="h-full w-full flex items-end space-x-2">
+                                                        <div class="w-1/12 bg-indigo-900/10 rounded-t" style="height: 45%"></div>
+                                                        <div class="w-1/12 bg-indigo-900/20 rounded-t" style="height: 65%"></div>
+                                                        <div class="w-1/12 bg-indigo-900/30 rounded-t" style="height: 85%"></div>
+                                                        <div class="w-1/12 bg-indigo-900/40 rounded-t" style="height: 75%"></div>
+                                                        <div class="w-1/12 bg-indigo-900/50 rounded-t" style="height: 90%"></div>
+                                                        <div class="w-1/12 bg-indigo-900/60 rounded-t" style="height: 100%"></div>
+                                                        <div class="w-1/12 bg-indigo-900/70 rounded-t" style="height: 95%"></div>
+                                                        <div class="w-1/12 bg-indigo-900/80 rounded-t" style="height: 85%"></div>
+                                                        <div class="w-1/12 bg-indigo-900/90 rounded-t" style="height: 75%"></div>
+                                                        <div class="w-1/12 bg-indigo-900 rounded-t" style="height: 90%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </main>
 
-                <x-footer />
+                    <!-- Trust Badges -->
+                    <div class="mt-24">
+                        <p class="text-center text-sm font-semibold text-gray-500 mb-8">{{ __('ĐƯỢC TIN DÙNG BỞI CÁC DOANH NGHIỆP HÀNG ĐẦU') }}</p>
+                        <div class="mx-auto grid grid-cols-4 items-center justify-items-center gap-x-8 gap-y-10 opacity-60 grayscale">
+                            <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/tuple-logo-gray-900.svg" alt="Tuple">
+                            <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/reform-logo-gray-900.svg" alt="Reform">
+                            <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/savvycal-logo-gray-900.svg" alt="SavvyCal">
+                            <img class="max-h-12 w-full object-contain" src="https://tailwindui.com/img/logos/laravel-logo-gray-900.svg" alt="Laravel">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+
+        <!-- Features Section -->
+        <section class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                        {{ __('Tính năng nổi bật') }}
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                        {{ __('Giải pháp toàn diện cho mọi nhu cầu quản lý nhân sự của doanh nghiệp bạn') }}
+                    </p>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature Card 1 -->
+                    <div class="relative group">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-600 to-indigo-500 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-200"></div>
+                        <div class="relative p-8 bg-white rounded-2xl border border-gray-200">
+                            <div class="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center mb-6">
+                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Quản lý nhân viên') }}</h3>
+                            <p class="text-gray-600">{{ __('Quản lý thông tin nhân viên, hợp đồng, và tài liệu một cách hiệu quả với giao diện trực quan.') }}</p>
+                            <a href="#" class="mt-6 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                {{ __('Tìm hiểu thêm') }}
+                                <svg class="ml-2 w-4 h-4" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6.75 3.25L10.75 8L6.75 12.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Feature Card 2 -->
+                    <div class="relative group">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-600 to-indigo-500 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-200"></div>
+                        <div class="relative p-8 bg-white rounded-2xl border border-gray-200">
+                            <div class="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center mb-6">
+                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Tuyển dụng thông minh') }}</h3>
+                            <p class="text-gray-600">{{ __('Tự động hóa quy trình tuyển dụng với AI, từ đăng tuyển đến sàng lọc và phỏng vấn.') }}</p>
+                            <a href="#" class="mt-6 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                {{ __('Tìm hiểu thêm') }}
+                                <svg class="ml-2 w-4 h-4" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6.75 3.25L10.75 8L6.75 12.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Feature Card 3 -->
+                    <div class="relative group">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-600 to-indigo-500 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-200"></div>
+                        <div class="relative p-8 bg-white rounded-2xl border border-gray-200">
+                            <div class="w-12 h-12 bg-indigo-500 rounded-lg flex items-center justify-center mb-6">
+                                <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Báo cáo & Phân tích') }}</h3>
+                            <p class="text-gray-600">{{ __('Theo dõi và phân tích dữ liệu nhân sự với biểu đồ trực quan và báo cáo chi tiết.') }}</p>
+                            <a href="#" class="mt-6 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                {{ __('Tìm hiểu thêm') }}
+                                <svg class="ml-2 w-4 h-4" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6.75 3.25L10.75 8L6.75 12.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="py-24 bg-gradient-to-b from-gray-50 to-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-indigo-600">5K+</div>
+                        <div class="mt-2 text-base text-gray-600">{{ __('Doanh nghiệp tin dùng') }}</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-indigo-600">98%</div>
+                        <div class="mt-2 text-base text-gray-600">{{ __('Khách hàng hài lòng') }}</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-indigo-600">24/7</div>
+                        <div class="mt-2 text-base text-gray-600">{{ __('Hỗ trợ khách hàng') }}</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-indigo-600">50+</div>
+                        <div class="mt-2 text-base text-gray-600">{{ __('Tính năng tích hợp') }}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                        {{ __('Khách hàng nói gì về chúng tôi') }}
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                        {{ __('Khám phá trải nghiệm thực tế từ các doanh nghiệp đang sử dụng giải pháp của chúng tôi') }}
+                    </p>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Testimonial 1 -->
+                    <div class="bg-gray-50 rounded-2xl p-8">
+                        <div class="flex items-center mb-6">
+                            <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                            <div class="ml-4">
+                                <div class="text-base font-semibold text-gray-900">Sarah Thompson</div>
+                                <div class="text-sm text-gray-600">HR Director, Tech Corp</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">{{ __('Giải pháp HR của Modobom đã giúp chúng tôi tự động hóa 80% quy trình tuyển dụng và tiết kiệm hơn 30 giờ làm việc mỗi tuần.') }}</p>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="bg-gray-50 rounded-2xl p-8">
+                        <div class="flex items-center mb-6">
+                            <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                            <div class="ml-4">
+                                <div class="text-base font-semibold text-gray-900">Michael Chen</div>
+                                <div class="text-sm text-gray-600">CEO, Growth Startup</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">{{ __('Hệ thống phân tích dữ liệu nhân sự giúp chúng tôi đưa ra quyết định chính xác và nhanh chóng hơn trong việc phát triển đội ngũ.') }}</p>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="bg-gray-50 rounded-2xl p-8">
+                        <div class="flex items-center mb-6">
+                            <img class="h-12 w-12 rounded-full" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                            <div class="ml-4">
+                                <div class="text-base font-semibold text-gray-900">David Kim</div>
+                                <div class="text-sm text-gray-600">COO, Enterprise Solutions</div>
+                            </div>
+                        </div>
+                        <p class="text-gray-600">{{ __('Giao diện trực quan và dễ sử dụng giúp team HR của chúng tôi thích nghi nhanh chóng và làm việc hiệu quả hơn.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="py-24 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                        {{ __('Bảng giá đơn giản và minh bạch') }}
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                        {{ __('Lựa chọn gói dịch vụ phù hợp với quy mô và nhu cầu của doanh nghiệp bạn') }}
+                    </p>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Starter Plan -->
+                    <div class="relative rounded-2xl bg-white shadow-sm">
+                        <div class="p-8">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ __('Gói Khởi Đầu') }}</h3>
+                            <p class="mt-2 text-sm text-gray-600">{{ __('Dành cho doanh nghiệp nhỏ') }}</p>
+                            <p class="mt-4">
+                                <span class="text-4xl font-bold text-gray-900">$29</span>
+                                <span class="text-base text-gray-600">/tháng</span>
+                            </p>
+                            <ul class="mt-8 space-y-4">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="ml-3 text-gray-600">{{ __('Tối đa 10 nhân viên') }}</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="ml-3 text-gray-600">{{ __('Quản lý cơ bản') }}</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="ml-3 text-gray-600">{{ __('Hỗ trợ email') }}</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="mt-8 block w-full py-3 px-4 rounded-lg text-center text-sm font-semibold text-indigo-600 border border-indigo-600 hover:bg-indigo-50 transition-colors">
+                                {{ __('Bắt đầu dùng thử') }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Professional Plan -->
+                    <div class="relative rounded-2xl bg-white shadow-xl border-2 border-indigo-600">
+                        <div class="absolute -top-5 left-0 right-0 flex justify-center">
+                            <span class="inline-flex items-center px-4 py-1 rounded-full text-sm font-semibold bg-indigo-600 text-white">
+                                {{ __('Phổ biến nhất') }}
+                            </span>
+                        </div>
+                        <div class="p-8">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ __('Gói Chuyên Nghiệp') }}</h3>
+                            <p class="mt-2 text-sm text-gray-600">{{ __('Dành cho doanh nghiệp vừa') }}</p>
+                            <p class="mt-4">
+                                <span class="text-4xl font-bold text-gray-900">$99</span>
+                                <span class="text-base text-gray-600">/tháng</span>
+                            </p>
+                            <ul class="mt-8 space-y-4">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="ml-3 text-gray-600">{{ __('Tối đa 50 nhân viên') }}</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="ml-3 text-gray-600">{{ __('Tất cả tính năng quản lý') }}</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="ml-3 text-gray-600">{{ __('Hỗ trợ 24/7') }}</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="mt-8 block w-full py-3 px-4 rounded-lg text-center text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+                                {{ __('Bắt đầu dùng thử') }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Enterprise Plan -->
+                    <div class="relative rounded-2xl bg-white shadow-sm">
+                        <div class="p-8">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ __('Gói Doanh Nghiệp') }}</h3>
+                            <p class="mt-2 text-sm text-gray-600">{{ __('Dành cho doanh nghiệp lớn') }}</p>
+                            <p class="mt-4">
+                                <span class="text-4xl font-bold text-gray-900">$299</span>
+                                <span class="text-base text-gray-600">/tháng</span>
+                            </p>
+                            <ul class="mt-8 space-y-4">
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="ml-3 text-gray-600">{{ __('Không giới hạn nhân viên') }}</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="ml-3 text-gray-600">{{ __('Tùy chỉnh theo yêu cầu') }}</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span class="ml-3 text-gray-600">{{ __('Hỗ trợ ưu tiên 24/7') }}</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="mt-8 block w-full py-3 px-4 rounded-lg text-center text-sm font-semibold text-indigo-600 border border-indigo-600 hover:bg-indigo-50 transition-colors">
+                                {{ __('Liên hệ với chúng tôi') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="relative rounded-2xl overflow-hidden">
+                    <!-- Background -->
+                    <div class="absolute inset-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-indigo-900 mix-blend-multiply"></div>
+                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2830&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply" alt="Team working">
+                    </div>
+
+                    <!-- Content -->
+                    <div class="relative py-16 px-8 sm:px-16 lg:py-24 lg:px-24">
+                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                            {{ __('Sẵn sàng nâng cao hiệu quả quản lý nhân sự?') }}
+                        </h2>
+                        <p class="mt-4 text-lg text-indigo-100 max-w-2xl">
+                            {{ __('Bắt đầu dùng thử miễn phí 14 ngày và khám phá cách Modobom có thể giúp doanh nghiệp của bạn phát triển.') }}
+                        </p>
+                        <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                            <a href="#" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-indigo-700 bg-white hover:bg-indigo-50 transition-colors">
+                                {{ __('Bắt đầu dùng thử') }}
+                            </a>
+                            <a href="#" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-indigo-900 bg-opacity-25 hover:bg-opacity-30 transition-colors">
+                                {{ __('Tìm hiểu thêm') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <!-- Company Info -->
+                <div class="col-span-1 md:col-span-2">
+                    <a href="/" class="text-xl font-bold text-white">
+                        Modobom
+                    </a>
+                    <p class="mt-4 text-gray-400 text-sm">
+                        {{ __('Giải pháp quản lý doanh nghiệp toàn diện, giúp doanh nghiệp của bạn phát triển nhanh chóng và hiệu quả.') }}
+                    </p>
+                </div>
+
+                <!-- Product Links -->
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">{{ __('Sản phẩm') }}</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">{{ __('Tính năng') }}</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">{{ __('Bảng giá') }}</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">{{ __('Khách hàng') }}</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company Links -->
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">{{ __('Công ty') }}</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">{{ __('Về chúng tôi') }}</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">{{ __('Tuyển dụng') }}</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">{{ __('Blog') }}</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support Links -->
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">{{ __('Hỗ trợ') }}</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">{{ __('Trung tâm hỗ trợ') }}</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">{{ __('Liên hệ') }}</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white text-sm transition-colors">{{ __('Tài liệu API') }}</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div class="mt-12 pt-8 border-t border-gray-800">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-gray-300 text-sm">{{ __('Điều khoản') }}</a>
+                        <a href="#" class="text-gray-400 hover:text-gray-300 text-sm">{{ __('Chính sách bảo mật') }}</a>
+                        <a href="#" class="text-gray-400 hover:text-gray-300 text-sm">{{ __('Cookie') }}</a>
+                    </div>
+                    <div class="mt-4 md:mt-0">
+                        <p class="text-gray-400 text-sm">&copy; {{ date('Y') }} Modobom. {{ __('Đã đăng ký bản quyền.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.querySelector('#mobile-menu');
+
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        });
+    </script>
+
+    @livewireScripts
 </body>
 
 </html>
+
