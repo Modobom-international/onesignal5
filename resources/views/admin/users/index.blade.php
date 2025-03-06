@@ -36,7 +36,7 @@
                         </div>
                         <input type="text" name="search" value="{{ request('search') }}"
                             class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            placeholder="{{ __('Search users...') }}">
+                            placeholder="{{ __('Tìm kiếm nhân viên...') }}">
                     </div>
                 </div>
             </form>
@@ -65,6 +65,7 @@
                             <div class="ml-4">
                                 {{ $user->name }}
                             </div>
+
                         </div>
                     </x-table.cell>
                     <x-table.cell>{{ $user->email }}</x-table.cell>
