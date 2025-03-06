@@ -3,12 +3,12 @@
 <div class="relative" x-data="{ unreadCount: {{ count($notificationSystem->where('status_read', 0)) }}, notificationOpen: false, selected: 'unread' }"
     @click.outside="if (!$event.target.closest('.notification-dropdown')) notificationOpen = false">
     <x-button type="button"
-        class="h-8 w-8 justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors duration-200"
-        icon-only variant="secondary" @click="notificationOpen = !notificationOpen">
-        <x-icons.bell class="w-4 h-4 text-slate-600 dark:text-slate-400" aria-hidden="true" />
+        class="h-8 w-8 justify-center hover:bg-slate-100 dark:hover:bg-[#161b22] transition-colors duration-200"
+        icon-only variant="ghost" @click="notificationOpen = !notificationOpen">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
         <!-- Notification Badge -->
         <div x-show="unreadCount > 0" class="absolute -top-0.5 -right-0.5 flex items-center justify-center">
-            <span class="flex h-2 w-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
+            <span class="flex h-2 w-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-[#0d1117]"></span>
         </div>
     </x-button>
 
@@ -23,33 +23,32 @@
             <div class="px-4 py-3">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-base font-semibold text-gray-900 dark:text-[#c9d1d9]">{{ __('Thông báo') }}</h3>
-
                 </div>
 
                 <!-- Minimal Tab Design -->
-                <div class="flex p-1 bg-gray-100 dark:bg-gray-800/50 rounded-lg">
+                <div class="flex p-1 bg-gray-100 dark:bg-[#0d1117] rounded-lg">
                     <button @click.stop="selected = 'unread'"
                         :class="{
-                            'bg-white dark:bg-gray-700 shadow-sm': selected === 'unread',
-                            'hover:bg-gray-50 dark:hover:bg-gray-700/50': selected !== 'unread'
+                            'bg-white dark:bg-[#161b22] shadow-sm': selected === 'unread',
+                            'hover:bg-gray-50 dark:hover:bg-[#1f242c]': selected !== 'unread'
                         }"
                         class="flex-1 text-sm py-1.5 px-4 rounded-md transition-all duration-200" role="tab">
                         <span
                             :class="{
-                                'text-gray-900 dark:text-white font-medium': selected === 'unread',
-                                'text-gray-600 dark:text-gray-400': selected !== 'unread'
+                                'text-gray-900 dark:text-[#c9d1d9] font-medium': selected === 'unread',
+                                'text-gray-600 dark:text-[#8b949e]': selected !== 'unread'
                             }">{{ __('Chưa đọc') }}</span>
                     </button>
                     <button @click.stop="selected = 'all'"
                         :class="{
-                            'bg-white dark:bg-gray-700 shadow-sm': selected === 'all',
-                            'hover:bg-gray-50 dark:hover:bg-gray-700/50': selected !== 'all'
+                            'bg-white dark:bg-[#161b22] shadow-sm': selected === 'all',
+                            'hover:bg-gray-50 dark:hover:bg-[#1f242c]': selected !== 'all'
                         }"
                         class="flex-1 text-sm py-1.5 px-4 rounded-md transition-all duration-200" role="tab">
                         <span
                             :class="{
-                                'text-gray-900 dark:text-white font-medium': selected === 'all',
-                                'text-gray-600 dark:text-gray-400': selected !== 'all'
+                                'text-gray-900 dark:text-[#c9d1d9] font-medium': selected === 'all',
+                                'text-gray-600 dark:text-[#8b949e]': selected !== 'all'
                             }">{{ __('Tất cả') }}</span>
                     </button>
                 </div>
@@ -59,7 +58,7 @@
             <div class="overflow-y-auto" style="max-height: calc(100vh - 200px)">
                 <div class="divide-y divide-gray-100 dark:divide-[#30363d]">
                     @forelse ($notificationSystem as $notification)
-                        <div class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#1f2428] cursor-pointer {{ $notification->status_read == 0 ? 'bg-gray-50 dark:bg-[#1c2128]' : '' }}"
+                        <div class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#1f242c] cursor-pointer {{ $notification->status_read == 0 ? 'bg-gray-50 dark:bg-[#161b22]' : '' }}"
                             x-show="selected === 'all' || (selected === 'unread' && {{ $notification->status_read }} === 0)"
                             data-notification data-read="{{ $notification->status_read === 1 ? 'true' : 'false' }}">
                             <div class="flex items-start justify-between gap-4">
@@ -82,8 +81,8 @@
                         </div>
                     @empty
                         <div class="px-4 py-16 text-center">
-                            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">{{ __('Bạn đã cập nhật tất cả') }}</h3>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('Không có thông báo mới vào lúc này') }}</p>
+                            <h3 class="text-base font-medium text-gray-900 dark:text-[#c9d1d9] mb-1">{{ __('Bạn đã cập nhật tất cả') }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-[#8b949e]">{{ __('Không có thông báo mới vào lúc này') }}</p>
                         </div>
                     @endforelse
                 </div>

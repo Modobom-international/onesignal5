@@ -120,11 +120,10 @@ class AdminController extends Controller
         return response()->json(['message' => 'Successful!']);
     }
 
-    public function setLocale(Request $request)
+    public function setLocale($locale)
     {
-        $locale = $request->input('locale');
         if (in_array($locale, array_keys(Language::LIST_LANGUAGE))) {
-            $request->session()->put('locale', $locale);
+            session()->put('locale', $locale);
         }
 
         return redirect()->back();
