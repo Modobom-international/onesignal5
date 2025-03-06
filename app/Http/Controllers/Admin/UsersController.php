@@ -37,8 +37,16 @@ class UsersController extends Controller
     public function create()
     {
         $teams = $this->teamRepository->getTeams();
+        $getPermission = $this->permissionRepository->getPermissions();
+        $permissions = [];
+        foreach ($getPermission as $permission) {
+            $explode = explode('/', $permission->prefix);
+            $prefix = $explode[1];
 
-        return view('admin.users.create', compact('teams'));
+            $permissions[$prefix][] = $permission;
+        }
+
+        return view('admin.users.create', compact('teams', 'permissions'));
     }
 
     public function store(Request $request)

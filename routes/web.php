@@ -21,7 +21,8 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogBehaviorController;
-
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\ShareGlobalVariable;
@@ -29,17 +30,6 @@ use App\Http\Middleware\ShareGlobalVariable;
 require __DIR__ . '/auth.php';
 
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
-
-Route::prefix('push-system-global')->group(function () {
-    Route::get('/get-push-system-config-global', [PushSystemGlobalController::class, 'getSettingsGlobal'])->name('pushSystemGlobalGetSettings');
-    Route::post('/save', [PushSystemGlobalController::class, 'saveSystemGlobal'])->name('saveSystemGlobal');
-    Route::get('/list-data-global', [PushSystemGlobalController::class, 'listPushSystemGlobal'])->name('listPushSystemGlobal');
-    Route::get('/list-user-active-global', [PushSystemGlobalController::class, 'listUserActiveGlobalAjax'])->name('listUserActiveGlobalAjax');
-    Route::get('/show-config-push-system-global', [PushSystemGlobalController::class, 'showConfigGlobal'])->name('showConfigGlobal');
-    Route::post('/save-system-config', [PushSystemGlobalController::class, 'saveSystemConfigGlobal'])->name('saveSystemConfigGlobal');
-    Route::get('/add-link-system-global', [PushSystemGlobalController::class, 'addLinkSystemGlobal'])->name('addLinkSystemGlobal');
-    Route::post('/add-user-active-push-system-global', [PushSystemGlobalController::class, 'addUserActiveGlobal'])->name('addUserActivePushSystemGlobal');
-});
 
 Route::prefix('config-link')->group(function () {
     Route::post('/save', [PushSystemController::class, 'saveConfigSystemLink'])->name('saveConfigSystemLink');
@@ -65,7 +55,7 @@ Route::middleware(Authenticate::class)->prefix('admin')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    //Route for permission. Only if route has more prefix. etc prefix push-system ....
+    //Route after this comment for permission. Only if route has more prefix. etc prefix push-system ....
     Route::prefix('push-system')->group(function () {
         Route::get('/', [PushSystemController::class, 'listPushSystem'])->name('push.system.list')->middleware(ShareGlobalVariable::class);
         Route::get('/config-link/add', [PushSystemController::class, 'addConfigSystemLink'])->name('push.system.config.link');
@@ -112,5 +102,13 @@ Route::middleware(Authenticate::class)->prefix('admin')->group(function () {
         Route::get('/get-detail-tracking', [UsersTrackingController::class, 'getDetailTracking'])->name('users.tracking.detail');
         Route::get('/get-heat-map', [UsersTrackingController::class, 'getHeatMap'])->name('users.tracking.heat.map');
         Route::get('/get-link-for-heat-map', [UsersTrackingController::class, 'getLinkForHeatMap'])->name('users.tracking.link.heat.map');
+    });
+
+    Route::prefix('team')->group(function () {
+        Route::get('/', [TeamController::class, 'index'])->name('team.list')->middleware(ShareGlobalVariable::class);
+        Route::get('/create', [TeamController::class, 'create'])->name('team.create')->middleware(ShareGlobalVariable::class);
+        Route::get('/store', [TeamController::class, 'store'])->name('team.store');
+        Route::get('/update', [TeamController::class, 'update'])->name('team.update');
+        Route::get('/edit', [TeamController::class, 'edit'])->name('team.edit');
     });
 });

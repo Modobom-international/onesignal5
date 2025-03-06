@@ -16,14 +16,14 @@
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-lg-2 col-md-12">
-                    <label>Ngày</label>
+                    <label>{{ __('Ngày') }}</label>
                     <input class="form-control" type="text" id="datepicker">
                 </div>
 
                 <div class="col-lg-2 col-md-12">
-                    <label>Ứng dụng</label>
+                    <label>{{ __('Ứng dụng') }}</label>
                     <select class="form-control" id="app-name">
-                        <option value="all">Tất cả</option>
+                        <option value="all">{{ __('Tất cả') }}</option>
                         @foreach($apps as $appItem)
                         @if($appItem->app_id != '')
                         <option @if($app==$appItem->app_id) selected @endif value="{{ $appItem->app_id }}">{{ $appItem->app_id }}</option>
@@ -35,7 +35,7 @@
                 <div class="col-lg-2 col-md-12">
                     <label>Quốc gia</label>
                     <select class="form-control" id="country-name">
-                        <option value="all">Tất cả</option>
+                        <option value="all">{{ __('Tất cả') }}</option>
                         @foreach($countries as $countryItem)
                         @if($countryItem->country != '')
                         <option @if($country==$countryItem->country) selected @endif value="{{ $countryItem->country  }}">{{ $countryItem->country  }}</option>
@@ -45,12 +45,12 @@
                 </div>
 
                 <div class="col-lg-2 col-md-12">
-                    <label> Thiết bị</label>
+                    <label> {{ __('Thiết bị') }}</label>
                     <input value="{{ $device }}" class="form-control" type="text" id="text-device">
                 </div>
 
                 <div class="col-lg-2 col-md-12">
-                    <label>Từ khóa source</label>
+                    <label>{{ __('Từ khóa nguồn') }}</label>
                     <input value="{{ $textSource }}" class="form-control" type="text" id="text-source">
                 </div>
 
