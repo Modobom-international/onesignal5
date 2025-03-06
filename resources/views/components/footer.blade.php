@@ -1,5 +1,5 @@
 {{-- Footer positioned within content area --}}
-<footer class="relative w-full bg-background border-t border-border">
+<footer class="relative w-full bg-background">
     <div class="container mx-auto px-6 py-3">
         <div class="flex items-center justify-between">
             <div class="text-sm text-muted-foreground">
