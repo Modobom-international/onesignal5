@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 use App\Models\Team;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable;
 
     const ADMIN_TYPE = 'admin';
     const USER_TYPE = 'user';
@@ -25,7 +24,9 @@ class User extends Authenticatable
         'email',
         'password',
         'type',
-        'security_key'
+        'security_key',
+        'address',
+        'phone_number'
     ];
 
     /**
@@ -64,5 +65,10 @@ class User extends Authenticatable
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'user_team', 'user_id', 'team_id');
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'user_permission', 'user_id', 'permission_id');
     }
 }

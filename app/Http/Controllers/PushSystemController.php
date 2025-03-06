@@ -152,7 +152,7 @@ class PushSystemController extends Controller
             DB::table('push_systems_config')->insert($dataPush);
         }
 
-        return redirect()->route('PushSystemShowConfigLinksPush')->with('message', 'Config updated successfully');
+        return redirect()->route('push.system.config.link.push')->with('message', 'Config updated successfully');
     }
 
     public function addUserActive(Request $request)

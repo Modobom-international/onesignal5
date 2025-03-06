@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\Role;
+use App\Enums\Language;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +33,14 @@ class ShareGlobalVariable
                 ->get();
 
             View::share('notificationSystem', $notificationSystem);
+
+            if (Language::LIST_LANGUAGE[app()->getLocale()] == 'English') {
+                $listTitle = Role::LIST_EN;
+            } else {
+                $listTitle = Role::LIST_VN;
+            }
+
+            View::share('listTitle', $listTitle);
         }
 
         return $next($request);

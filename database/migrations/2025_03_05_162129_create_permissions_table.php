@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('employees')) {
-            Schema::create('employees', function (Blueprint $table) {
+        if (!Schema::hasTable('permissions')) {
+            Schema::create('permissions', function (Blueprint $table) {
                 $table->id();
-                $table->bigInteger('users_id');
-                $table->string('position');
-                $table->date('joining_date');
                 $table->timestamps();
             });
         }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employees');
+        Schema::dropIfExists('permissions');
     }
 };

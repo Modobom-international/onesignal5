@@ -15,7 +15,7 @@ Config System links
             <div class="card">
                 <div class="card-header">Config</div>
                 <div class="card-body">
-                    <a href="{{ route('listPushSystem') }}" title="Back">
+                    <a href="{{ route('push.system.list') }}" title="Back">
                         <button class="btn btn-warning"><i aria-hidden="true" class="fa fa-arrow-left"></i> Back</button>
                     </a>
                     <br /> <br />

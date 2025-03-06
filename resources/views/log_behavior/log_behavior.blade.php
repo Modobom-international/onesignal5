@@ -242,6 +242,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modalListAppCheckInstall" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalListAppCheckInstallLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -384,6 +385,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modalChangeSelection" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalChangeSelectionLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -454,6 +456,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modalReport" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalReport" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -529,6 +532,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modalActivity" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalActivity" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

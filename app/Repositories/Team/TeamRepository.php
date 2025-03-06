@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories\Role;
+namespace App\Repositories\Team;
 
 use LaravelEasyRepository\Repository;
 
-interface RoleRepository extends Repository{
+interface TeamRepository extends Repository{
 
     // Write something awesome :)
 }

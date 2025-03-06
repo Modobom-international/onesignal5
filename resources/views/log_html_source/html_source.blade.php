@@ -99,7 +99,7 @@
                             <td>{{ $source->created_at }}</td>
                             <td>{{ $source->note }}</td>
                             <td class="d-flex" style="gap: 5px">
-                                <a href="javascript:void(0)" id="show-user" data-url="{{ route('showHtmlSource', $source->id) }}" class="btn btn-info">{{ __('Chi tiết') }}</a>
+                                <a href="javascript:void(0)" id="show-user" data-url="{{ route('html.source.show', $source->id) }}" class="btn btn-info">{{ __('Chi tiết') }}</a>
                             </td>
                         </tr>
                         @endforeach
