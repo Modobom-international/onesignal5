@@ -14,7 +14,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
     <link rel="stylesheet" href="{{ asset('/css/lib/font-awesome/css/font-awesome.min.css') }}" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" />
     <link rel="stylesheet" href="{{ asset('/css/custom.css') }}" />
     <link rel="stylesheet" href="{{ asset('/css/lib.css') }}" />
 
@@ -73,10 +73,28 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="{{ asset('js/chart.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
+
+    <script type="text/javascript">
+        <?php if (session('success')) { ?>
+            toastr.success("{{ session('success') }}", "Success");
+        <?php } ?>
+
+        <?php if (session('info')) { ?>
+            toastr.info("{{ session('info') }}", "Info");
+        <?php } ?>
+
+        <?php if (session('warning')) { ?>
+            toastr.warning("{{ session('warning') }}", "Warning");
+        <?php } ?>
+
+        <?php if (session('error')) { ?>
+            toastr.error("{{ session('error') }}", "Error");
+        <?php } ?>
+    </script>
 
     <script>
         const users_id = '<?php echo Auth::user()->id; ?>';

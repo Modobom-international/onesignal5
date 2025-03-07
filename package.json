@@ -27,7 +27,6 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
-        "alpine-toast": "^0.0.2",
         "puppeteer": "^24.1.0",
         "toastr": "^2.1.4",
         "webextension-polyfill": "^0.12.0"

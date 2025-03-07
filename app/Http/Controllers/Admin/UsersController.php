@@ -63,6 +63,7 @@ class UsersController extends Controller
         $passwordPlain = $request->get('password');
         $securityKey = hash('sha256', $passwordPlain);
         $data['password'] = bcrypt($request->password);
+        $permissions = [];
         $dataInsert = [
             'name' => $request->name,
             'email' => $request->email,
@@ -73,9 +74,14 @@ class UsersController extends Controller
             'security_key' => $securityKey
         ];
 
+        foreach ($data['permissions'] as $key => $value) {
+            $permissions[] = $key;
+        }
+
         $user = $this->userRepository->create($dataInsert);
 
-        $user->permission()->sync($request->route_ids);
+        $user->permissions()->sync($request->get('permissions'));
+        $user->teams()->sync($data['team']);
 
         return redirect()->route('users.list')->with('success', __('Thêm nhân viên thành công!'));
     }
@@ -113,15 +119,18 @@ class UsersController extends Controller
         ]);
 
         $data = $request->except('password');
-        if ($request->has('password')) {
-            $data['password'] = bcrypt($request->password);
+        $permissions = [];
+
+        foreach ($data['permissions'] as $key => $value) {
+            $permissions[] = $key;
         }
 
         $user = $this->userRepository->findOrFail($id);
         $user->update($data);
-        $user->syncRoles($request->get('roles'));
+        $user->permissions()->sync($permissions);
+        $user->teams()->sync($data['team']);
 
-        return redirect()->route('users.edit', $id)->with('success', __('Cập nhật thông tin nhân viên thành công!'));
+        return redirect()->route('users.list')->with('success', __('Cập nhật thông tin nhân viên thành công!'));
     }
 
     public function destroy($id)

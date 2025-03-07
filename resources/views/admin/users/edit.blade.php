@@ -55,21 +55,6 @@
                     </div>
 
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">{{ __('Mật khẩu') }}</label>
-                        <div class="mt-1.5">
-                            <input type="password"
-                                name="password"
-                                id="password"
-                                value="{{ $user->password }}"
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors disabled"
-                                autocomplete="off" disabled>
-                        </div>
-                        @if ($errors->has('password'))
-                        <p class="mt-2 text-sm text-red-600">{{ $errors->first('password') }}</p>
-                        @endif
-                    </div>
-
-                    <div>
                         <label for="address" class="block text-sm font-medium text-gray-700">{{ __('Địa chỉ') }}</label>
                         <div class="mt-1.5">
                             <input type="text"
@@ -102,7 +87,7 @@
                     <div>
                         <label for="team" class="block text-sm font-medium text-gray-700">{{ __('Phòng ban') }}</label>
                         <div class="mt-1.5">
-                            <select id="team" value="{{ isset($user->team) ? $user->team->id : '' }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                            <select name="team" id="team" value="{{ isset($user->team) ? $user->team->id : '' }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
                                 @foreach($teams as $team)
                                 @if($user->teams->has('id') and $team->id == $user->teams['id'])
                                 <option value="{{ $team->id }}" selected>{{ $team->name }}</option>
@@ -187,18 +172,28 @@
 <script>
     $(document).ready(function() {
         var default_permission = '';
+        var id_default_team = $('#team').val();
         const user = JSON.parse(`<?php echo json_encode($user) ?>`);
+        const team_permission = JSON.parse(`<?php echo json_encode($teams) ?>`);
 
-        if (user.permissions.length === 0) {
+        if (user.permissions.length !== 0) {
             default_permission = user.permissions;
+        } else if (user.teams.length !== 0) {
+            default_permission = user.teams;
+        } else {
+            for (var i in team_permission) {
+                if (team_permission[i].id == id_default_team) {
+                    default_permission = team_permission[i];
+                }
+            }
         }
 
         if (default_permission != '') {
             for (var k in default_permission) {
                 let isChecked = true;
-                let permissionId = default_team[k].prefix;
+                let permissionId = default_permission[k].prefix;
 
-                $(`input[id^="${permissionId}_path_${default_team[k].name}"]`).prop('checked', isChecked);
+                $(`input[id^="${permissionId}_path_${default_permission[k].name}"]`).prop('checked', isChecked);
             }
         }
 
