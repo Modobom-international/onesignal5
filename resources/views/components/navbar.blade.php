@@ -1,5 +1,5 @@
 <nav aria-label="primary" x-data="{ open: false, notificationOpen: false }"
-    class="sticky top-0 left-0 right-0 z-50 backdrop-blur flex-none transition-colors duration-300 border-b border-slate-900/10 dark:border-[#30363d] bg-white/95 dark:bg-[#0d1117]">
+    class="sticky top-0 left-0 right-0 !-z-10 backdrop-blur flex-none transition-colors duration-300 border-b border-slate-900/10 dark:border-[#30363d] bg-white/95 dark:bg-[#0d1117]">
     <div class="h-14 flex items-center justify-between px-4 mx-4">
         <div class="flex items-center gap-3">
             <x-button type="button" icon-only variant="ghost" sr-text="Open main menu" x-on:click="toggleSidebar()"

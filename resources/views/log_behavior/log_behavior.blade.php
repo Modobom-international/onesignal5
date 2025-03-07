@@ -1,380 +1,500 @@
 @extends('layouts.app')
 
-@section('title', 'Log behavior')
-
-@section('styles')
-<link href="{{ asset('css/log-behavior.css') }}" rel="stylesheet">
-@endsection
+@section('title', 'Dashboard')
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class="fa fa-arrow-circle-up"></i></button>
-        <div class="card">
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Ngày') }}</label>
-                        <input class="form-control" type="text" id="datepicker">
+<div class="min-h-screen bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Action Buttons Bar -->
+        <div class="mb-6 flex flex-wrap items-center gap-3">
+            <button type="button" data-modal-target="modalListAppCheckInstall" data-modal-toggle="modalListAppCheckInstall"
+                class="inline-flex items-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                {{ __('Installation List') }}
+            </button>
+
+            <button type="button" data-modal-target="modalChangeSelection" data-modal-toggle="modalChangeSelection"
+                class="inline-flex items-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                {{ __('Edit Selection') }}
+            </button>
+
+            <button type="button" data-modal-target="modalReport" data-modal-toggle="modalReport"
+                class="inline-flex items-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                {{ __('Statistics') }}
+            </button>
+
+            @php
+            $pareDate = $filter['date'] ?? '';
+            $canCompare = !empty($pareDate) && strtotime($today) >= strtotime($pareDate);
+            @endphp
+
+            @if($canCompare)
+            <button type="button" id="compare-date-btn"
+                class="inline-flex items-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                {{ __('Compare Dates') }}
+            </button>
+            @endif
+
+            <button type="button" data-modal-target="modalActivity" data-modal-toggle="modalActivity"
+                class="inline-flex items-center px-4 py-2 border border-gray-200 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {{ __('Activity History') }}
+            </button>
+        </div>
+
+        <!-- Filters Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="p-6">
+                <div class="space-y-6">
+                    <!-- Filter Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <!-- Date Filter -->
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-gray-700">{{ __('Date') }}</label>
+                            <div class="relative">
+                                <input type="text" id="datepicker"
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    placeholder="{{ __('Select date') }}">
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application Filter -->
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-gray-700">{{ __('Application') }}</label>
+                            <select id="app-name"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <option value="all">{{ __('All applications') }}</option>
+                                @foreach($listArrayApp as $app)
+                                <option value="{{ $app }}">{{ $app }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Country Filter -->
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-gray-700">{{ __('Country') }}</label>
+                            <select id="country"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <option value="all">{{ __('All countries') }}</option>
+                                @foreach($listArrayCountry as $country)
+                                <option value="{{ $country }}">{{ $country }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Platform Filter -->
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-gray-700">{{ __('Platform') }}</label>
+                            <select id="platform"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <option value="all">{{ __('All platforms') }}</option>
+                                @foreach($listArrayPlatform as $platform)
+                                <option value="{{ $platform }}">{{ $platform }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Ứng dụng') }}</label>
-                        <select class="form-select" id="app-name">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayApp as $app)
-                            <option value="{{ $app }}">{{ $app }}</option>
-                            @endforeach
-                        </select>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center justify-between pt-4">
+                        <button type="button" id="search-report"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            {{ __('Search') }}
+                        </button>
+
+                        <div class="flex items-center space-x-4">
+                            <button type="button" class="text-sm text-gray-500 hover:text-indigo-600">
+                                {{ __('Save filters') }}
+                            </button>
+                            <div class="h-4 w-px bg-gray-300"></div>
+                            <button type="button" class="text-sm text-gray-500 hover:text-indigo-600">
+                                {{ __('Saved filters') }}
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Quốc gia') }}</label>
-                        <select class="form-select" id="country">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayCountry as $country)
-                            <option value="{{ $country }}">{{ $country }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Nền tảng') }}</label>
-                        <select class="form-select" id="platform">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayPlatform as $platform)
-                            <option value="{{ $platform }}">{{ $platform }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Mạng') }}</label>
-                        <select class="form-select" id="network">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($networks as $network)
-                            @if($network != '')
-                            <option value="{{ $network }}">{{ $network }}</option>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Grid -->
+        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <!-- Total IDs Card -->
+            <div class="bg-white overflow-hidden rounded-lg border border-gray-200 px-6 py-4">
+                <dt class="text-sm font-medium text-gray-500">{{ __('Total IDs') }}</dt>
+                <dd class="mt-2 flex items-baseline justify-between">
+                    <div class="flex flex-col">
+                        <div class="text-2xl font-semibold text-gray-900">
+                            @if($statusPaginate)
+                                {{ $data->total() }}
+                            @else
+                                {{ count($data) }}
                             @endif
-                            @endforeach
-                            <option value="other">KHONG_CO_SIM</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Tổng') }}</label>
-                        <select class="form-select" id="install">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            <option value="install">{{ __('Chỉ cài đặt') }}</option>
-                            <option value="country">{{ __('Chỉ sai quốc gia') }}</option>
-                            <option value="network">{{ __('Chỉ sai nhà mạng') }}</option>
-                            <option value="test">{{ __('Chỉ thiết bị thử nghiệm') }}</option>
-                            <option value="sub">{{ __('Chỉ người dùng đăng ký') }}</option>
-                            <option value="real">{{ __('Chỉ thực cài') }}</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <button type="button" class="btn btn-primary mt-4 mb-4" id="search-report">{{ __('Tìm kiếm') }}</button>
-                    </div>
-                    <div class="col-lg-12 col-md-12 d-flex" id="group-btn-filter">
-                        <div>
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalListAppCheckInstall">{{ __('Danh sách lượt cài ứng dụng') }}</button>
                         </div>
-                        <div class="ml-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalChangeSelection">{{ __('Chỉnh sửa lựa chọn') }}</button>
-                        </div>
-                        <div class="ml-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalReport">{{ __('Thống kê') }}</button>
-                        </div>
-                        <?php
-                        $pareDate = $filter['date'];
-                        $display = true;
-                        if (strtotime($today) < strtotime($pareDate)) {
-                            $display = false;
-                        }
-                        ?>
-                        @if($display)
-                        <div class="ml-3">
-                            <button type="button" class="btn btn-success" id="compare-date-btn">{{ __('So sánh ngày') }}</button>
-                        </div>
-                        @endif
-                        <div class="ml-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalActivity">{{ __('Lịch sử hoạt động') }}</button>
-                        </div>
+                        <div class="text-sm text-gray-500">from all sources</div>
                     </div>
-                </div>
-                <div>
-                    @if($statusPaginate)
-                    {{ $data->links() }}
-                    @endif
-                    {{ __('Hiển thị trong trang') }} :
-                    <a class="btn" id="show-in-page-100">100</a>
-                    <a class="btn" id="show-in-page-150">150</a>
-                    <a class="btn" id="show-in-page-200">200</a>
-                    <a class="btn" id="show-in-page-250">250</a>
-                    <a class="btn" id="show-in-page-all">All</a>
-                </div>
-                <div class="d-flex mt-2 compare-date">
-                    <button class="Btn" id="btn-compare">
-                        <span class="text">{{ __('So sánh') }}</span>
-                        <span class="svgIcon">
-                            <svg fill="white" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M280 64h40c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128C0 92.7 28.7 64 64 64h40 9.6C121 27.5 153.3 0 192 0s71 27.5 78.4 64H280zM64 112c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320c8.8 0 16-7.2 16-16V128c0-8.8-7.2-16-16-16H304v24c0 13.3-10.7 24-24 24H192 104c-13.3 0-24-10.7-24-24V112H64zm128-8a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"></path>
-                            </svg>
-                        </span>
-                    </button>
-                    <div class="col-lg-2 col-md-12 ml-3">
-                        <input class="form-control" type="text" id="datepicker-previous" placeholder="{{ __('Chọn ngày') }}">
+                </dd>
+            </div>
+
+            <!-- Total Installs Card -->
+            <div class="bg-white overflow-hidden rounded-lg border border-gray-200 px-6 py-4">
+                <dt class="text-sm font-medium text-gray-500">{{ __('Total Installs') }}</dt>
+                <dd class="mt-2 flex items-baseline justify-between">
+                    <div class="flex flex-col">
+                        <div class="text-2xl font-semibold text-gray-900">{{ $totalInstall ?? 0 }}</div>
+                        <div class="text-sm text-gray-500">successful installations</div>
                     </div>
-                    <div class="mb-10x">
-                        <button class="btn" id="btn-turn-off-compare"><img src="{{ asset('/img/remove.png') }}" width="30px"></button>
+                </dd>
+            </div>
+
+            <!-- Wrong Country Card -->
+            <div class="bg-white overflow-hidden rounded-lg border border-gray-200 px-6 py-4">
+                <dt class="text-sm font-medium text-gray-500">{{ __('Wrong Country') }}</dt>
+                <dd class="mt-2 flex items-baseline justify-between">
+                    <div class="flex flex-col">
+                        <div class="text-2xl font-semibold text-gray-900">{{ $totalWrongCountry ?? 0 }}</div>
+                        <div class="text-sm text-gray-500">location mismatches</div>
                     </div>
-                    <div id="loader-previous-date" class="loader hide loader-previous"></div>
-                </div>
-                <div class="d-flex mt-3" id="area-total-all">
-                    @if($statusPaginate)
-                    <div>
-                        <b>{{ __('Tổng id') }} : <span class="text-danger">{{ $data->total() }} </span></b>
+                </dd>
+            </div>
+
+            <!-- Wrong Network Card -->
+            <div class="bg-white overflow-hidden rounded-lg border border-gray-200 px-6 py-4">
+                <dt class="text-sm font-medium text-gray-500">{{ __('Wrong Network') }}</dt>
+                <dd class="mt-2 flex items-baseline justify-between">
+                    <div class="flex flex-col">
+                        <div class="text-2xl font-semibold text-gray-900">{{ $totalWrongNetWork ?? 0 }}</div>
+                        <div class="text-sm text-gray-500">network mismatches</div>
                     </div>
-                    @else
-                    <div>
-                        <b>{{ __('Tổng id') }} : <span class="text-danger">{{ count($data) }}</span></b>
-                    </div>
-                    @endif
-                    <div class="ml-5">
-                        <b>{{ __('Tổng lượt cài') }} : <span class="text-danger">{{ $totalInstall ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng sai quốc gia') }} : <span class="text-danger">{{ $totalWrongCountry ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng sai nhà mạng') }} : <span class="text-danger">{{ $totalWrongNetWork ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng thiết bị thử nghiệm') }} : <span class="text-danger">{{ $totalDeviceTest ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng người dùng đăng ký') }} : <span class="text-danger">{{ $totalUserSub ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng thực cài') }} : <span class="text-danger">{{ $totalTrueInstall ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-4 compare-date">
-                        <p><b>--- {{ __('Ngày') }} :</b> <span id="real-time"></span></p>
-                    </div>
-                </div>
-                <div class="mt-2" id="area-compare-date">
-                    <div>
-                        <b>{{ __('Tổng id') }} : <span class="text-danger" id="total-id-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng lượt cài') }} : <span class="text-danger" id="total-install-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng sai quốc gia') }} : <span class="text-danger" id="wrong-country-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng sai nhà mạng') }} : <span class="text-danger" id="wrong-network-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng thiết bị thử nghiệm') }} : <span class="text-danger" id="device-test-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng người dùng đăng ký') }} : <span class="text-danger" id="user-sub-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng thực cài') }} : <span class="text-danger" id="true-install-previous">0</span></b>
-                    </div>
-                    <div class="ml-4 d-none" id="text-date-area-compare-date">
-                        <p><b>--- {{ __('Ngày') }} :</b> <span id="text-date-previous"></span></p>
-                    </div>
-                </div>
-                <div class="show-content">
-                    {{ $textShowContent }}
-                </div>
-                @if($totalForThaoVy)
-                <div class="show-content">
-                    <p>{{ __('Tổng nè') }} : {{ $totalForThaoVy }}</p>
-                </div>
-                @endif
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Id</th>
-                                <th scope="col">{{ __('Ngày Cài') }}</th>
-                                <th scope="col">{{ __('Ngày') }}</th>
-                                <th scope="col" width="10%">{{ __('Ứng dụng') }}</th>
-                                <th scope="col" width="6%">{{ __('Quốc gia') }}</th>
-                                <th scope="col" width="6%">{{ __('Nền tảng') }}</th>
-                                <th scope="col" width="10%">{{ __('Mạng') }}</th>
-                                <th scope="col" class="for-behavior">{{ __('Hành vi') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($data as $record)
-                            <tr>
-                                <th scope="row">{{ $record->uid ?? '' }}</th>
-                                <td>{{ $record->date_install ?? '' }}</td>
-                                <td>{{ $record->date ?? '' }}</td>
-                                <td>{{ $record->app ?? ''}}</td>
-                                <td>{{ $record->country ?? ''}}</td>
-                                <td>{{ $record->platform ?? ''}}</td>
-                                <td>{{ isset($record->network) ? $record->network : __('Không có sim') }}</td>
+                </dd>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Id</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Install Date') }}</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Date') }}</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Application') }}</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Country') }}</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Platform') }}</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Network') }}</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Behavior') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach($data as $record)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $record->uid ?? '' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $record->date_install ?? '' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $record->date ?? '' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $record->app ?? '' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $record->country ?? '' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $record->platform ?? '' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ isset($record->network) ? $record->network : __('No SIM') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">
                                 @if(isset($record->behavior))
-                                @php
-                                $behavior = json_decode($record->behavior, true);
-                                if($behavior == null) {
-                                $behavior = array();
-                                }
-                                @endphp
-                                <td>
-                                    <ul class="list-style-disc">
+                                    @php
+                                        $behavior = json_decode($record->behavior, true);
+                                        if($behavior == null) {
+                                            $behavior = array();
+                                        }
+                                    @endphp
+                                    <ul class="space-y-1">
                                         @foreach($behavior as $key => $value)
-                                        <li>{{ $key }} : {{ $value }}</li>
+                                            <li class="flex items-center space-x-2">
+                                                <span class="text-gray-600">{{ $key }}:</span>
+                                                <span class="font-medium">{{ $value }}</span>
+                                            </li>
                                         @endforeach
                                     </ul>
-                                </td>
-                                @else
-                                <td></td>
                                 @endif
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="modalListAppCheckInstall" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalListAppCheckInstallLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalChangeSelectionLabel">{{ __('Danh sách lượt cài ứng dụng') }}</h5>
-                <div class="error-message-modal">
-                    <p>{{ __('Ứng dụng đã tồn tại') }}</p>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+<!-- Back to top button -->
+<button onclick="topFunction()" id="back-to-top"
+    class="fixed bottom-8 right-8 bg-white text-gray-600 rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 border border-gray-200 hover:border-gray-300">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+</button>
+
+<!-- Modals -->
+<!-- List App Check Install Modal -->
+<div id="modalListAppCheckInstall" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-4xl max-h-full">
+        <div class="relative bg-white rounded-lg shadow-lg">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900">
+                    {{ __('Installation List') }}
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-100 hover:text-gray-500 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center" data-modal-hide="modalListAppCheckInstall">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="ml-4 text-danger">
-                    <h4>{{ __('Thêm mới') }}</h4>
-                </div>
-                <div class="row choose-area-modal">
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Ứng dụng') }}</label>
-                        <select class="form-select" id="app-name-modal">
+
+            <!-- Modal body -->
+            <div class="p-6">
+                <div class="space-y-6">
+                    <!-- Add New Section -->
+                    <div class="bg-white rounded-lg border border-gray-200">
+                        <div class="border-b border-gray-200 bg-gray-50 px-4 py-3">
+                            <h4 class="text-sm font-medium text-gray-900">{{ __('Add New') }}</h4>
+                        </div>
+                        <div class="p-4">
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
+                                    <div class="relative group">
+                                        <select id="app-name-modal" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             @foreach($listArrayApp as $app)
                             <option value="{{ $app }}">{{ $app }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
                     </div>
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Quốc gia') }}</label>
-                        <select class="form-select" id="country-modal">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
+                                    <div class="relative group">
+                                        <select id="country-modal" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             @foreach($listArrayCountry as $country)
                             <option value="{{ $country }}">{{ $country }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
                     </div>
-                    <div class="col-lg-2">
-                        <label class="form-label">{{ __('Nền tảng') }}</label>
-                        <select class="form-select" id="platform-modal">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
+                                    <div class="relative group">
+                                        <select id="platform-modal" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             @foreach($listArrayPlatform as $platform)
                             <option value="{{ $platform }}">{{ $platform }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
                     </div>
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Người theo dõi') }}</label>
-                        <select class="form-select" id="assigned-modal">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Người theo dõi') }}</label>
+                                    <div class="relative group">
+                                        <select id="assigned-modal" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             @foreach($listAssigned as $assigned)
                             <option value="{{ $assigned }}">{{ $assigned }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <button type="button" onclick="addAppToList()" class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    {{ __('Thêm') }}
+                                </button>
+                            </div>
                     </div>
-                    <div class="col-lg-1">
-                        <button type="button" class="btn btn-primary" style="margin-top: 30px; margin-bottom: 30px;" onclick="addAppToList()">{{ __('Thêm') }}</button>
                     </div>
-                </div>
-                <div class="ml-4 text-danger">
-                    <h4>{{ __('Tìm kiếm') }}</h4>
-                </div>
-                <div class="row choose-area-modal">
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Ứng dụng') }}</label>
-                        <select class="form-select" id="app-name-search-modal">
-                            <option value="all">Tất cả</option>
+
+                    <!-- Search Section -->
+                    <div class="bg-white rounded-lg border border-gray-200">
+                        <div class="border-b border-gray-200 bg-gray-50 px-4 py-3">
+                            <h4 class="text-sm font-medium text-gray-900">{{ __('Search') }}</h4>
+                        </div>
+                        <div class="p-4">
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
+                                    <div class="relative group">
+                                        <select id="app-name-search-modal" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
+                                            <option value="all">{{ __('Tất cả') }}</option>
                             @foreach($apps as $app)
                             @if($app != '')
                             <option value="{{ $app }}">{{ ucfirst($app) }}</option>
                             @endif
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
                     </div>
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Quốc gia' )}}</label>
-                        <select class="form-select" id="country-search-modal">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
+                                    <div class="relative group">
+                                        <select id="country-search-modal" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             <option value="all">{{ __('Tất cả') }}</option>
                             @foreach($listArrayCountry as $country)
                             <option value="{{ $country }}">{{ $country }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
                     </div>
-                    <div class="col-lg-2">
-                        <label class="form-label">{{ __('Nền tảng') }}</label>
-                        <select class="form-select" id="platform-search-modal">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
+                                    <div class="relative group">
+                                        <select id="platform-search-modal" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             <option value="all">{{ __('Tất cả') }}</option>
                             @foreach($listArrayPlatform as $platform)
                             <option value="{{ $platform }}">{{ $platform }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
                     </div>
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Người theo dõi') }}</label>
-                        <select class="form-select" id="assigned-search-modal">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Người theo dõi') }}</label>
+                                    <div class="relative group">
+                                        <select id="assigned-search-modal" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             <option value="all">{{ __('Tất cả') }}</option>
                             @foreach($listAssigned as $assigned)
                             <option value="{{ $assigned }}">{{ $assigned }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <button type="button" onclick="searchAppInList()" class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                    {{ __('Tìm') }}
+                                </button>
+                            </div>
                     </div>
-                    <div class="col-lg-1">
-                        <button type="button" class="btn btn-primary" style="margin-top: 30px; margin-bottom: 30px;" onclick="searchAppInList()">{{ __('Tìm') }}</button>
                     </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-striped" id="table-list-check-install">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">{{ __('Ứng dụng') }}</th>
-                                <th scope="col">{{ __('Quốc gia') }}</th>
-                                <th scope="col">{{ __('Nền tảng') }}</th>
-                                <th scope="col">{{ __('Người theo dõi') }}</th>
-                                <th scope="col">{{ __('Thời gian cài cuối cùng') }}</th>
-                                <th scope="col">{{ __('Hành động') }}</th>
+
+                    <!-- Results Table -->
+                    <div class="bg-white rounded-lg border border-gray-200">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200" id="table-list-check-install">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">#</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ __('Ứng dụng') }}</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ __('Quốc gia') }}</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ __('Nền tảng') }}</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ __('Người theo dõi') }}</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ __('Thời gian cài cuối cùng') }}</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">{{ __('Hành động') }}</th>
                             </tr>
                         </thead>
-                        <tbody id="tbody-modal">
+                                    <tbody class="divide-y divide-gray-200 bg-white" id="tbody-modal">
                             @foreach($listAppCheck as $keyCheck => $check)
-                            <tr id="{{ $check->id }}">
-                                <th scope="row">{{ $keyCheck + 1 }}</th>
-                                <td>{{ ucfirst($check->app) }}</td>
-                                <td>{{ ucfirst($check->country) }}</td>
-                                <td>{{ ucfirst($check->platform) }}</td>
-                                <td>{{ $check->assigned }}</td>
-                                <td>{{ !is_string($check->last_install) ? $check->last_install->toDateTime()->format('Y-m-d H:i:s') : __('Chưa có lượt cài mới') }}</td>
-                                <td class="d-flex align-items-center">
-                                    <button data-id="{{ $check->id }}" class="btn btn-danger delete-app-in-list-check"><i class="fa fa-trash"></i></button>
+                                        <tr id="{{ $check->id }}" class="hover:bg-gray-50/50 transition-colors duration-200">
+                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">{{ $keyCheck + 1 }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ ucfirst($check->app) }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ ucfirst($check->country) }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ ucfirst($check->platform) }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $check->assigned }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ !is_string($check->last_install) ? $check->last_install->toDateTime()->format('Y-m-d H:i:s') : __('Chưa có lượt cài mới') }}</td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                <div class="flex items-center space-x-3">
+                                                    <button data-id="{{ $check->id }}" class="text-red-600 hover:text-red-900 transition-colors duration-200 delete-app-in-list-check">
+                                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                    </button>
                                     @if(!isset($check->lock))
-                                    <button id="lock-{{ $check->id }}" data-id="{{ $check->id }}" title="Unlock" data-lock="1" class="btn btn-warning lock-app-in-list-check"><i class="fa fa-bell-slash"></i></button>
+                                                    <button id="lock-{{ $check->id }}" data-id="{{ $check->id }}" title="Unlock" data-lock="1" class="text-yellow-600 hover:text-yellow-900 transition-colors duration-200 lock-app-in-list-check">
+                                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                                        </svg>
+                                                    </button>
                                     @else
                                     @if($check->lock == 0)
-                                    <button id="lock-{{ $check->id }}" data-id="{{ $check->id }}" title="Lock" data-lock="1" class="btn btn-warning lock-app-in-list-check"><i class="fa fa-bell-slash"></i></button>
+                                                    <button id="lock-{{ $check->id }}" data-id="{{ $check->id }}" title="Lock" data-lock="1" class="text-yellow-600 hover:text-yellow-900 transition-colors duration-200 lock-app-in-list-check">
+                                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                                        </svg>
+                                                    </button>
                                     @else
-                                    <button id="lock-{{ $check->id }}" data-id="{{ $check->id }}" title="Unlock" data-lock="0" class="btn btn-success lock-app-in-list-check"><i class="fa fa-bell"></i></button>
+                                                    <button id="lock-{{ $check->id }}" data-id="{{ $check->id }}" title="Unlock" data-lock="0" class="text-green-600 hover:text-green-900 transition-colors duration-200 lock-app-in-list-check">
+                                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                        </svg>
+                                                    </button>
                                     @endif
                                     @endif
                                     <div id="loader-{{ $check->id }}" class="loader hide"></div>
+                                                </div>
                                 </td>
                             </tr>
                             @endforeach
@@ -386,146 +506,279 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalChangeSelection" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalChangeSelectionLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="d-flex">
-                    <h5 class="modal-title" id="modalChangeSelectionLabel">{{ __('Chỉnh sửa lựa chọn') }}</h5>
-                    <button type="button" class="btn ml-3" title="Reset" id="reset-btn"><i class="fa fa-undo"></i></button>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+<!-- Change Selection Modal -->
+<div id="modalChangeSelection" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-4xl max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalChangeSelectionLabel">
+                    {{ __('Chỉnh sửa lựa chọn') }}
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modalChangeSelection">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
                 </button>
             </div>
-            <div class="modal-body row">
-                <div class="col-4">
-                    <h3>{{ __('Quốc gia') }}</h3>
-                    <ul class="ul-in-modal">
+            <!-- Modal body -->
+            <div class="p-4 md:p-5">
+                <!-- Your existing modal content -->
+                <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
+                    <!-- Keep your existing content structure -->
+                    <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
+                        <!-- Countries -->
+                        <div class="bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                            <div class="border-b border-gray-200/80 bg-gray-50/80 px-4 py-3">
+                                <h4 class="text-base font-medium text-gray-900">{{ __('Quốc gia') }}</h4>
+                            </div>
+                            <div class="p-4">
+                                <div class="max-h-96 overflow-y-auto">
+                                    <ul class="space-y-2">
                         @foreach($countries as $country)
                         @if($country != null)
+                                        <li class="flex items-center">
                         @if(in_array($country, $listDefaultCountry))
-                        <li><input class="check-box-country" type="checkbox" data-id="{{ $country }}" checked disabled> {{ $country }} </li>
+                                            <input type="checkbox" class="check-box-country h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" data-id="{{ $country }}" checked disabled>
                         @else
-                        @if(in_array($country, $listArrayCountry))
-                        <li><input class="check-box-country" type="checkbox" checked data-id="{{ $country }}"> {{ $country }} </li>
-                        @else
-                        <li><input class="check-box-country" type="checkbox" data-id="{{ $country }}"> {{ $country }} </li>
+                                            <input type="checkbox" class="check-box-country h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" data-id="{{ $country }}" {{ in_array($country, $listArrayCountry) ? 'checked' : '' }}>
                         @endif
-                        @endif
+                                            <label class="ml-2 text-sm text-gray-700">{{ $country }}</label>
+                                        </li>
                         @endif
                         @endforeach
                     </ul>
                 </div>
-                <div class="col-4">
-                    <h3>{{ __('Nền tảng') }}</h3>
-                    <ul class="ul-in-modal">
+                            </div>
+                        </div>
+
+                        <!-- Platforms -->
+                        <div class="bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                            <div class="border-b border-gray-200/80 bg-gray-50/80 px-4 py-3">
+                                <h4 class="text-base font-medium text-gray-900">{{ __('Nền tảng') }}</h4>
+                            </div>
+                            <div class="p-4">
+                                <div class="max-h-96 overflow-y-auto">
+                                    <ul class="space-y-2">
                         @foreach($platforms as $platform)
                         @if($platform != null)
+                                        <li class="flex items-center">
                         @if(in_array($platform, $listDefaultPlatform))
-                        <li><input class="check-box-platform" type="checkbox" data-id="{{ $platform }}" checked disabled> {{ $platform }} </li>
+                                            <input type="checkbox" class="check-box-platform h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" data-id="{{ $platform }}" checked disabled>
                         @else
-                        @if(in_array($platform, $listArrayPlatform))
-                        <li><input class="check-box-platform" type="checkbox" checked data-id="{{ $platform }}"> {{ $platform }} </li>
-                        @else
-                        <li><input class="check-box-platform" type="checkbox" data-id="{{ $platform }}"> {{ $platform }} </li>
+                                            <input type="checkbox" class="check-box-platform h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" data-id="{{ $platform }}" {{ in_array($platform, $listArrayPlatform) ? 'checked' : '' }}>
                         @endif
-                        @endif
+                                            <label class="ml-2 text-sm text-gray-700">{{ $platform }}</label>
+                                        </li>
                         @endif
                         @endforeach
                     </ul>
                 </div>
-                <div class="col-4">
-                    <h3>{{ __('Ứng dụng') }}</h3>
-                    <input class="form-control mt-2 mb-2" placeholder="Nhập tên ứng dụng" id="search-in-filter-modal" onkeypress="search()" onkeydown="search()">
-                    <ul class="ul-in-modal ul-list-app-in-modal" id="ul-list-app-in-modal">
+                            </div>
+                        </div>
+
+                        <!-- Apps -->
+                        <div class="bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                            <div class="border-b border-gray-200/80 bg-gray-50/80 px-4 py-3">
+                                <h4 class="text-base font-medium text-gray-900">{{ __('Ứng dụng') }}</h4>
+                            </div>
+                            <div class="p-4">
+                                <div class="relative">
+                                    <input type="text" id="search-in-filter-modal" placeholder="{{ __('Nhập tên ứng dụng') }}"
+                                        class="block w-full rounded-lg border border-gray-300 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                                        onkeypress="search()" onkeydown="search()">
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="mt-4 max-h-96 overflow-y-auto">
+                                    <ul class="space-y-2" id="ul-list-app-in-modal">
                         @foreach($apps as $app)
                         @if($app != null)
-                        @if(in_array($app, $listArrayApp))
-                        <li><input class="check-box-app" type="checkbox" checked data-id="{{ $app }}"> {{ $app }} </li>
-                        @else
-                        <li><input class="check-box-app" type="checkbox" data-id="{{ $app }}"> {{ $app }} </li>
-                        @endif
+                                        <li class="flex items-center">
+                                            <input type="checkbox" class="check-box-app h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                data-id="{{ $app }}" {{ in_array($app, $listArrayApp) ? 'checked' : '' }}>
+                                            <label class="ml-2 text-sm text-gray-700">{{ $app }}</label>
+                                        </li>
                         @endif
                         @endforeach
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-12 pl-3 pb-3">
-                <button type="button" class="btn btn-primary" id="save-change-option">{{ __('Lưu') }}</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <button type="button" id="save-change-option"
+                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            {{ __('Lưu') }}
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="modalReport" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalReport" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="d-flex">
-                    <h5 class="modal-title" id="modalReportLabel">{{ __('Thống kê') }}</h5>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Report Modal -->
+<div id="modalReport" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-4xl max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalReportLabel">
+                    {{ __('Thống kê') }}
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modalReport">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
             </div>
-            <div class="modal-body row">
-                <div class="col-12 d-flex row">
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Từ ngày') }}</label>
-                        <input class="form-select" type="text" id="datepicker-from">
+            <!-- Modal body -->
+            <div class="p-4 md:p-5">
+                <!-- Your existing modal content -->
+                <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
+                    <!-- Keep your existing content structure -->
+                    <div class="mt-6 bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                        <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
+                            <h4 class="text-base font-medium text-gray-900">{{ __('Bộ lọc') }}</h4>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Từ ngày') }}</label>
+                                    <div class="relative group">
+                                        <input type="text" id="datepicker-from"
+                                            class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 group-hover:shadow-md"
+                                            placeholder="{{ __('Chọn ngày bắt đầu') }}">
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Đến ngày') }}</label>
+                                    <div class="relative group">
+                                        <input type="text" id="datepicker-to"
+                                            class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 group-hover:shadow-md"
+                                            placeholder="{{ __('Chọn ngày kết thúc') }}">
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
                     </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Đến ngày') }}</label>
-                        <input class="form-select" type="text" id="datepicker-to">
                     </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Quốc gia') }}</label>
-                        <select class="form-select" id="country-report">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
+                                    <div class="relative group">
+                                        <select id="country-report" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             <option value="all">{{ __('Tất cả') }}</option>
                             @foreach($listArrayCountry as $country)
-                            <option value="{{ $country }}">{{ $country }} </option>
+                                            <option value="{{ $country }}">{{ $country }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
                     </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Nền tảng') }}</label>
-                        <select class="form-select" id="platform-report">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
+                                    <div class="relative group">
+                                        <select id="platform-report" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             <option value="all">{{ __('Tất cả') }}</option>
                             @foreach($listArrayPlatform as $platform)
                             <option value="{{ $platform }}">{{ $platform }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
                     </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Ứng dụng') }}</label>
-                        <select class="form-select" id="app-name-report">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
+                                    <div class="relative group">
+                                        <select id="app-name-report" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             <option value="all">{{ __('Tất cả') }}</option>
                             @foreach($listArrayApp as $app)
                             <option value="{{ $app }}">{{ $app }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
                     </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Từ khóa') }}</label>
-                        <select class="form-select" id="keyword-report">
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Từ khóa') }}</label>
+                                    <div class="relative group">
+                                        <select id="keyword-report" class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 cursor-pointer group-hover:shadow-md">
                             <option value="all">{{ __('Tất cả') }}</option>
                             @foreach($keywords as $keyword)
                             <option value="{{ $keyword }}">{{ $keyword }}</option>
                             @endforeach
                         </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                                            <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <button type="button" onclick="getDataChart()" class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                    {{ __('Thống kê') }}
+                                </button>
+                            </div>
                     </div>
-                    <div class="col-lg-2 col-md-12 mt-3">
-                        <button type="button" class="btn btn-primary" onclick="getDataChart()">{{ __('Thống kê') }}</button>
                     </div>
-                </div>
-                <div class="col-12">
-                    <div id="pre-loader">
+
+                    <!-- Chart Results -->
+                    <div class="mt-8">
+                        <div id="pre-loader" class="flex justify-center">
                         @include('components.pre-loader')
                     </div>
-                    <div id="text-total-modal" style="display: none; justify-content: center; margin: 10px 0;">
-                        <p class="total-title">Tổng lượt cài : <span id="sum-total"></span></p>
-                        <p class="total-title" style="margin-left: 15px">{{ __('Tổng thành công') }} : <span id="sum-success"></span></p>
+                        <div id="text-total-modal" class="hidden justify-center space-x-8 mt-6 mb-8">
+                            <div class="text-center">
+                                <dt class="text-sm font-medium text-gray-500">{{ __('Tổng lượt cài') }}</dt>
+                                <dd class="mt-1 text-3xl font-semibold text-indigo-600" id="sum-total"></dd>
+                            </div>
+                            <div class="text-center">
+                                <dt class="text-sm font-medium text-gray-500">{{ __('Tổng thành công') }}</dt>
+                                <dd class="mt-1 text-3xl font-semibold text-indigo-600" id="sum-success"></dd>
+                            </div>
                     </div>
-                    <div class="chart-container">
+                        <div class="chart-container bg-white rounded-lg border border-gray-200/80 p-6">
                         <canvas id="countChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -533,46 +786,74 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalActivity" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalActivity" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="d-flex">
-                    <h5 class="modal-title" id="modalReportLabel">{{ __('Lịch sử hoạt động') }}</h5>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Activity Modal -->
+<div id="modalActivity" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative w-full max-w-4xl max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalActivityLabel">
+                    {{ __('Lịch sử hoạt động') }}
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modalActivity">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
             </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <input type="text" id="uid-activity" class="form-control" placeholder="Nhập id device" aria-label="Nhập id device" aria-describedby="basic-addon2" require>
-                    <button class="btn btn-outline-secondary ml-3" type="button" onclick="searchActivity()">{{ __('Tìm kiếm') }}</button>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5">
+                <!-- Your existing modal content -->
+                <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
+                    <!-- Keep your existing content structure -->
+                    <div class="mt-6 bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                        <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-1">
+                                    <input type="text" id="uid-activity" placeholder="{{ __('Nhập id device') }}"
+                                        class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                                </div>
+                                <button type="button" onclick="searchActivity()" class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                    {{ __('Tìm kiếm') }}
+                                </button>
+                            </div>
                 </div>
-                <div class="table-responsive mt-3">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">{{ __('Thời gian') }}</th>
-                                <th scope="col">{{ __('Hoạt động') }}</th>
-                                <th scope="col">{{ __('Dữ liệu (nếu có)') }}</th>
+
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200/80">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Thời gian') }}</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Hoạt động') }}</th>
+                                        <th scope="col" class="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Dữ liệu (nếu có)') }}</th>
                             </tr>
                         </thead>
-                        <tbody id="table-activity">
-                        </tbody>
+                                <tbody class="divide-y divide-gray-200/80 bg-white" id="table-activity"></tbody>
                     </table>
                 </div>
-                <div id="pre-loader-activity">
+
+                        <div id="pre-loader-activity" class="flex justify-center p-6">
                     @include('components.pre-loader')
                 </div>
-                <div id="empty-result">
-                    <p class="text-danger ">{{ __('Không tìm thấy kết quả') }}</p>
+
+                        <div id="empty-result" class="hidden p-6 text-center">
+                            <p class="text-sm font-medium text-red-600">{{ __('Không tìm thấy kết quả') }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 <script>
     var backToTop = document.getElementById("back-to-top");
     var chart = 'chart';
