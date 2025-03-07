@@ -1,15 +1,10 @@
 {{-- Footer positioned within content area --}}
-<footer class="relative w-full bg-background">
-    <div class="container mx-auto px-6 py-3">
-        <div class="flex items-center justify-between">
-            <div class="text-sm text-muted-foreground">
-                © {{ date('Y') }} {{ __('Modobom.inc') }}. {{ __('All rights reserved') }}.
-            </div>
-            <div class="flex items-center space-x-2">
-                <span class="text-sm text-muted-foreground ">{{ __('Made with') }}</span>
-                <x-heroicon-s-heart class="w-4 h-4 text-red-500" />
-                <span class="text-sm text-muted-foreground ">{{ __('by Modobom') }}</span>
-            </div>
-        </div>
+<footer class="relative w-full">
+    <div class="container mx-auto px-6 py-6">
+        <nav class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <ul class="flex items-center gap-4 flex-wrap justify-center text-sm text-muted-foreground">
+                <li>© {{ date('Y') }} {{ __('Modobom.inc') }}</li>
+            </ul>
+        </nav>
     </div>
 </footer>
