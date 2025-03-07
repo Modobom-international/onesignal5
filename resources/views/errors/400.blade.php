@@ -7,7 +7,7 @@
         </x-slot>
 
         <div class="mb-4 text-sm text-gray-600">
-            {{ __('Xin lỗi, bạn không có quyền truy cập vào trang này!') }}
+            {{ __('Xin lỗi, chức năng đang không được ổn định. Vui lòng quay lại sau') }}
         </div>
 
         <div>
