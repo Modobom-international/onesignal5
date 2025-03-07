@@ -105,14 +105,12 @@ class UsersController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate(
-            [
-                'name' => 'required',
-                'email' => 'required|string|max:255|email|unique:users,email,' . $id,
-                'address' => 'required|string',
-                'phone_number' => 'required',
-            ]
-        );
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|string|max:255|email|unique:users,email,' . $id,
+            'address' => 'required|string',
+            'phone_number' => 'required',
+        ]);
 
         $data = $request->except('password');
         if ($request->has('password')) {
@@ -123,7 +121,7 @@ class UsersController extends Controller
         $user->update($data);
         $user->syncRoles($request->get('roles'));
 
-        return redirect()->route('users.list')->with('success', __('Cập nhật thông tin nhân viên thành công!'));
+        return redirect()->route('users.edit', $id)->with('success', __('Cập nhật thông tin nhân viên thành công!'));
     }
 
     public function destroy($id)

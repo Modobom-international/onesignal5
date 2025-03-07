@@ -21,13 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'auth' => \App\Http\Middleware\Authenticate::class,
-            'permission' => \App\Http\Middleware\PermissionMiddleware::class,
-            'roles' => \App\Http\Middleware\CheckRole::class,
             'can' => \Illuminate\Auth\Middleware\Authorize::class,
-            'Html' => Spatie\Html\Facades\Html::class,
             'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class
         ]);
 

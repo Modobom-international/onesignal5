@@ -3,7 +3,6 @@ import './bootstrap'
 import Alpine from 'alpinejs'
 import collapse from '@alpinejs/collapse'
 import PerfectScrollbar from 'perfect-scrollbar'
-import { AlpineToast, TailWindCSSConfig } from 'alpine-toast';
 
 window.PerfectScrollbar = PerfectScrollbar
 
@@ -97,8 +96,3 @@ document.addEventListener('alpine:init', () => {
 Alpine.plugin(collapse)
 
 Alpine.start()
-
-const toaster = AlpineToast(TailWindCSSConfig);
-document.addEventListener('DOMContentLoaded', () => {
-    toaster.start();
-});

@@ -44,7 +44,7 @@ Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'
 Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
 
-Route::middleware(Authenticate::class, 'web')->prefix('admin')->group(function () {
+Route::middleware(Authenticate::class)->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard')->middleware(ShareGlobalVariable::class);
     Route::get('/fetch-horizon-dashboard', [AdminController::class, 'fetchHorizonDashboard'])->name('fetchHorizonDashboard');
     Route::get('/change-status-notification', [AdminController::class, 'changeStatusNotification'])->name('changeStatusNotification');
