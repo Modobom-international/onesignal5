@@ -7,8 +7,8 @@
     <div class=" py-10">
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h1 class="text-2xl font-semibold text-gray-900">{{ __('Tạo phòng ban') }}</h1>
-                <p class="mt-1 text-sm text-gray-500">{{ __('Thêm phòng ban vào hệ thống') }}</p>
+                <h1 class="text-2xl font-semibold text-gray-900">{{ __('Cập nhật phòng ban') }}</h1>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Cập nhật thông tin và quyền phòng ban') }}</p>
             </div>
             <a href="{{ url('/admin/users') }}"
                 class="group inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
@@ -20,7 +20,7 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <form method="POST" action="{{ route('team.store')}}" class="divide-y divide-gray-200">
+            <form method="POST" action="{{ route('team.update', $team->id)}}" class="divide-y divide-gray-200">
                 @csrf
                 <div class="p-8">
                     <!-- Team Name Section -->
@@ -30,6 +30,7 @@
                             <input type="text"
                                 name="name"
                                 id="name"
+                                value="{{ $team->name }}"
                                 class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-all duration-200"
                                 placeholder="{{ __('Nhập tên phòng ban') }}"
                                 autocomplete="off">
@@ -40,7 +41,7 @@
                     </div>
 
                     <!-- Permissions Section -->
-                    <div class="mt-10">
+                    <div class="mt-3">
                         <h3 class="text-lg font-medium text-gray-900 mb-6">{{ __('Phân quyền truy cập') }}</h3>
 
                         <div class="space-y-6">
@@ -101,7 +102,7 @@
                         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
-                        {{ __('Tạo phòng ban') }}
+                        {{ __('Cập nhật phòng ban') }}
                     </button>
                 </div>
             </form>
@@ -113,6 +114,17 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
+        var team_permissions = JSON.parse(`<?php echo json_encode($team_permissions) ?>`);
+
+        for (var i in team_permissions) {
+            for (var k in team_permissions[i]) {
+                let permissionId = i;
+                let isChecked = true;
+
+                $(`input[id^="${permissionId}_path_${team_permissions[i][k]}"]`).prop('checked', isChecked);
+            }
+        }
+
         $('input[id^="permission_"]').on('change', function() {
             let permissionId = $(this).attr('id').replace('permission_', '');
             let isChecked = $(this).prop('checked');

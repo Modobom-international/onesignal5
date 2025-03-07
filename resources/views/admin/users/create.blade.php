@@ -96,9 +96,9 @@
                     <div>
                         <label for="team" class="block text-sm font-medium text-gray-700">{{ __('Phòng ban') }}</label>
                         <div class="mt-1.5">
-                            <select class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                            <select id="team" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
                                 @foreach($teams as $team)
-                                <option value="{{ $team->name }}">{{ $team->name }}</option>
+                                <option value="{{ $team->id }}">{{ $team->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -107,38 +107,48 @@
                         @endif
                     </div>
 
-                    <div class="pt-4">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-base font-medium text-gray-900">{{ __('Chọn quyền') }}</h3>
-                        </div>
+                    <div class="mt-10">
+                        <h3 class="text-lg font-medium text-gray-900 mb-6">{{ __('Phân quyền truy cập') }}</h3>
 
-                        <div class="mt-4">
+                        <div class="space-y-6">
                             @foreach($permissions as $permission => $route)
-                            <div class="d-flex mt-3">
-                                <div>
-                                    <input type="checkbox"
-                                        name="permission[{{ $permission }}]"
-                                        id="permission_{{ $permission }}"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-colors">
-                                </div>
-
-                                <div class="w-full max-w-lg mx-auto accordion-permission">
-                                    <div x-data="{ open: false }">
-                                        <button type="button" @click.prevent="open = !open" class="w-full text-left px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">
-                                            <label for="permission_{{ $permission }}"
-                                                class="ml-3 block text-sm text-gray-600 select-none cursor-pointer">
-                                                {{ __(Str::title(str_replace('-', ' ', $permission))) }}
-                                            </label>
+                            <div class="bg-gray-50 rounded-lg overflow-hidden">
+                                <div x-data="{ open: false }" class="border border-gray-200 rounded-lg">
+                                    <div class="flex items-center px-4 py-3">
+                                        <input type="checkbox"
+                                            id="permission_{{ $permission }}"
+                                            class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-colors">
+                                        <label for="permission_{{ $permission }}"
+                                            class="ml-3 flex-1 text-sm font-medium text-gray-900">
+                                            {{ __(Str::title(str_replace('-', ' ', $permission))) }}
+                                        </label>
+                                        <button type="button"
+                                            @click.prevent="open = !open"
+                                            class="ml-2 flex items-center text-sm text-gray-500 hover:text-gray-700">
+                                            <span x-show="!open">{{ __('Hiển thị chi tiết') }}</span>
+                                            <span x-show="open">{{ __('Ẩn chi tiết') }}</span>
+                                            <svg class="ml-1.5 h-4 w-4 transition-transform duration-200"
+                                                :class="{'rotate-180': open}"
+                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
                                         </button>
+                                    </div>
+
+                                    <div x-show="open"
+                                        x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 transform -translate-y-2"
+                                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                                        class="border-t border-gray-200">
                                         @foreach($route as $path)
-                                        <div x-show="open" class="px-4 py-2 border-l-4 border-blue-500">
-                                            <div class="flex items-center py-2 px-3 rounded-md hover:bg-gray-50 transition-colors">
+                                        <div class="px-4 py-3 hover:bg-gray-100 transition-colors">
+                                            <div class="flex items-center">
                                                 <input type="checkbox"
-                                                    name="permission[{{ $path }}]"
-                                                    id="path_{{ $path }}"
+                                                    name="permissions[{{ $path->id }}]"
+                                                    id="{{ $permission }}_path_{{ $path->name }}"
                                                     class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-colors">
-                                                <label for="path_{{ $permission }}"
-                                                    class="ml-3 block text-sm text-gray-600 select-none cursor-pointer">
+                                                <label for="{{ $permission }}_path_{{ $path->name }}"
+                                                    class="ml-3 text-sm text-gray-600">
                                                     {{ __(Str::title(str_replace('.', ' ', $path->name))) }}
                                                 </label>
                                             </div>
@@ -166,8 +176,72 @@
 
 @section('scripts')
 <script>
-    $('.accordion-permission').on('click', function() {
+    $(document).ready(function() {
+        var id_default_team = $('#team').val();
+        var default_team = '';
+        var arrPermissionTeam = [];
+        const team_permission = JSON.parse(`<?php echo json_encode($teams) ?>`);
 
+        for (var i in team_permission) {
+            if (team_permission[i].id == id_default_team) {
+                default_team = team_permission[i];
+            }
+        }
+
+        if (default_team != '') {
+            for (var k in default_team.permissions) {
+                let isChecked = true;
+                let permissionId = default_team.permissions[k].prefix;
+
+                $(`input[id^="${permissionId}_path_${default_team.permissions[k].name}"]`).prop('checked', isChecked);
+            }
+        }
+
+        $('input[id^="permission_"]').on('change', function() {
+            let permissionId = $(this).attr('id').replace('permission_', '');
+            let isChecked = $(this).prop('checked');
+
+            $(`input[id^="${permissionId}_path_"]`).each(function(index) {
+                setTimeout(() => {
+                    $(this).prop('checked', isChecked);
+                }, index * 50);
+            });
+        });
+
+        $('input[id*="_path_"]').on('change', function() {
+            handleCheckboxParent();
+        });
+
+        $('#team').on('change', function() {
+            let url = <?php route('') ?>
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    app: app,
+                    country: country,
+                    platform: platform,
+                    from: from,
+                    to: to,
+                    keyword: keyword,
+                }
+            }).done(function(result) {
+                
+            });
+        });
+
+        handleCheckboxParent();
     });
+
+    function handleCheckboxParent() {
+        $('input[id^="permission_"]').each(function() {
+            let permissionId = $(this).attr('id').replace('permission_', '');
+            let totalCheckboxes = $(`input[id^="${permissionId}_path_"]`).length;
+            let checkedCheckboxes = $(`input[id^="${permissionId}_path_"]:checked`).length;
+
+            $(this).prop('checked', totalCheckboxes === checkedCheckboxes);
+            $(this).prop('indeterminate', checkedCheckboxes > 0 && checkedCheckboxes < totalCheckboxes);
+        });
+    }
 </script>
 @endsection

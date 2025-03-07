@@ -40,9 +40,7 @@ class UsersController extends Controller
         $getPermission = $this->permissionRepository->getPermissions();
         $permissions = [];
         foreach ($getPermission as $permission) {
-            $explode = explode('/', $permission->prefix);
-            $prefix = $explode[1];
-
+            $prefix = $permission->prefix;
             $permissions[$prefix][] = $permission;
         }
 
@@ -86,13 +84,20 @@ class UsersController extends Controller
     {
         $user = $this->userRepository->findUsers($id);
         $teams = $this->teamRepository->getTeams();
+
         $getPermission = $this->permissionRepository->getPermissions();
         $permissions = [];
+        $permissions_users = [];
         foreach ($getPermission as $permission) {
-            $explode = explode('/', $permission->prefix);
-            $prefix = $explode[1];
-
+            $prefix = $permission->prefix;
             $permissions[$prefix][] = $permission;
+        }
+
+        if ($user->permissions->isNotEmpty()) {
+            foreach ($user->permissions as $userPermission) {
+                $prefix = $permission->prefix;
+                $permissions_users[$prefix][] = $userPermission;
+            }
         }
 
         return view('admin.users.edit', compact('user', 'teams', 'permissions'));

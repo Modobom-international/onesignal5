@@ -6,6 +6,7 @@ use App\Helper\Common;
 use App\Repositories\Permission\PermissionRepository;
 use App\Repositories\Team\TeamRepository;
 use Illuminate\Http\Request;
+use App\Models\Team;
 
 class TeamController extends Controller
 {
@@ -27,8 +28,7 @@ class TeamController extends Controller
             if (isset($team->permissions)) {
                 $getPermission = $team->permissions;
                 foreach ($getPermission as $permission) {
-                    $explode = explode('/', $permission->prefix);
-                    $prefix = $explode[1];
+                    $prefix = $permission->prefix;
 
                     if (!in_array($prefix, $permissions)) {
                         $permissions[] = $prefix;
@@ -49,8 +49,7 @@ class TeamController extends Controller
         $getPermission = $this->permissionRepository->getPermissions();
         $permissions = [];
         foreach ($getPermission as $permission) {
-            $explode = explode('/', $permission->prefix);
-            $prefix = $explode[1] ?? null;
+            $prefix = $permission->prefix;
 
             $permissions[$prefix][] = $permission;
         }
@@ -85,17 +84,23 @@ class TeamController extends Controller
 
     public function edit($id)
     {
-        $team = $this->teamRepository->findOrFail($id);
+        $team = $this->teamRepository->findTeam($id);
         $getPermission = $this->permissionRepository->getPermissions();
         $permissions = [];
+        $team_permissions = [];
         foreach ($getPermission as $permission) {
-            $explode = explode('/', $permission->prefix);
-            $prefix = $explode[1];
+            $prefix = $permission->prefix;
 
             $permissions[$prefix][] = $permission;
         }
 
-        return view('admin.team.edit', compact('team', 'permissions'));
+        foreach($team->permissions as $permission) {
+            $prefix = $permission->prefix;
+
+            $team_permissions[$prefix][] = $permission->name;
+        }
+
+        return view('admin.team.edit', compact('team', 'permissions', 'team_permissions'));
     }
 
     public function update(Request $request, $id)
@@ -112,15 +117,17 @@ class TeamController extends Controller
             $permissions[] = $permission;
         }
 
-        $team = $this->teamRepository->update($id, [
+        $this->teamRepository->update($id, [
             'name' => $request->name
         ]);
+
+        $team = $this->teamRepository->findTeam($id);
 
         if (!empty($permissions)) {
             $team->permissions()->sync($permissions);
         }
 
-        return redirect()->route('users.list')->with('success', __('Cập nhật thông tin nhân viên thành công!'));
+        return redirect()->route('team.list')->with('success', __('Cập nhật thông tin phòng ban thành công!'));
     }
 
     public function destroy($id)

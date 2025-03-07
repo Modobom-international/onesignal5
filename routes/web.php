@@ -107,8 +107,8 @@ Route::middleware(Authenticate::class)->prefix('admin')->group(function () {
         Route::get('/', [TeamController::class, 'index'])->name('team.list')->middleware(ShareGlobalVariable::class);
         Route::get('/create', [TeamController::class, 'create'])->name('team.create')->middleware(ShareGlobalVariable::class);
         Route::post('/store', [TeamController::class, 'store'])->name('team.store');
-        Route::get('/update/{id}', [TeamController::class, 'update'])->name('team.update');
-        Route::get('/edit/{id}', [TeamController::class, 'edit'])->name('team.edit');
+        Route::post('/update/{id}', [TeamController::class, 'update'])->name('team.update');
+        Route::get('/edit/{id}', [TeamController::class, 'edit'])->name('team.edit')->middleware(ShareGlobalVariable::class);
         Route::get('/delete/{id}', [TeamController::class, 'destroy'])->name('team.delete');
     });
 });
