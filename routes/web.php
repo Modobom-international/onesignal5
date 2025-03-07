@@ -44,7 +44,7 @@ Route::post('/create-log-behavior', [LogBehaviorController::class, 'logBehavior'
 Route::post('/create-users-tracking', [UsersTrackingController::class, 'store']);
 Route::post('/save-html-source', [HtmlSourceController::class, 'saveHtml'])->name('saveHtml');
 
-Route::middleware(Authenticate::class)->prefix('admin')->group(function () {
+Route::middleware(Authenticate::class, 'web')->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard')->middleware(ShareGlobalVariable::class);
     Route::get('/fetch-horizon-dashboard', [AdminController::class, 'fetchHorizonDashboard'])->name('fetchHorizonDashboard');
     Route::get('/change-status-notification', [AdminController::class, 'changeStatusNotification'])->name('changeStatusNotification');
@@ -77,7 +77,7 @@ Route::middleware(Authenticate::class)->prefix('admin')->group(function () {
         Route::get('/', [UsersController::class, 'index'])->name('users.list')->middleware(ShareGlobalVariable::class);
         Route::get('/create', [UsersController::class, 'create'])->name('users.create')->middleware(ShareGlobalVariable::class);
         Route::get('/edit/{id}', [UsersController::class, 'edit'])->name('users.edit')->middleware(ShareGlobalVariable::class);
-        Route::post('/update/{id}', [UsersController::class, 'update'])->name('users.update');
+        Route::put('/update/{id}', [UsersController::class, 'update'])->name('users.update');
         Route::post('/store', [UsersController::class, 'store'])->name('users.store');
         Route::get('/delete/{id}', [UsersController::class, 'destroy'])->name('users.delete');
     });
@@ -110,5 +110,6 @@ Route::middleware(Authenticate::class)->prefix('admin')->group(function () {
         Route::post('/update/{id}', [TeamController::class, 'update'])->name('team.update');
         Route::get('/edit/{id}', [TeamController::class, 'edit'])->name('team.edit')->middleware(ShareGlobalVariable::class);
         Route::get('/delete/{id}', [TeamController::class, 'destroy'])->name('team.delete');
+        Route::get('/get-permission-by-team', [TeamController::class, 'getPermissionByTeam'])->name('team.get.permission');
     });
 });

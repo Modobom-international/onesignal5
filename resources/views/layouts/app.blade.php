@@ -15,8 +15,6 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
     <link rel="stylesheet" href="{{ asset('/css/lib/font-awesome/css/font-awesome.min.css') }}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-    <link rel="stylesheet" href="{{ asset('/css/lib/select2-bootstrap/select2-bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/css/lib/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/custom.css') }}" />
     <link rel="stylesheet" href="{{ asset('/css/lib.css') }}" />
 
@@ -73,56 +71,15 @@
         </div>
     </div>
 
+    <div x-toast>{{ session('error') }}</div>
+
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ asset('/js/lib/toastr.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="{{ asset('js/chart.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-
-    <script>
-        toastr.options = {
-            "closeButton": true,
-            "debug": false,
-            "newestOnTop": true,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };
-
-        <?php if (session('success')) { ?>
-            toastr.success("{{ session('success') }}");
-        <?php } ?>
-
-        <?php if (session('error')) { ?>
-            toastr.error("{{ session('error') }}");
-        <?php } ?>
-
-        <?php if (session('info')) { ?>
-            toastr.info("{{ session('info') }}");
-        <?php } ?>
-
-        <?php if (session('warning')) { ?>
-            toastr.warning("{{ session('warning') }}");
-        <?php } ?>
-
-        <?php if ($errors->any()) {
-            foreach ($errors->all() as $error) { ?>
-                toastr.error("{{ $error }}");
-        <?php }
-        } ?>
-    </script>
 
     <script>
         const users_id = '<?php echo Auth::user()->id; ?>';

@@ -109,6 +109,8 @@ class UsersController extends Controller
             [
                 'name' => 'required',
                 'email' => 'required|string|max:255|email|unique:users,email,' . $id,
+                'address' => 'required|string',
+                'phone_number' => 'required',
             ]
         );
 

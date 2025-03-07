@@ -179,7 +179,6 @@
     $(document).ready(function() {
         var id_default_team = $('#team').val();
         var default_team = '';
-        var arrPermissionTeam = [];
         const team_permission = JSON.parse(`<?php echo json_encode($teams) ?>`);
 
         for (var i in team_permission) {
@@ -202,9 +201,7 @@
             let isChecked = $(this).prop('checked');
 
             $(`input[id^="${permissionId}_path_"]`).each(function(index) {
-                setTimeout(() => {
-                    $(this).prop('checked', isChecked);
-                }, index * 50);
+                $(this).prop('checked', isChecked);
             });
         });
 
@@ -213,20 +210,35 @@
         });
 
         $('#team').on('change', function() {
-            let url = <?php route('') ?>
+            let url = `<?php echo route('team.get.permission') ?>`;
+            let id = $(this).val();
             $.ajax({
                 url: url,
                 type: 'GET',
                 data: {
-                    app: app,
-                    country: country,
-                    platform: platform,
-                    from: from,
-                    to: to,
-                    keyword: keyword,
+                    id: id
                 }
             }).done(function(result) {
-                
+                $(`input[id^="permission_"]`).each(function() {
+                    $(this).prop('checked', false);
+                    $(this).prop('indeterminate', false);
+                });
+
+                $(`input[id*="_path_"]`).each(function() {
+                    $(this).prop('checked', false);
+                    $(this).prop('indeterminate', false);
+                });
+
+                for (var i in result) {
+                    let isChecked = true;
+
+                    for (var k in result[i]) {
+                        let id = `${i}_path_${result[i][k]}`;
+                        $(`input[id^="${i}_path_${result[i][k]}"]`).prop('checked', isChecked);
+                    }
+                }
+
+                handleCheckboxParent();
             });
         });
 

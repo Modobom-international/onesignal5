@@ -20,7 +20,8 @@
         </div>
 
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <form method="POST" action="{{ route('users.store')}}" class="divide-y divide-gray-200">
+            <form method="POST" action="{{ route('users.update', $user->id) }}" class="divide-y divide-gray-200">
+                @method('PUT')
                 @csrf
                 <div class="p-8 space-y-8">
                     <div>
@@ -101,12 +102,12 @@
                     <div>
                         <label for="team" class="block text-sm font-medium text-gray-700">{{ __('Phòng ban') }}</label>
                         <div class="mt-1.5">
-                            <select id="team" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                            <select id="team" value="{{ isset($user->team) ? $user->team->id : '' }}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
                                 @foreach($teams as $team)
                                 @if($user->teams->has('id') and $team->id == $user->teams['id'])
-                                <option value="{{ $team->name }}" selected>{{ $team->name }}</option>
+                                <option value="{{ $team->id }}" selected>{{ $team->name }}</option>
                                 @else
-                                <option value="{{ $team->name }}">{{ $team->name }}</option>
+                                <option value="{{ $team->id }}">{{ $team->name }}</option>
                                 @endif
                                 @endforeach
                             </select>
@@ -116,38 +117,47 @@
                         @endif
                     </div>
 
-                    <div class="pt-4">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-base font-medium text-gray-900">{{ __('Chọn quyền') }}</h3>
-                        </div>
-
-                        <div class="mt-4">
+                    <div class="mt-10">
+                        <h3 class="text-lg font-medium text-gray-900 mb-6">{{ __('Phân quyền truy cập') }}</h3>
+                        <div class="space-y-6">
                             @foreach($permissions as $permission => $route)
-                            <div class="d-flex mt-3">
-                                <div>
-                                    <input type="checkbox"
-                                        name="permission[{{ $permission }}]"
-                                        id="permission_{{ $permission }}"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-colors">
-                                </div>
-
-                                <div class="w-full max-w-lg mx-auto accordion-permission">
-                                    <div x-data="{ open: false }">
-                                        <button type="button" @click.prevent="open = !open" class="w-full text-left px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">
-                                            <label for="permission_{{ $permission }}"
-                                                class="ml-3 block text-sm text-gray-600 select-none cursor-pointer">
-                                                {{ __(Str::title(str_replace('-', ' ', $permission))) }}
-                                            </label>
+                            <div class="bg-gray-50 rounded-lg overflow-hidden">
+                                <div x-data="{ open: false }" class="border border-gray-200 rounded-lg">
+                                    <div class="flex items-center px-4 py-3">
+                                        <input type="checkbox"
+                                            id="permission_{{ $permission }}"
+                                            class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-colors">
+                                        <label for="permission_{{ $permission }}"
+                                            class="ml-3 flex-1 text-sm font-medium text-gray-900">
+                                            {{ __(Str::title(str_replace('-', ' ', $permission))) }}
+                                        </label>
+                                        <button type="button"
+                                            @click.prevent="open = !open"
+                                            class="ml-2 flex items-center text-sm text-gray-500 hover:text-gray-700">
+                                            <span x-show="!open">{{ __('Hiển thị chi tiết') }}</span>
+                                            <span x-show="open">{{ __('Ẩn chi tiết') }}</span>
+                                            <svg class="ml-1.5 h-4 w-4 transition-transform duration-200"
+                                                :class="{'rotate-180': open}"
+                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
                                         </button>
+                                    </div>
+
+                                    <div x-show="open"
+                                        x-transition:enter="transition ease-out duration-200"
+                                        x-transition:enter-start="opacity-0 transform -translate-y-2"
+                                        x-transition:enter-end="opacity-100 transform translate-y-0"
+                                        class="border-t border-gray-200">
                                         @foreach($route as $path)
-                                        <div x-show="open" class="px-4 py-2 border-l-4 border-blue-500">
-                                            <div class="flex items-center py-2 px-3 rounded-md hover:bg-gray-50 transition-colors">
+                                        <div class="px-4 py-3 hover:bg-gray-100 transition-colors">
+                                            <div class="flex items-center">
                                                 <input type="checkbox"
-                                                    name="permission[{{ $path }}]"
-                                                    id="path_{{ $path }}"
+                                                    name="permissions[{{ $path->id }}]"
+                                                    id="{{ $permission }}_path_{{ $path->name }}"
                                                     class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-colors">
-                                                <label for="path_{{ $permission }}"
-                                                    class="ml-3 block text-sm text-gray-600 select-none cursor-pointer">
+                                                <label for="{{ $permission }}_path_{{ $path->name }}"
+                                                    class="ml-3 text-sm text-gray-600">
                                                     {{ __(Str::title(str_replace('.', ' ', $path->name))) }}
                                                 </label>
                                             </div>
@@ -175,8 +185,56 @@
 
 @section('scripts')
 <script>
-    // const team = <?php ?>;
     $(document).ready(function() {
+        var default_permission = '';
+        const user = JSON.parse(`<?php echo json_encode($user) ?>`);
+
+        if (user.permissions.length === 0) {
+            default_permission = user.permissions;
+        }
+
+        if (default_permission != '') {
+            for (var k in default_permission) {
+                let isChecked = true;
+                let permissionId = default_team[k].prefix;
+
+                $(`input[id^="${permissionId}_path_${default_team[k].name}"]`).prop('checked', isChecked);
+            }
+        }
+
+        $('#team').on('change', function() {
+            let url = `<?php echo route('team.get.permission') ?>`;
+            let id = $(this).val();
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id: id
+                }
+            }).done(function(result) {
+                $(`input[id^="permission_"]`).each(function() {
+                    $(this).prop('checked', false);
+                    $(this).prop('indeterminate', false);
+                });
+
+                $(`input[id*="_path_"]`).each(function() {
+                    $(this).prop('checked', false);
+                    $(this).prop('indeterminate', false);
+                });
+
+                for (var i in result) {
+                    let isChecked = true;
+
+                    for (var k in result[i]) {
+                        let id = `${i}_path_${result[i][k]}`;
+                        $(`input[id^="${i}_path_${result[i][k]}"]`).prop('checked', isChecked);
+                    }
+                }
+
+                handleCheckboxParent();
+            });
+        });
+
         $('input[id^="permission_"]').on('change', function() {
             let permissionId = $(this).attr('id').replace('permission_', '');
             let isChecked = $(this).prop('checked');

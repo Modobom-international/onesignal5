@@ -94,7 +94,7 @@ class TeamController extends Controller
             $permissions[$prefix][] = $permission;
         }
 
-        foreach($team->permissions as $permission) {
+        foreach ($team->permissions as $permission) {
             $prefix = $permission->prefix;
 
             $team_permissions[$prefix][] = $permission->name;
@@ -135,5 +135,22 @@ class TeamController extends Controller
         $this->userRepository->destroy([$id]);
 
         return redirect()->route('team.list')->with('success', __('Xóa phòng ban thành công!'));
+    }
+
+    public function getPermissionByTeam(Request $request)
+    {
+        $id = $request->get('id');
+        $team = $this->teamRepository->findTeam($id);
+
+        
+
+        if (isset($team->permissions)) {
+            foreach ($team->permissions as $permission) {
+                $prefix = $permission->prefix;
+                $permissions[$prefix][] = $permission->name;
+            }
+        }
+
+        return response()->json($permissions);
     }
 }
