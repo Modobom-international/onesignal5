@@ -203,17 +203,7 @@
                                     {{ __('Tìm kiếm') }}
                                 </button>
 
-                                <div class="flex items-center space-x-4">
-                                    <button type="button"
-                                            class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
-                                        {{ __('Lưu bộ lọc') }}
-                                    </button>
-                                    <div class="h-4 w-px bg-gray-300"></div>
-                                    <button type="button"
-                                            class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
-                                        {{ __('Bộ lọc đã lưu') }}
-                                    </button>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -394,7 +384,6 @@
                                 <x-table.head>{{ __('Ứng dụng') }}</x-table.head>
                                 <x-table.head>{{ __('Quốc gia') }}</x-table.head>
                                 <x-table.head>{{ __('Nền tảng') }}</x-table.head>
-                                <x-table.head>{{ __('ID Device') }}</x-table.head>
                                 <x-table.head>{{ __('Nhà mạng') }}</x-table.head>
                                 <x-table.head>{{ __('Time UTC') }}</x-table.head>
                                 <x-table.head>{{ __('Ngày tạo') }}</x-table.head>
@@ -405,7 +394,7 @@
                         <x-table.body>
                             @foreach ($data as $item)
                                 <x-table.row class="hover:bg-gray-50">
-                                    <x-table.cell class="font-mono text-xs">{{ $item->id ?? 'N/A' }}</x-table.cell>
+                                    <x-table.cell class="font-mono text-xs">{{ $item->uid ?? 'N/A' }}</x-table.cell>
                                     <x-table.cell class="text-sm font-mono text-gray-900">
                                         {{ $item->app ?? 'N/A' }}
                                     </x-table.cell>
@@ -418,7 +407,6 @@
                                             {{ $item->platform ?? 'N/A' }}
                                         </span>
                                     </x-table.cell>
-                                    <x-table.cell class="font-mono text-xs">{{ $item->uid ?? 'N/A' }}</x-table.cell>
                                     <x-table.cell class="text-sm font-mono text-gray-900">
                                         {{ $item->network ?: 'KHONG_CO_SIM' }}
                                     </x-table.cell>
