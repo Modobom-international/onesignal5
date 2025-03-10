@@ -6,12 +6,12 @@
     <div class=" py-8">
         <div>
             <!-- Page Header -->
-            <div class="mb-6">
+            <div class="mb-6 border-border border-b pb-6">
                 <div class="sm:flex sm:items-center sm:justify-between">
                     <div class="sm:flex-auto">
-                        <h1 class="text-2xl font-semibold text-gray-900">{{ __('Push System') }}</h1>
+                        <h1 class="text-2xl font-semibold text-gray-900">{{ __('Hệ thống Push') }}</h1>
                         <p class="mt-2 text-sm text-gray-700">
-                            {{ __('Manage and monitor your push notification system statistics') }}</p>
+                            {{ __('Quản lý và theo dõi thống kê hệ thống thông báo đẩy') }}</p>
                     </div>
                     <div class="mt-4 sm:mt-0 sm:flex-none">
                         <a href="{{ route('push.system.config.link') }}"
@@ -23,17 +23,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            {{ __('Config links push') }}
+                            {{ __('Cấu hình liên kết push') }}
                         </a>
                     </div>
                 </div>
             </div>
 
             <!-- Main Content -->
-            <div class="bg-white rounded-lg shadow-sm ring-1 ring-gray-900/5 overflow-hidden">
-
-
-                <div class="px-6 py-6">
+            <div class=" overflow-hidden">
+                <div class="py-6">
                     <!-- Stats Grid -->
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
                         <!-- Total Users Card -->
@@ -65,7 +63,7 @@
                                                 d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
                                                 clip-rule="evenodd" />
                                         </svg>
-                                        <span>{{ __('Click to view details') }}</span>
+                                        <span>{{ __('Xem chi tiết') }}</span>
                                     </span>
                                 </div>
                             </div>
@@ -74,20 +72,19 @@
                         <!-- Active Users Card -->
                         <div class="relative group">
                             <div
-                                class="absolute -inset-0.5 bg-gradient-to-r from-green-500 to-green-600 rounded-lg blur opacity-0 group-hover:opacity-25 transition duration-200">
+                                class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg blur opacity-0 group-hover:opacity-25 transition duration-200">
                             </div>
                             <div class="relative bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer p-5"
                                 id="count_total_user_active">
                                 <div class="flex items-center">
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium text-gray-500 truncate">
-                                            {{ __('Tổng User hoạt động trong ngày') }}</p>
+                                        <p class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng User hoạt động trong ngày') }}</p>
                                         <p class="mt-1 text-2xl font-semibold text-gray-900" id="users_active">
                                             {{ number_format($totalActive) }}</p>
                                     </div>
                                     <div
-                                        class="flex-shrink-0 p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-full">
-                                        <svg class="w-6 h-6 text-green-600" xmlns="http://www.w3.org/2000/svg"
+                                        class="flex-shrink-0 p-3 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-full">
+                                        <svg class="w-6 h-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg"
                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -101,7 +98,7 @@
                                                 d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
                                                 clip-rule="evenodd" />
                                         </svg>
-                                        <span>{{ __('Auto-updates every 30 seconds') }}</span>
+                                        <span>{{ __('Xem chi tiết') }}</span>
                                     </span>
                                 </div>
                             </div>
@@ -114,7 +111,7 @@
                             class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity flex items-center justify-center z-50">
                             <div class="relative">
                                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-                                <div class="mt-4 text-white text-sm font-medium">{{ __('Loading...') }}</div>
+                                <div class="mt-4 text-white text-sm font-medium">{{ __('Đang tải...') }}</div>
                             </div>
                         </div>
                     </div>
@@ -129,11 +126,11 @@
                                             <tr>
                                                 <th scope="col"
                                                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Country') }}
+                                                    {{ __('Quốc gia') }}
                                                 </th>
                                                 <th scope="col"
                                                     class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Number of users') }}
+                                                    {{ __('Số lượng người dùng') }}
                                                 </th>
                                             </tr>
                                         </thead>
@@ -161,11 +158,11 @@
                                             <tr>
                                                 <th scope="col"
                                                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Country') }}
+                                                    {{ __('Quốc gia') }}
                                                 </th>
                                                 <th scope="col"
                                                     class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Number of users') }}
+                                                    {{ __('Số lượng người dùng') }}
                                                 </th>
                                             </tr>
                                         </thead>
