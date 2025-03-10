@@ -13,7 +13,7 @@
 
             <!-- Back to top button -->
             <button onclick="topFunction()" id="back-to-top"
-                    class="fixed bottom-8 right-8 bg-indigo-600 text-white rounded-full p-3 shadow-lg hover:bg-indigo-700 transition-all duration-200 hover:shadow-xl hover:-translate-y-1">
+                    class="fixed bottom-8 z-50 right-8 bg-indigo-600 text-white rounded-full p-3 shadow-lg hover:bg-indigo-700 transition-all duration-200 hover:shadow-xl hover:-translate-y-1">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
                 </svg>
@@ -21,54 +21,52 @@
 
             <!-- Statistics Section -->
             <div class="mt-8">
-
-
-                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                        <div
-                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
-                            <div class="px-4 py-5 sm:p-6">
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng id') }}</dt>
-                                <dd
-                                    class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
-                                    @if ($statusPaginate)
-                                        {{ $data->total() }}
-                                    @else
-                                        {{ count($data) }}
-                                    @endif
-                                </dd>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
-                            <div class="px-4 py-5 sm:p-6">
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng lượt cài') }}</dt>
-                                <dd
-                                    class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
-                                    {{ $totalInstall ?? 0 }}</dd>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
-                            <div class="px-4 py-5 sm:p-6">
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai quốc gia') }}</dt>
-                                <dd
-                                    class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
-                                    {{ $totalWrongCountry ?? 0 }}</dd>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
-                            <div class="px-4 py-5 sm:p-6">
-                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai nhà mạng') }}</dt>
-                                <dd
-                                    class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
-                                    {{ $totalWrongNetWork ?? 0 }}</dd>
-                            </div>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    <div
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                        <div class="px-4 py-5 sm:p-6">
+                            <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng id') }}</dt>
+                            <dd
+                                class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                                @if ($statusPaginate)
+                                    {{ $data->total() }}
+                                @else
+                                    {{ count($data) }}
+                                @endif
+                            </dd>
                         </div>
                     </div>
+
+                    <div
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                        <div class="px-4 py-5 sm:p-6">
+                            <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng lượt cài') }}</dt>
+                            <dd
+                                class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                                {{ $totalInstall ?? 0 }}</dd>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                        <div class="px-4 py-5 sm:p-6">
+                            <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai quốc gia') }}</dt>
+                            <dd
+                                class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                                {{ $totalWrongCountry ?? 0 }}</dd>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                        <div class="px-4 py-5 sm:p-6">
+                            <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai nhà mạng') }}</dt>
+                            <dd
+                                class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                                {{ $totalWrongNetWork ?? 0 }}</dd>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
@@ -265,7 +263,7 @@
                                 <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
                                      viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
                                 {{ __('So sánh ngày') }}
                             </button>
@@ -284,6 +282,107 @@
                 </div>
             </div>
 
+            <!-- Date Comparison Modal -->
+            <div id="modalDateComparison" tabindex="-1" aria-hidden="true"
+                 class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative w-full max-w-4xl max-h-full">
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                                {{ __('So sánh dữ liệu') }}
+                            </h3>
+                            <button type="button"
+                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                    data-modal-hide="modalDateComparison">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                     viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="p-4 md:p-5">
+                            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                <!-- Current Date Section -->
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <h5 class="text-sm font-medium text-gray-700">{{ __('Ngày hiện tại') }}</h5>
+                                        <span id="current-date-display" class="text-sm text-gray-500"></span>
+                                    </div>
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <dl class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Tổng lượt cài') }}</dt>
+                                                <dd id="current-total-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Thành công') }}</dt>
+                                                <dd id="current-success-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Sai quốc gia') }}</dt>
+                                                <dd id="current-wrong-country" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Sai mạng') }}</dt>
+                                                <dd id="current-wrong-network" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+
+                                <!-- Comparison Date Section -->
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <h5 class="text-sm font-medium text-gray-700">{{ __('Ngày so sánh') }}</h5>
+                                        <div class="relative">
+                                            <input type="text" id="comparison-date"
+                                                   class="block w-40 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                   placeholder="{{ __('Chọn ngày') }}">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <dl class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Tổng lượt cài') }}</dt>
+                                                <dd id="comparison-total-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Thành công') }}</dt>
+                                                <dd id="comparison-success-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Sai quốc gia') }}</dt>
+                                                <dd id="comparison-wrong-country" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Sai mạng') }}</dt>
+                                                <dd id="comparison-wrong-network" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Comparison Actions -->
+                            <div class="mt-6 flex items-center justify-end space-x-4">
+                                <div id="comparison-loader" class="hidden">
+                                    <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-indigo-600"></div>
+                                </div>
+                                <button type="button" id="compare-dates"
+                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                                    {{ __('So sánh') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!-- Data Table -->
             <div class="mt-4">
@@ -295,7 +394,7 @@
                                 <x-table.head>{{ __('Ứng dụng') }}</x-table.head>
                                 <x-table.head>{{ __('Quốc gia') }}</x-table.head>
                                 <x-table.head>{{ __('Nền tảng') }}</x-table.head>
-                                <x-table.head>{{ __('UID') }}</x-table.head>
+                                <x-table.head>{{ __('ID Device') }}</x-table.head>
                                 <x-table.head>{{ __('Nhà mạng') }}</x-table.head>
                                 <x-table.head>{{ __('Time UTC') }}</x-table.head>
                                 <x-table.head>{{ __('Ngày tạo') }}</x-table.head>
@@ -314,7 +413,8 @@
                                         {{ $item->country ?? 'N/A' }}
                                     </x-table.cell>
                                     <x-table.cell>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono bg-gray-100 text-gray-800">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono bg-gray-100 text-gray-800">
                                             {{ $item->platform ?? 'N/A' }}
                                         </span>
                                     </x-table.cell>
@@ -392,20 +492,24 @@
                         </x-table.body>
                     </x-table>
                 @else
-                <div class="bg-white px-6 py-8">
-                    <div class="text-center">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-gray-50">
-                            <svg class="w-6 h-6 text-gray-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z" />
-                                <path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
-                            </svg>
+                    <div class="bg-white px-6 py-8">
+                        <div class="text-center">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-gray-50">
+                                <svg class="w-6 h-6 text-gray-400" viewBox="0 0 24 24" fill="currentColor"
+                                     aria-hidden="true">
+                                    <path
+                                        d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h3 class="mt-4 text-sm font-semibold text-gray-900">{{ __('Không tìm thấy dữ liệu') }}</h3>
+                            <p class="mt-2 text-sm text-gray-500">
+                                {{ __('Bạn có thể thay đổi bộ lọc hoặc tìm kiếm lại để mở rộng kết quả.') }}
+                            </p>
                         </div>
-                        <h3 class="mt-4 text-sm font-semibold text-gray-900">{{ __('Không tìm thấy dữ liệu') }}</h3>
-                        <p class="mt-2 text-sm text-gray-500">
-                            {{ __('Bạn có thể thay đổi bộ lọc hoặc tìm kiếm lại để mở rộng kết quả.') }}
-                        </p>
                     </div>
-                </div>
                 @endif
             </div>
 
@@ -1055,7 +1159,7 @@
                                                class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
                                     </div>
                                     <button type="button" onclick="searchActivity()"
-                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
                                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
                                              viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
