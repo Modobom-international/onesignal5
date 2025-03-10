@@ -97,122 +97,80 @@
             </div>
 
             <!-- Results Table -->
-            <div class="mt-4 flex flex-col">
-                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-300">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th scope="col"
-                                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
-                                            ID</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            {{ __('Đường dẫn') }}</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            {{ __('Quốc gia') }}</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            {{ __('Nền tảng') }}</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            {{ __('Thiết bị') }}</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            {{ __('Nguồn') }}</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            {{ __('ID ứng dụng') }}</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            {{ __('Phiên bản') }}</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            {{ __('Ngày tạo') }}</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                            {{ __('Ghi chú') }}</th>
-                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                            <span class="sr-only">{{ __('Hành động') }}</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200 bg-white">
-                                    @if (count($dataPaginate) > 0)
-                                        @foreach ($dataPaginate as $source)
-                                            <tr>
-                                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
-                                                    {{ $source->id }}</td>
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ Str::limit($source->url, 100) }}</td>
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ $source->country ?? '' }}</td>
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ $source->platform ?? '' }}</td>
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ $source->device_id ?? '' }}</td>
-                                                <td class="px-3 py-4 text-sm text-gray-500">
-                                                    <div class="flex items-center space-x-2">
-                                                        <button data-type="email"
-                                                            class="text-indigo-600 hover:text-indigo-900">{{ Str::limit($source->source, 100) }}</button>
-                                                        @if ($source->source != null)
-                                                            <button data-type="copy"
-                                                                class="text-gray-400 hover:text-gray-600">
-                                                                <svg class="h-4 w-4" fill="none"
-                                                                    stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                                </svg>
-                                                            </button>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ $source->app_id }}</td>
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ $source->version }}</td>
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ $source->created_at }}</td>
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ $source->note }}</td>
-                                                <td
-                                                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                    <button
-                                                        data-url="{{ route('html.source.show', $source->id) }}"
-                                                        class="text-indigo-600 hover:text-indigo-900 details-btn">
-                                                        {{ __('Chi tiết') }}
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <tr>
-                                            <td colspan="11" class="px-3 py-8 text-center">
-                                                <div class="flex flex-col items-center justify-center">
-                                                    <svg class="h-12 w-12 text-gray-400" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor"
-                                                        aria-hidden="true">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="1"
-                                                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            <div class="mt-4">
+                @if (count($dataPaginate) > 0)
+                    <x-table>
+                        <x-table.header class="border-t border-gray-200">
+                            <x-table.row>
+                                <x-table.head>ID</x-table.head>
+                                <x-table.head>{{ __('Đường dẫn') }}</x-table.head>
+                                <x-table.head>{{ __('Quốc gia') }}</x-table.head>
+                                <x-table.head>{{ __('Nền tảng') }}</x-table.head>
+                                <x-table.head>{{ __('Thiết bị') }}</x-table.head>
+                                <x-table.head>{{ __('Nguồn') }}</x-table.head>
+                                <x-table.head>{{ __('ID ứng dụng') }}</x-table.head>
+                                <x-table.head>{{ __('Phiên bản') }}</x-table.head>
+                                <x-table.head>{{ __('Ngày tạo') }}</x-table.head>
+                                <x-table.head>{{ __('Ghi chú') }}</x-table.head>
+                                <x-table.head class="relative">
+                                    <span class="sr-only">{{ __('Hành động') }}</span>
+                                </x-table.head>
+                            </x-table.row>
+                        </x-table.header>
+
+                        <x-table.body>
+                            @foreach ($dataPaginate as $source)
+                                <x-table.row>
+                                    <x-table.cell>{{ $source->id }}</x-table.cell>
+                                    <x-table.cell>{{ Str::limit($source->url, 100) }}</x-table.cell>
+                                    <x-table.cell>{{ $source->country ?? '' }}</x-table.cell>
+                                    <x-table.cell>{{ $source->platform ?? '' }}</x-table.cell>
+                                    <x-table.cell>{{ $source->device_id ?? '' }}</x-table.cell>
+                                    <x-table.cell>
+                                        <div class="flex items-center space-x-2">
+                                            <button data-type="email" class="text-indigo-600 hover:text-indigo-900">
+                                                {{ Str::limit($source->source, 100) }}
+                                            </button>
+                                            @if ($source->source != null)
+                                                <button data-type="copy" class="text-gray-400 hover:text-gray-600">
+                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                                     </svg>
-                                                    <h3 class="mt-2 text-sm font-medium text-gray-900">
-                                                        {{ __('Không có dữ liệu') }}</h3>
-                                                    <p class="mt-1 text-sm text-gray-500">
-                                                        {{ __('Không tìm thấy bản ghi nào phù hợp với tiêu chí tìm kiếm của bạn.') }}
-                                                    </p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </x-table.cell>
+                                    <x-table.cell>{{ $source->app_id }}</x-table.cell>
+                                    <x-table.cell>{{ $source->version }}</x-table.cell>
+                                    <x-table.cell>{{ $source->created_at }}</x-table.cell>
+                                    <x-table.cell>{{ $source->note }}</x-table.cell>
+                                    <x-table.cell class="text-right">
+                                        <button data-url="{{ route('html.source.show', $source->id) }}"
+                                            class="text-indigo-600 hover:text-indigo-900 details-btn">
+                                            {{ __('Chi tiết') }}
+                                        </button>
+                                    </x-table.cell>
+                                </x-table.row>
+                            @endforeach
+                        </x-table.body>
+                    </x-table>
+                @else
+                    <div class="bg-white px-6 py-8">
+                        <div class="text-center">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-gray-50">
+                                <svg class="w-6 h-6 text-gray-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z" />
+                                    <path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <h3 class="mt-4 text-sm font-semibold text-gray-900">{{ __('Không tìm thấy dữ liệu') }}</h3>
+                            <p class="mt-2 text-sm text-gray-500">
+                                {{ __('Bạn có thể thay đổi bộ lọc hoặc tìm kiếm lại để mở rộng kết quả.') }}
+                            </p>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
 
             <!-- Pagination -->
