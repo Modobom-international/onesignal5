@@ -1,79 +1,6 @@
 $(function () {
-    $('#country').select2({
-        theme: 'bootstrap'
-    });
-    $('#platform').select2({
-        theme: 'bootstrap'
-    });
-    $('#app-name').select2({
-        theme: 'bootstrap'
-    });
-    $('#network').select2({
-        theme: 'bootstrap'
-    });
-    $('#install').select2({
-        theme: 'bootstrap'
-    });
-    $('#country-report').select2({
-        theme: 'bootstrap'
-    });
-    $('#platform-report').select2({
-        theme: 'bootstrap'
-    });
-    $('#app-name-report').select2({
-        theme: 'bootstrap'
-    });
-    $('#keyword-report').select2({
-        theme: 'bootstrap'
-    });
-    $('#country-modal').select2({
-        dropdownParent: $('#modalListAppCheckInstall'),
-        theme: 'bootstrap'
-    });
-    $('#platform-modal').select2({
-        dropdownParent: $('#modalListAppCheckInstall'),
-        theme: 'bootstrap'
-    });
-    $('#app-name-modal').select2({
-        dropdownParent: $('#modalListAppCheckInstall'),
-        theme: 'bootstrap'
-    });
-    $('#assigned-modal').select2({
-        dropdownParent: $('#modalListAppCheckInstall'),
-        theme: 'bootstrap'
-    });
-    $('#country-search-modal').select2({
-        dropdownParent: $('#modalListAppCheckInstall'),
-        theme: 'bootstrap'
-    });
-    $('#platform-search-modal').select2({
-        dropdownParent: $('#modalListAppCheckInstall'),
-        theme: 'bootstrap'
-    });
-    $('#app-name-search-modal').select2({
-        dropdownParent: $('#modalListAppCheckInstall'),
-        theme: 'bootstrap'
-    });
-    $('#assigned-search-modal').select2({
-        dropdownParent: $('#modalListAppCheckInstall'),
-        theme: 'bootstrap'
-    });
-    $('#country-report').select2({
-        dropdownParent: $('#modalReport'),
-        theme: 'bootstrap'
-    });
-    $('#platform-report').select2({
-        dropdownParent: $('#modalReport'),
-        theme: 'bootstrap'
-    });
-    $('#app-name-report').select2({
-        dropdownParent: $('#modalReport'),
-        theme: 'bootstrap'
-    });
-    $('#keyword-report').select2({
-        dropdownParent: $('#modalReport'),
-        theme: 'bootstrap'
-    });
+    // Remove custom modal implementation since we're using Flowbite
+
     $("#datepicker").datepicker({
         dateFormat: "yy-m-dd",
         maxDate: 0
@@ -304,7 +231,6 @@ $(function () {
     });
     $('#btn-turn-off-compare').on('click', function () {
         $('.compare-date').attr('style', 'display: none !important');
-        $('#compare-date-btn').css('display', 'block');
         $('#area-compare-date').css('display', 'none');
         if (!$('#text-date-area-compare-date').hasClass('d-none')) {
             $('#text-date-area-compare-date').addClass('d-none');
@@ -367,9 +293,6 @@ $(function () {
                 }
                 $('#text-date-area-compare-date').removeClass('d-none');
                 $('#text-date-previous').text(setTime);
-            }
-            if ($("#area-compare-date").is(':hidden')) {
-                $('#area-compare-date').css('display', 'flex');
             }
         });
     });
@@ -478,8 +401,11 @@ function scrollFunction() {
 }
 
 function topFunction() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    // Smooth scroll to top
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
 
 function search() {
@@ -575,3 +501,165 @@ function searchActivity() {
         }
     });
 }
+
+// Date comparison functionality
+$(function () {
+    // Initialize variables
+    const comparisonModal = document.getElementById('modalDateComparison');
+    const comparisonDate = $('#comparison-date');
+    const comparisonLoader = $('#comparison-loader');
+    const currentDateDisplay = $('#current-date-display');
+    const compareBtn = $('#compare-date-btn');
+    const closeModalBtn = $('[data-modal-hide="modalDateComparison"]');
+
+    // Initialize Flowbite modal
+    const modal = new Modal(comparisonModal, {
+        placement: 'center',
+        backdrop: 'dynamic',
+        onHide: () => {
+            resetComparisonData();
+            // Ensure compare button is visible when modal is closed
+            compareBtn.show();
+        }
+    });
+
+    // Initialize datepicker for comparison with proper formatting
+    comparisonDate.datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: 0,
+        beforeShowDay: function (date) {
+            const currentDate = $('#datepicker').val();
+            const dateString = $.datepicker.formatDate('yy-mm-dd', date);
+            return [dateString !== currentDate, '', 'Không thể chọn ngày này'];
+        }
+    });
+
+    // Show modal when clicking compare button
+    compareBtn.on('click', function (e) {
+        e.preventDefault();
+        const currentDate = $('#datepicker').val();
+        if (!currentDate) {
+            showError('{{ __("Vui lòng chọn ngày để so sánh") }}');
+            return;
+        }
+
+        // Format and display current date
+        const formattedDate = formatDate(currentDate);
+        currentDateDisplay.text(formattedDate);
+
+        // Show modal
+        modal.show();
+    });
+
+    // Close modal handler
+    closeModalBtn.on('click', function () {
+        modal.hide();
+    });
+
+    // Handle date comparison
+    $('#compare-dates').on('click', function () {
+        const selectedDate = comparisonDate.val();
+        const currentDate = $('#datepicker').val();
+
+        // Validate dates
+        if (!selectedDate) {
+            comparisonDate.addClass('border-red-500');
+            showError('{{ __("Vui lòng chọn ngày để so sánh") }}');
+            setTimeout(() => {
+                comparisonDate.removeClass('border-red-500');
+            }, 3000);
+            return;
+        }
+
+        if (selectedDate === currentDate) {
+            showError('{{ __("Không thể so sánh cùng một ngày") }}');
+            return;
+        }
+
+        // Show loader and make AJAX request
+        comparisonLoader.removeClass('hidden');
+
+        $.ajax({
+            url: '/admin/log-behavior/compare-date',
+            type: 'GET',
+            data: {
+                datePrevious: selectedDate,
+                dateSelected: currentDate,
+                app: $('#app-name').val() || 'all',
+                country: $('#country').val() || 'all',
+                platform: $('#platform').val() || 'all',
+                network: $('#network').val() || 'all',
+                install: $('#install').val() || 'all',
+                time: getCurrentTime()
+            },
+            success: function (response) {
+                updateComparisonData(response);
+            },
+            error: function (error) {
+                console.error('Comparison failed:', error);
+                showError('{{ __("Có lỗi xảy ra khi so sánh dữ liệu") }}');
+            },
+            complete: function () {
+                comparisonLoader.addClass('hidden');
+            }
+        });
+    });
+
+    // Helper function to format date
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('vi-VN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+    }
+
+    // Helper function to get current time
+    function getCurrentTime() {
+        const now = new Date();
+        return now.getHours() + ':' +
+            String(now.getMinutes()).padStart(2, '0') + ':' +
+            String(now.getSeconds()).padStart(2, '0');
+    }
+
+    // Update comparison data in the UI
+    function updateComparisonData(data) {
+        if (!data) return;
+
+        // Update current date stats
+        $('#current-total-installs').text(data.current?.total || '0');
+        $('#current-success-installs').text(data.current?.success || '0');
+        $('#current-wrong-country').text(data.current?.wrong_country || '0');
+        $('#current-wrong-network').text(data.current?.wrong_network || '0');
+
+        // Update comparison date stats
+        $('#comparison-total-installs').text(data.comparison?.total || '0');
+        $('#comparison-success-installs').text(data.comparison?.success || '0');
+        $('#comparison-wrong-country').text(data.comparison?.wrong_country || '0');
+        $('#comparison-wrong-network').text(data.comparison?.wrong_network || '0');
+    }
+
+    // Reset comparison data
+    function resetComparisonData() {
+        comparisonDate.val('');
+        const elements = [
+            'current-total-installs', 'current-success-installs', 'current-wrong-country', 'current-wrong-network',
+            'comparison-total-installs', 'comparison-success-installs', 'comparison-wrong-country', 'comparison-wrong-network'
+        ];
+        elements.forEach(id => $(`#${id}`).text('-'));
+    }
+
+    // Show error message
+    function showError(message) {
+        // Remove any existing error messages first
+        $('.error-message-floating').remove();
+
+        const errorDiv = $('<div>')
+            .addClass('error-message-floating fixed bottom-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg shadow-lg z-50')
+            .text(message);
+
+        $('body').append(errorDiv);
+        setTimeout(() => errorDiv.remove(), 3000);
+    }
+});

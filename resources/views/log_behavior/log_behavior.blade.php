@@ -2,600 +2,1233 @@
 
 @section('title', 'Log behavior')
 
-@section('styles')
-<link href="{{ asset('css/log-behavior.css') }}" rel="stylesheet">
-@endsection
-
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <button onclick="topFunction()" id="back-to-top" title="Go to top"><i class="fa fa-arrow-circle-up"></i></button>
-        <div class="card">
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Ngày') }}</label>
-                        <input class="form-control" type="text" id="datepicker">
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Ứng dụng') }}</label>
-                        <select class="form-select" id="app-name">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayApp as $app)
-                            <option value="{{ $app }}">{{ $app }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Quốc gia') }}</label>
-                        <select class="form-select" id="country">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayCountry as $country)
-                            <option value="{{ $country }}">{{ $country }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Nền tảng') }}</label>
-                        <select class="form-select" id="platform">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayPlatform as $platform)
-                            <option value="{{ $platform }}">{{ $platform }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Mạng') }}</label>
-                        <select class="form-select" id="network">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($networks as $network)
-                            @if($network != '')
-                            <option value="{{ $network }}">{{ $network }}</option>
-                            @endif
-                            @endforeach
-                            <option value="other">KHONG_CO_SIM</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Tổng') }}</label>
-                        <select class="form-select" id="install">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            <option value="install">{{ __('Chỉ cài đặt') }}</option>
-                            <option value="country">{{ __('Chỉ sai quốc gia') }}</option>
-                            <option value="network">{{ __('Chỉ sai nhà mạng') }}</option>
-                            <option value="test">{{ __('Chỉ thiết bị thử nghiệm') }}</option>
-                            <option value="sub">{{ __('Chỉ người dùng đăng ký') }}</option>
-                            <option value="real">{{ __('Chỉ thực cài') }}</option>
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <button type="button" class="btn btn-primary mt-4 mb-4" id="search-report">{{ __('Tìm kiếm') }}</button>
-                    </div>
-                    <div class="col-lg-12 col-md-12 d-flex" id="group-btn-filter">
-                        <div>
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalListAppCheckInstall">{{ __('Danh sách lượt cài ứng dụng') }}</button>
-                        </div>
-                        <div class="ml-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalChangeSelection">{{ __('Chỉnh sửa lựa chọn') }}</button>
-                        </div>
-                        <div class="ml-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalReport">{{ __('Thống kê') }}</button>
-                        </div>
-                        <?php
-                        $pareDate = $filter['date'];
-                        $display = true;
-                        if (strtotime($today) < strtotime($pareDate)) {
-                            $display = false;
-                        }
-                        ?>
-                        @if($display)
-                        <div class="ml-3">
-                            <button type="button" class="btn btn-success" id="compare-date-btn">{{ __('So sánh ngày') }}</button>
-                        </div>
-                        @endif
-                        <div class="ml-3">
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalActivity">{{ __('Lịch sử hoạt động') }}</button>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    @if($statusPaginate)
-                    {{ $data->links() }}
-                    @endif
-                    {{ __('Hiển thị trong trang') }} :
-                    <a class="btn" id="show-in-page-100">100</a>
-                    <a class="btn" id="show-in-page-150">150</a>
-                    <a class="btn" id="show-in-page-200">200</a>
-                    <a class="btn" id="show-in-page-250">250</a>
-                    <a class="btn" id="show-in-page-all">All</a>
-                </div>
-                <div class="d-flex mt-2 compare-date">
-                    <button class="Btn" id="btn-compare">
-                        <span class="text">{{ __('So sánh') }}</span>
-                        <span class="svgIcon">
-                            <svg fill="white" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M280 64h40c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128C0 92.7 28.7 64 64 64h40 9.6C121 27.5 153.3 0 192 0s71 27.5 78.4 64H280zM64 112c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320c8.8 0 16-7.2 16-16V128c0-8.8-7.2-16-16-16H304v24c0 13.3-10.7 24-24 24H192 104c-13.3 0-24-10.7-24-24V112H64zm128-8a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"></path>
-                            </svg>
-                        </span>
-                    </button>
-                    <div class="col-lg-2 col-md-12 ml-3">
-                        <input class="form-control" type="text" id="datepicker-previous" placeholder="{{ __('Chọn ngày') }}">
-                    </div>
-                    <div class="mb-10x">
-                        <button class="btn" id="btn-turn-off-compare"><img src="{{ asset('/img/remove.png') }}" width="30px"></button>
-                    </div>
-                    <div id="loader-previous-date" class="loader hide loader-previous"></div>
-                </div>
-                <div class="d-flex mt-3" id="area-total-all">
-                    @if($statusPaginate)
-                    <div>
-                        <b>{{ __('Tổng id') }} : <span class="text-danger">{{ $data->total() }} </span></b>
-                    </div>
-                    @else
-                    <div>
-                        <b>{{ __('Tổng id') }} : <span class="text-danger">{{ count($data) }}</span></b>
-                    </div>
-                    @endif
-                    <div class="ml-5">
-                        <b>{{ __('Tổng lượt cài') }} : <span class="text-danger">{{ $totalInstall ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng sai quốc gia') }} : <span class="text-danger">{{ $totalWrongCountry ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng sai nhà mạng') }} : <span class="text-danger">{{ $totalWrongNetWork ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng thiết bị thử nghiệm') }} : <span class="text-danger">{{ $totalDeviceTest ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng người dùng đăng ký') }} : <span class="text-danger">{{ $totalUserSub ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng thực cài') }} : <span class="text-danger">{{ $totalTrueInstall ?? 0 }}</span></b>
-                    </div>
-                    <div class="ml-4 compare-date">
-                        <p><b>--- {{ __('Ngày') }} :</b> <span id="real-time"></span></p>
-                    </div>
-                </div>
-                <div class="mt-2" id="area-compare-date">
-                    <div>
-                        <b>{{ __('Tổng id') }} : <span class="text-danger" id="total-id-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng lượt cài') }} : <span class="text-danger" id="total-install-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng sai quốc gia') }} : <span class="text-danger" id="wrong-country-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng sai nhà mạng') }} : <span class="text-danger" id="wrong-network-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng thiết bị thử nghiệm') }} : <span class="text-danger" id="device-test-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng người dùng đăng ký') }} : <span class="text-danger" id="user-sub-previous">0</span></b>
-                    </div>
-                    <div class="ml-5">
-                        <b>{{ __('Tổng thực cài') }} : <span class="text-danger" id="true-install-previous">0</span></b>
-                    </div>
-                    <div class="ml-4 d-none" id="text-date-area-compare-date">
-                        <p><b>--- {{ __('Ngày') }} :</b> <span id="text-date-previous"></span></p>
-                    </div>
-                </div>
-                <div class="show-content">
-                    {{ $textShowContent }}
-                </div>
-                @if($totalForThaoVy)
-                <div class="show-content">
-                    <p>{{ __('Tổng nè') }} : {{ $totalForThaoVy }}</p>
-                </div>
-                @endif
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Id</th>
-                                <th scope="col">{{ __('Ngày Cài') }}</th>
-                                <th scope="col">{{ __('Ngày') }}</th>
-                                <th scope="col" width="10%">{{ __('Ứng dụng') }}</th>
-                                <th scope="col" width="6%">{{ __('Quốc gia') }}</th>
-                                <th scope="col" width="6%">{{ __('Nền tảng') }}</th>
-                                <th scope="col" width="10%">{{ __('Mạng') }}</th>
-                                <th scope="col" class="for-behavior">{{ __('Hành vi') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($data as $record)
-                            <tr>
-                                <th scope="row">{{ $record->uid ?? '' }}</th>
-                                <td>{{ $record->date_install ?? '' }}</td>
-                                <td>{{ $record->date ?? '' }}</td>
-                                <td>{{ $record->app ?? ''}}</td>
-                                <td>{{ $record->country ?? ''}}</td>
-                                <td>{{ $record->platform ?? ''}}</td>
-                                <td>{{ isset($record->network) ? $record->network : __('Không có sim') }}</td>
-                                @if(isset($record->behavior))
-                                @php
-                                $behavior = json_decode($record->behavior, true);
-                                if($behavior == null) {
-                                $behavior = array();
-                                }
-                                @endphp
-                                <td>
-                                    <ul class="list-style-disc">
-                                        @foreach($behavior as $key => $value)
-                                        <li>{{ $key }} : {{ $value }}</li>
-                                        @endforeach
-                                    </ul>
-                                </td>
+    <div class="py-8">
+        <div class="">
+            <!-- Page Header -->
+            <div class="border-border border-b pb-6">
+                <h1 class="text-2xl font-semibold text-gray-900">{{ __('Hành vi người dùng') }}</h1>
+                <p class="mt-2 text-sm text-gray-700">{{ __('Xem và quản lý hành vi người dùng từ các ứng dụng') }}</p>
+            </div>
+
+            <!-- Back to top button -->
+            <button onclick="topFunction()" id="back-to-top"
+                    class="fixed bottom-8 z-50 right-8 bg-indigo-600 text-white rounded-full p-3 shadow-lg hover:bg-indigo-700 transition-all duration-200 hover:shadow-xl hover:-translate-y-1">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                </svg>
+            </button>
+
+            <!-- Statistics Section -->
+            <div class="mt-8">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    <div
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                        <div class="px-4 py-5 sm:p-6">
+                            <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng id') }}</dt>
+                            <dd
+                                class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                                @if ($statusPaginate)
+                                    {{ $data->total() }}
                                 @else
-                                <td></td>
+                                    {{ count($data) }}
                                 @endif
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                            </dd>
+                        </div>
+                    </div>
 
-<div class="modal fade" id="modalListAppCheckInstall" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalListAppCheckInstallLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalChangeSelectionLabel">{{ __('Danh sách lượt cài ứng dụng') }}</h5>
-                <div class="error-message-modal">
-                    <p>{{ __('Ứng dụng đã tồn tại') }}</p>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="ml-4 text-danger">
-                    <h4>{{ __('Thêm mới') }}</h4>
-                </div>
-                <div class="row choose-area-modal">
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Ứng dụng') }}</label>
-                        <select class="form-select" id="app-name-modal">
-                            @foreach($listArrayApp as $app)
-                            <option value="{{ $app }}">{{ $app }}</option>
-                            @endforeach
-                        </select>
+                    <div
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                        <div class="px-4 py-5 sm:p-6">
+                            <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng lượt cài') }}</dt>
+                            <dd
+                                class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                                {{ $totalInstall ?? 0 }}</dd>
+                        </div>
                     </div>
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Quốc gia') }}</label>
-                        <select class="form-select" id="country-modal">
-                            @foreach($listArrayCountry as $country)
-                            <option value="{{ $country }}">{{ $country }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="form-label">{{ __('Nền tảng') }}</label>
-                        <select class="form-select" id="platform-modal">
-                            @foreach($listArrayPlatform as $platform)
-                            <option value="{{ $platform }}">{{ $platform }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Người theo dõi') }}</label>
-                        <select class="form-select" id="assigned-modal">
-                            @foreach($listAssigned as $assigned)
-                            <option value="{{ $assigned }}">{{ $assigned }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-1">
-                        <button type="button" class="btn btn-primary" style="margin-top: 30px; margin-bottom: 30px;" onclick="addAppToList()">{{ __('Thêm') }}</button>
-                    </div>
-                </div>
-                <div class="ml-4 text-danger">
-                    <h4>{{ __('Tìm kiếm') }}</h4>
-                </div>
-                <div class="row choose-area-modal">
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Ứng dụng') }}</label>
-                        <select class="form-select" id="app-name-search-modal">
-                            <option value="all">Tất cả</option>
-                            @foreach($apps as $app)
-                            @if($app != '')
-                            <option value="{{ $app }}">{{ ucfirst($app) }}</option>
-                            @endif
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Quốc gia' )}}</label>
-                        <select class="form-select" id="country-search-modal">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayCountry as $country)
-                            <option value="{{ $country }}">{{ $country }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="form-label">{{ __('Nền tảng') }}</label>
-                        <select class="form-select" id="platform-search-modal">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayPlatform as $platform)
-                            <option value="{{ $platform }}">{{ $platform }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="form-label">{{ __('Người theo dõi') }}</label>
-                        <select class="form-select" id="assigned-search-modal">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listAssigned as $assigned)
-                            <option value="{{ $assigned }}">{{ $assigned }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-1">
-                        <button type="button" class="btn btn-primary" style="margin-top: 30px; margin-bottom: 30px;" onclick="searchAppInList()">{{ __('Tìm') }}</button>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-striped" id="table-list-check-install">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">{{ __('Ứng dụng') }}</th>
-                                <th scope="col">{{ __('Quốc gia') }}</th>
-                                <th scope="col">{{ __('Nền tảng') }}</th>
-                                <th scope="col">{{ __('Người theo dõi') }}</th>
-                                <th scope="col">{{ __('Thời gian cài cuối cùng') }}</th>
-                                <th scope="col">{{ __('Hành động') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-modal">
-                            @foreach($listAppCheck as $keyCheck => $check)
-                            <tr id="{{ $check->id }}">
-                                <th scope="row">{{ $keyCheck + 1 }}</th>
-                                <td>{{ ucfirst($check->app) }}</td>
-                                <td>{{ ucfirst($check->country) }}</td>
-                                <td>{{ ucfirst($check->platform) }}</td>
-                                <td>{{ $check->assigned }}</td>
-                                <td>{{ !is_string($check->last_install) ? $check->last_install->toDateTime()->format('Y-m-d H:i:s') : __('Chưa có lượt cài mới') }}</td>
-                                <td class="d-flex align-items-center">
-                                    <button data-id="{{ $check->id }}" class="btn btn-danger delete-app-in-list-check"><i class="fa fa-trash"></i></button>
-                                    @if(!isset($check->lock))
-                                    <button id="lock-{{ $check->id }}" data-id="{{ $check->id }}" title="Unlock" data-lock="1" class="btn btn-warning lock-app-in-list-check"><i class="fa fa-bell-slash"></i></button>
-                                    @else
-                                    @if($check->lock == 0)
-                                    <button id="lock-{{ $check->id }}" data-id="{{ $check->id }}" title="Lock" data-lock="1" class="btn btn-warning lock-app-in-list-check"><i class="fa fa-bell-slash"></i></button>
-                                    @else
-                                    <button id="lock-{{ $check->id }}" data-id="{{ $check->id }}" title="Unlock" data-lock="0" class="btn btn-success lock-app-in-list-check"><i class="fa fa-bell"></i></button>
-                                    @endif
-                                    @endif
-                                    <div id="loader-{{ $check->id }}" class="loader hide"></div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade" id="modalChangeSelection" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalChangeSelectionLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="d-flex">
-                    <h5 class="modal-title" id="modalChangeSelectionLabel">{{ __('Chỉnh sửa lựa chọn') }}</h5>
-                    <button type="button" class="btn ml-3" title="Reset" id="reset-btn"><i class="fa fa-undo"></i></button>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body row">
-                <div class="col-4">
-                    <h3>{{ __('Quốc gia') }}</h3>
-                    <ul class="ul-in-modal">
-                        @foreach($countries as $country)
-                        @if($country != null)
-                        @if(in_array($country, $listDefaultCountry))
-                        <li><input class="check-box-country" type="checkbox" data-id="{{ $country }}" checked disabled> {{ $country }} </li>
-                        @else
-                        @if(in_array($country, $listArrayCountry))
-                        <li><input class="check-box-country" type="checkbox" checked data-id="{{ $country }}"> {{ $country }} </li>
-                        @else
-                        <li><input class="check-box-country" type="checkbox" data-id="{{ $country }}"> {{ $country }} </li>
-                        @endif
-                        @endif
-                        @endif
-                        @endforeach
-                    </ul>
-                </div>
-                <div class="col-4">
-                    <h3>{{ __('Nền tảng') }}</h3>
-                    <ul class="ul-in-modal">
-                        @foreach($platforms as $platform)
-                        @if($platform != null)
-                        @if(in_array($platform, $listDefaultPlatform))
-                        <li><input class="check-box-platform" type="checkbox" data-id="{{ $platform }}" checked disabled> {{ $platform }} </li>
-                        @else
-                        @if(in_array($platform, $listArrayPlatform))
-                        <li><input class="check-box-platform" type="checkbox" checked data-id="{{ $platform }}"> {{ $platform }} </li>
-                        @else
-                        <li><input class="check-box-platform" type="checkbox" data-id="{{ $platform }}"> {{ $platform }} </li>
-                        @endif
-                        @endif
-                        @endif
-                        @endforeach
-                    </ul>
-                </div>
-                <div class="col-4">
-                    <h3>{{ __('Ứng dụng') }}</h3>
-                    <input class="form-control mt-2 mb-2" placeholder="Nhập tên ứng dụng" id="search-in-filter-modal" onkeypress="search()" onkeydown="search()">
-                    <ul class="ul-in-modal ul-list-app-in-modal" id="ul-list-app-in-modal">
-                        @foreach($apps as $app)
-                        @if($app != null)
-                        @if(in_array($app, $listArrayApp))
-                        <li><input class="check-box-app" type="checkbox" checked data-id="{{ $app }}"> {{ $app }} </li>
-                        @else
-                        <li><input class="check-box-app" type="checkbox" data-id="{{ $app }}"> {{ $app }} </li>
-                        @endif
-                        @endif
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-12 pl-3 pb-3">
-                <button type="button" class="btn btn-primary" id="save-change-option">{{ __('Lưu') }}</button>
-            </div>
-        </div>
-    </div>
-</div>
+                    <div
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                        <div class="px-4 py-5 sm:p-6">
+                            <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai quốc gia') }}</dt>
+                            <dd
+                                class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                                {{ $totalWrongCountry ?? 0 }}</dd>
+                        </div>
+                    </div>
 
-<div class="modal fade" id="modalReport" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalReport" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="d-flex">
-                    <h5 class="modal-title" id="modalReportLabel">{{ __('Thống kê') }}</h5>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body row">
-                <div class="col-12 d-flex row">
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Từ ngày') }}</label>
-                        <input class="form-select" type="text" id="datepicker-from">
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Đến ngày') }}</label>
-                        <input class="form-select" type="text" id="datepicker-to">
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Quốc gia') }}</label>
-                        <select class="form-select" id="country-report">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayCountry as $country)
-                            <option value="{{ $country }}">{{ $country }} </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Nền tảng') }}</label>
-                        <select class="form-select" id="platform-report">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayPlatform as $platform)
-                            <option value="{{ $platform }}">{{ $platform }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Ứng dụng') }}</label>
-                        <select class="form-select" id="app-name-report">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($listArrayApp as $app)
-                            <option value="{{ $app }}">{{ $app }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12">
-                        <label class="form-label">{{ __('Từ khóa') }}</label>
-                        <select class="form-select" id="keyword-report">
-                            <option value="all">{{ __('Tất cả') }}</option>
-                            @foreach($keywords as $keyword)
-                            <option value="{{ $keyword }}">{{ $keyword }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2 col-md-12 mt-3">
-                        <button type="button" class="btn btn-primary" onclick="getDataChart()">{{ __('Thống kê') }}</button>
+                    <div
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                        <div class="px-4 py-5 sm:p-6">
+                            <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai nhà mạng') }}</dt>
+                            <dd
+                                class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                                {{ $totalWrongNetWork ?? 0 }}</dd>
+                        </div>
                     </div>
                 </div>
-                <div class="col-12">
-                    <div id="pre-loader">
-                        @include('components.pre-loader')
-                    </div>
-                    <div id="text-total-modal" style="display: none; justify-content: center; margin: 10px 0;">
-                        <p class="total-title">Tổng lượt cài : <span id="sum-total"></span></p>
-                        <p class="total-title" style="margin-left: 15px">{{ __('Tổng thành công') }} : <span id="sum-success"></span></p>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="countChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade" id="modalActivity" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalActivity" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="d-flex">
-                    <h5 class="modal-title" id="modalReportLabel">{{ __('Lịch sử hoạt động') }}</h5>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <input type="text" id="uid-activity" class="form-control" placeholder="Nhập id device" aria-label="Nhập id device" aria-describedby="basic-addon2" require>
-                    <button class="btn btn-outline-secondary ml-3" type="button" onclick="searchActivity()">{{ __('Tìm kiếm') }}</button>
+
+            <div class="mt-8">
+                <!-- Filters Section -->
+                <div class="space-y-8">
+                    <div
+                        class="bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-200/80 overflow-hidden">
+                        <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-base font-semibold text-gray-900">{{ __('Bộ lọc') }}</h2>
+                                <button type="button"
+                                        class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                                    {{ __('Đặt lại') }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="px-6 py-5">
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2 lg:grid-cols-6">
+                                <!-- Date Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Ngày') }}</label>
+                                    <div class="relative group">
+                                        <input type="date"
+                                               id="datepicker"
+                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10"
+                                               placeholder="{{ __('Chọn ngày') }}"
+                                               value="{{ $filter['date'] ?? '' }}">
+                                        <div
+                                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <svg
+                                                class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 peer-focus:text-indigo-500"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- App Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
+                                    <div class="relative group">
+                                        <select id="app-name"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả ứng dụng') }}</option>
+                                            @foreach ($listArrayApp as $app)
+                                                <option value="{{ $app }}">{{ $app }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                </div>
+
+
+                                <!-- Country Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
+                                    <div class="relative group">
+                                        <select id="country"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả quốc gia') }}</option>
+                                            @foreach ($listArrayCountry as $country)
+                                                <option value="{{ $country }}">{{ $country }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <!-- Platform Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
+                                    <div class="relative group">
+                                        <select id="platform"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả nền tảng') }}</option>
+                                            @foreach ($listArrayPlatform as $platform)
+                                                <option value="{{ $platform }}">{{ $platform }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <!-- Network Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Mạng') }}</label>
+                                    <div class="relative group">
+                                        <select id="network"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả mạng') }}</option>
+                                            @foreach ($networks as $network)
+                                                @if ($network != '')
+                                                    <option value="{{ $network }}">{{ $network }}</option>
+                                                @endif
+                                            @endforeach
+                                            <option value="other">KHONG_CO_SIM</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <!-- Install Type Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Tổng') }}</label>
+                                    <div class="relative group">
+                                        <select id="install"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả loại') }}</option>
+                                            <option value="install">{{ __('Chỉ cài đặt') }}</option>
+                                            <option value="country">{{ __('Chỉ sai quốc gia') }}</option>
+                                            <option value="network">{{ __('Chỉ sai nhà mạng') }}</option>
+                                            <option value="test">{{ __('Chỉ thiết bị thử nghiệm') }}</option>
+                                            <option value="sub">{{ __('Chỉ người dùng đăng ký') }}</option>
+                                            <option value="real">{{ __('Chỉ thực cài') }}</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Search Button -->
+                            <div class="mt-8 flex items-center justify-between">
+                                <button type="button" id="search-report"
+                                        class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                    {{ __('Tìm kiếm') }}
+                                </button>
+
+                                <div class="flex items-center space-x-4">
+                                    <button type="button"
+                                            class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                                        {{ __('Lưu bộ lọc') }}
+                                    </button>
+                                    <div class="h-4 w-px bg-gray-300"></div>
+                                    <button type="button"
+                                            class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                                        {{ __('Bộ lọc đã lưu') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap items-center gap-3" id="group-btn-filter">
+                        <button type="button" data-modal-target="modalListAppCheckInstall"
+                                data-modal-toggle="modalListAppCheckInstall"
+                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                            <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                            {{ __('Danh sách lượt cài') }}
+                        </button>
+
+                        <button type="button" data-modal-target="modalChangeSelection"
+                                data-modal-toggle="modalChangeSelection"
+                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                            <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            {{ __('Chỉnh sửa lựa chọn') }}
+                        </button>
+
+                        <button type="button" data-modal-target="modalReport" data-modal-toggle="modalReport"
+                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                            <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                            {{ __('Thống kê') }}
+                        </button>
+
+                        @php
+                            $pareDate = $filter['date'] ?? '';
+                            $canCompare = !empty($pareDate) && strtotime($today) >= strtotime($pareDate);
+                        @endphp
+
+                        @if ($canCompare)
+                            <button type="button" id="compare-date-btn"
+                                    class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                {{ __('So sánh ngày') }}
+                            </button>
+                        @endif
+
+                        <button type="button" data-modal-target="modalActivity" data-modal-toggle="modalActivity"
+                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                            <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            {{ __('Lịch sử hoạt động') }}
+                        </button>
+                    </div>
                 </div>
-                <div class="table-responsive mt-3">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">{{ __('Thời gian') }}</th>
-                                <th scope="col">{{ __('Hoạt động') }}</th>
-                                <th scope="col">{{ __('Dữ liệu (nếu có)') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-activity">
-                        </tbody>
-                    </table>
+            </div>
+
+            <!-- Date Comparison Modal -->
+            <div id="modalDateComparison" tabindex="-1" aria-hidden="true"
+                 class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                <div class="relative w-full max-w-4xl max-h-full">
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                                {{ __('So sánh dữ liệu') }}
+                            </h3>
+                            <button type="button"
+                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                    data-modal-hide="modalDateComparison">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                     viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="p-4 md:p-5">
+                            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                <!-- Current Date Section -->
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <h5 class="text-sm font-medium text-gray-700">{{ __('Ngày hiện tại') }}</h5>
+                                        <span id="current-date-display" class="text-sm text-gray-500"></span>
+                                    </div>
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <dl class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Tổng lượt cài') }}</dt>
+                                                <dd id="current-total-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Thành công') }}</dt>
+                                                <dd id="current-success-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Sai quốc gia') }}</dt>
+                                                <dd id="current-wrong-country" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Sai mạng') }}</dt>
+                                                <dd id="current-wrong-network" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+
+                                <!-- Comparison Date Section -->
+                                <div class="space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <h5 class="text-sm font-medium text-gray-700">{{ __('Ngày so sánh') }}</h5>
+                                        <div class="relative">
+                                            <input type="text" id="comparison-date"
+                                                   class="block w-40 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                   placeholder="{{ __('Chọn ngày') }}">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <dl class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Tổng lượt cài') }}</dt>
+                                                <dd id="comparison-total-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Thành công') }}</dt>
+                                                <dd id="comparison-success-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Sai quốc gia') }}</dt>
+                                                <dd id="comparison-wrong-country" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                            <div>
+                                                <dt class="text-xs text-gray-500">{{ __('Sai mạng') }}</dt>
+                                                <dd id="comparison-wrong-network" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Comparison Actions -->
+                            <div class="mt-6 flex items-center justify-end space-x-4">
+                                <div id="comparison-loader" class="hidden">
+                                    <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-indigo-600"></div>
+                                </div>
+                                <button type="button" id="compare-dates"
+                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                                    {{ __('So sánh') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="pre-loader-activity">
-                    @include('components.pre-loader')
+            </div>
+
+
+            <!-- Data Table -->
+            <div class="mt-4">
+                @if (count($data) > 0)
+                    <x-table>
+                        <x-table.header class="border-t border-gray-200">
+                            <x-table.row>
+                                <x-table.head>ID</x-table.head>
+                                <x-table.head>{{ __('Ứng dụng') }}</x-table.head>
+                                <x-table.head>{{ __('Quốc gia') }}</x-table.head>
+                                <x-table.head>{{ __('Nền tảng') }}</x-table.head>
+                                <x-table.head>{{ __('ID Device') }}</x-table.head>
+                                <x-table.head>{{ __('Nhà mạng') }}</x-table.head>
+                                <x-table.head>{{ __('Time UTC') }}</x-table.head>
+                                <x-table.head>{{ __('Ngày tạo') }}</x-table.head>
+                                <x-table.head>{{ __('Hành vi') }}</x-table.head>
+                            </x-table.row>
+                        </x-table.header>
+
+                        <x-table.body>
+                            @foreach ($data as $item)
+                                <x-table.row class="hover:bg-gray-50">
+                                    <x-table.cell class="font-mono text-xs">{{ $item->id ?? 'N/A' }}</x-table.cell>
+                                    <x-table.cell class="text-sm font-mono text-gray-900">
+                                        {{ $item->app ?? 'N/A' }}
+                                    </x-table.cell>
+                                    <x-table.cell class="text-sm font-mono text-gray-900">
+                                        {{ $item->country ?? 'N/A' }}
+                                    </x-table.cell>
+                                    <x-table.cell>
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono bg-gray-100 text-gray-800">
+                                            {{ $item->platform ?? 'N/A' }}
+                                        </span>
+                                    </x-table.cell>
+                                    <x-table.cell class="font-mono text-xs">{{ $item->uid ?? 'N/A' }}</x-table.cell>
+                                    <x-table.cell class="text-sm font-mono text-gray-900">
+                                        {{ $item->network ?: 'KHONG_CO_SIM' }}
+                                    </x-table.cell>
+                                    <x-table.cell class="font-mono text-xs">{{ $item->timeutc ?? 'N/A' }}</x-table.cell>
+                                    <x-table.cell>
+                                        @php
+                                            $date = $item->date ?? null;
+                                            if ($date instanceof \MongoDB\BSON\UTCDateTime) {
+                                                $formattedDate = $date->toDateTime()->format('Y-m-d H:i:s');
+                                            } elseif ($date && is_string($date)) {
+                                                $formattedDate = date('Y-m-d H:i:s', strtotime($date));
+                                            } else {
+                                                $formattedDate = 'N/A';
+                                            }
+                                        @endphp
+                                        <span class="font-mono text-xs">{{ $formattedDate }}</span>
+                                    </x-table.cell>
+                                    <x-table.cell class="max-w-md whitespace-normal">
+                                        @php
+                                            $behavior = $item->behavior ?? '';
+                                            if (is_string($behavior)) {
+                                                $behaviorData = json_decode($behavior, true);
+                                                if (json_last_error() === JSON_ERROR_NONE && is_array($behaviorData)) {
+                                                    echo '<div class="space-y-1.5">';
+                                                    foreach ($behaviorData as $key => $value) {
+                                                        $bgColor = 'bg-gray-50';
+                                                        $textColor = 'text-gray-600';
+
+                                                        if (strpos($key, 'INSTALL') !== false) {
+                                                            $bgColor = 'bg-emerald-50';
+                                                            $textColor = 'text-emerald-700';
+                                                        } elseif (strpos($value, 'SUCCESS') !== false || strpos($key, 'SUB_OK') !== false) {
+                                                            $bgColor = 'bg-blue-50';
+                                                            $textColor = 'text-blue-700';
+                                                        } elseif (strpos($key, 'ERRO') !== false || strpos($value, 'ERRO') !== false || strpos($key, 'SAI_') !== false) {
+                                                            $bgColor = 'bg-red-50';
+                                                            $textColor = 'text-red-700';
+                                                        } elseif (strpos($key, 'PERMISSION') !== false) {
+                                                            $bgColor = 'bg-amber-50';
+                                                            $textColor = 'text-amber-700';
+                                                        }
+
+                                                        echo "<div class='text-xs p-1.5 rounded {$bgColor} break-words'>";
+                                                        echo "<span class='font-medium {$textColor}'>{$key}:</span> ";
+
+                                                        if (strpos($value, 'DEVICE:') !== false) {
+                                                            $parts = explode('DEVICE:', $value);
+                                                            echo "<span class='break-all'>" . e(trim($parts[0])) . "</span>";
+                                                            if (isset($parts[1])) {
+                                                                echo "<div class='mt-1 font-mono text-xs text-gray-500 break-all'>DEVICE: " . e(trim($parts[1])) . "</div>";
+                                                            }
+                                                        } elseif (filter_var($value, FILTER_VALIDATE_URL)) {
+                                                            echo "<span class='break-all text-blue-600 hover:text-blue-800'>" . e($value) . "</span>";
+                                                        } else {
+                                                            echo "<span class='break-all'>" . e($value) . "</span>";
+                                                        }
+
+                                                        echo "</div>";
+                                                    }
+                                                    echo '</div>';
+                                                } else {
+                                                    echo '<div class="text-xs text-gray-600 break-words">' . e($behavior) . '</div>';
+                                                }
+                                            } else {
+                                                echo '<span class="text-gray-400">N/A</span>';
+                                            }
+                                        @endphp
+                                    </x-table.cell>
+                                </x-table.row>
+                            @endforeach
+                        </x-table.body>
+                    </x-table>
+                @else
+                    <div class="bg-white px-6 py-8">
+                        <div class="text-center">
+                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-gray-50">
+                                <svg class="w-6 h-6 text-gray-400" viewBox="0 0 24 24" fill="currentColor"
+                                     aria-hidden="true">
+                                    <path
+                                        d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <h3 class="mt-4 text-sm font-semibold text-gray-900">{{ __('Không tìm thấy dữ liệu') }}</h3>
+                            <p class="mt-2 text-sm text-gray-500">
+                                {{ __('Bạn có thể thay đổi bộ lọc hoặc tìm kiếm lại để mở rộng kết quả.') }}
+                            </p>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Pagination -->
+            @if (count($data) > 0 && $statusPaginate)
+                <div class="mt-6">
+                    {{ $data->appends(request()->except('page'))->links() }}
                 </div>
-                <div id="empty-result">
-                    <p class="text-danger ">{{ __('Không tìm thấy kết quả') }}</p>
+            @endif
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- List App Check Install Modal -->
+    <div id="modalListAppCheckInstall" tabindex="-1" aria-hidden="true"
+         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-4xl max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalListAppCheckInstallLabel">
+                        {{ __('Danh sách lượt cài ứng dụng') }}
+                    </h3>
+                    <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modalListAppCheckInstall">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                             viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5">
+                    <!-- Your existing modal content -->
+                    <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
+                        <!-- Add New Section -->
+                        <div class="mt-6 bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                            <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
+                                <h4 class="text-base font-medium text-gray-900">{{ __('Thêm mới') }}</h4>
+                            </div>
+                            <div class="p-6">
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
+                                        <div class="relative group">
+                                            <select id="app-name-modal"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                @foreach ($listArrayApp as $app)
+                                                    <option value="{{ $app }}">{{ $app }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
+                                        <div class="relative group">
+                                            <select id="country-modal"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                @foreach ($listArrayCountry as $country)
+                                                    <option value="{{ $country }}">{{ $country }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
+                                        <div class="relative group">
+                                            <select id="platform-modal"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                @foreach ($listArrayPlatform as $platform)
+                                                    <option value="{{ $platform }}">{{ $platform }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Người theo dõi') }}</label>
+                                        <div class="relative group">
+                                            <select id="assigned-modal"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                @foreach ($listAssigned as $assigned)
+                                                    <option value="{{ $assigned }}">{{ $assigned }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6">
+                                    <button type="button" onclick="addAppToList()"
+                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
+                                             viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                        </svg>
+                                        {{ __('Thêm') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Search Section -->
+                        <div class="mt-8 bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                            <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
+                                <h4 class="text-base font-medium text-gray-900">{{ __('Tìm kiếm') }}</h4>
+                            </div>
+                            <div class="p-6">
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
+                                        <div class="relative group">
+                                            <select id="app-name-search-modal"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                <option value="all">{{ __('Tất cả') }}</option>
+                                                @foreach ($apps as $app)
+                                                    @if ($app != '')
+                                                        <option value="{{ $app }}">{{ ucfirst($app) }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
+                                        <div class="relative group">
+                                            <select id="country-search-modal"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                <option value="all">{{ __('Tất cả') }}</option>
+                                                @foreach ($listArrayCountry as $country)
+                                                    <option value="{{ $country }}">{{ $country }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
+                                        <div class="relative group">
+                                            <select id="platform-search-modal"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                <option value="all">{{ __('Tất cả') }}</option>
+                                                @foreach ($listArrayPlatform as $platform)
+                                                    <option value="{{ $platform }}">{{ $platform }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Người theo dõi') }}</label>
+                                        <div class="relative group">
+                                            <select id="assigned-search-modal"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                <option value="all">{{ __('Tất cả') }}</option>
+                                                @foreach ($listAssigned as $assigned)
+                                                    <option value="{{ $assigned }}">{{ $assigned }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6">
+                                    <button type="button" onclick="searchAppInList()"
+                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
+                                             viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                        </svg>
+                                        {{ __('Tìm') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Table -->
+                        <div class="mt-8">
+                            <div class="bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200/80" id="table-list-check-install">
+                                        <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col"
+                                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
+                                                #
+                                            </th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Ứng dụng') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Quốc gia') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Nền tảng') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Người theo dõi') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Thời gian cài cuối cùng') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Hành động') }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200 bg-white" id="tbody-modal">
+                                        @foreach ($listAppCheck as $keyCheck => $check)
+                                            <tr id="{{ $check->id }}"
+                                                class="hover:bg-gray-50/50 transition-colors duration-200">
+                                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
+                                                    {{ $keyCheck + 1 }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ ucfirst($check->app) }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ ucfirst($check->country) }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ ucfirst($check->platform) }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ $check->assigned }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ !is_string($check->last_install) ? $check->last_install->toDateTime()->format('Y-m-d H:i:s') : __('Chưa có lượt cài mới') }}
+                                                </td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    <div class="flex items-center space-x-3">
+                                                        <button data-id="{{ $check->id }}"
+                                                                class="text-red-600 hover:text-red-900 transition-colors duration-200 delete-app-in-list-check">
+                                                            <svg class="h-5 w-5" fill="none" stroke="currentColor"
+                                                                 viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                      stroke-width="2"
+                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                            </svg>
+                                                        </button>
+                                                        @if (!isset($check->lock))
+                                                            <button id="lock-{{ $check->id }}"
+                                                                    data-id="{{ $check->id }}" title="Unlock"
+                                                                    data-lock="1"
+                                                                    class="text-yellow-600 hover:text-yellow-900 transition-colors duration-200 lock-app-in-list-check">
+                                                                <svg class="h-5 w-5" fill="none"
+                                                                     stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round"
+                                                                          stroke-linejoin="round" stroke-width="2"
+                                                                          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                                                </svg>
+                                                            </button>
+                                                        @else
+                                                            @if ($check->lock == 0)
+                                                                <button id="lock-{{ $check->id }}"
+                                                                        data-id="{{ $check->id }}" title="Lock"
+                                                                        data-lock="1"
+                                                                        class="text-yellow-600 hover:text-yellow-900 transition-colors duration-200 lock-app-in-list-check">
+                                                                    <svg class="h-5 w-5" fill="none"
+                                                                         stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round"
+                                                                              stroke-linejoin="round" stroke-width="2"
+                                                                              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                                                    </svg>
+                                                                </button>
+                                                            @else
+                                                                <button id="lock-{{ $check->id }}"
+                                                                        data-id="{{ $check->id }}" title="Unlock"
+                                                                        data-lock="0"
+                                                                        class="text-green-600 hover:text-green-900 transition-colors duration-200 lock-app-in-list-check">
+                                                                    <svg class="h-5 w-5" fill="none"
+                                                                         stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round"
+                                                                              stroke-linejoin="round" stroke-width="2"
+                                                                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                                                    </svg>
+                                                                </button>
+                                                            @endif
+                                                        @endif
+                                                        <div id="loader-{{ $check->id }}" class="loader hide">
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Change Selection Modal -->
+    <div id="modalChangeSelection" tabindex="-1" aria-hidden="true"
+         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-4xl max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalChangeSelectionLabel">
+                        {{ __('Chỉnh sửa lựa chọn') }}
+                    </h3>
+                    <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modalChangeSelection">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                             viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5">
+                    <!-- Your existing modal content -->
+                    <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
+                        <!-- Keep your existing content structure -->
+                        <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
+                            <!-- Countries -->
+                            <div class="bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                                <div class="border-b border-gray-200/80 bg-gray-50/80 px-4 py-3">
+                                    <h4 class="text-base font-medium text-gray-900">{{ __('Quốc gia') }}</h4>
+                                </div>
+                                <div class="p-4">
+                                    <div class="max-h-96 overflow-y-auto">
+                                        <ul class="space-y-2">
+                                            @foreach ($countries as $country)
+                                                @if ($country != null)
+                                                    <li class="flex items-center">
+                                                        @if (in_array($country, $listDefaultCountry))
+                                                            <input type="checkbox"
+                                                                   class="check-box-country h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                   data-id="{{ $country }}" checked disabled>
+                                                        @else
+                                                            <input type="checkbox"
+                                                                   class="check-box-country h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                   data-id="{{ $country }}"
+                                                                {{ in_array($country, $listArrayCountry) ? 'checked' : '' }}>
+                                                        @endif
+                                                        <label
+                                                            class="ml-2 text-sm text-gray-700">{{ $country }}</label>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Platforms -->
+                            <div class="bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                                <div class="border-b border-gray-200/80 bg-gray-50/80 px-4 py-3">
+                                    <h4 class="text-base font-medium text-gray-900">{{ __('Nền tảng') }}</h4>
+                                </div>
+                                <div class="p-4">
+                                    <div class="max-h-96 overflow-y-auto">
+                                        <ul class="space-y-2">
+                                            @foreach ($platforms as $platform)
+                                                @if ($platform != null)
+                                                    <li class="flex items-center">
+                                                        @if (in_array($platform, $listDefaultPlatform))
+                                                            <input type="checkbox"
+                                                                   class="check-box-platform h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                   data-id="{{ $platform }}" checked disabled>
+                                                        @else
+                                                            <input type="checkbox"
+                                                                   class="check-box-platform h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                   data-id="{{ $platform }}"
+                                                                {{ in_array($platform, $listArrayPlatform) ? 'checked' : '' }}>
+                                                        @endif
+                                                        <label
+                                                            class="ml-2 text-sm text-gray-700">{{ $platform }}</label>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Apps -->
+                            <div class="bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                                <div class="border-b border-gray-200/80 bg-gray-50/80 px-4 py-3">
+                                    <h4 class="text-base font-medium text-gray-900">{{ __('Ứng dụng') }}</h4>
+                                </div>
+                                <div class="p-4">
+                                    <div class="relative">
+                                        <input type="text" id="search-in-filter-modal"
+                                               placeholder="{{ __('Nhập tên ứng dụng') }}"
+                                               class="block w-full rounded-lg border border-gray-300 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                                               onkeypress="search()" onkeydown="search()">
+                                        <div
+                                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                                 viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 max-h-96 overflow-y-auto">
+                                        <ul class="space-y-2" id="ul-list-app-in-modal">
+                                            @foreach ($apps as $app)
+                                                @if ($app != null)
+                                                    <li class="flex items-center">
+                                                        <input type="checkbox"
+                                                               class="check-box-app h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                               data-id="{{ $app }}"
+                                                            {{ in_array($app, $listArrayApp) ? 'checked' : '' }}>
+                                                        <label
+                                                            class="ml-2 text-sm text-gray-700">{{ $app }}</label>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <button type="button" id="save-change-option"
+                                    class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M5 13l4 4L19 7"/>
+                                </svg>
+                                {{ __('Lưu') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="modalReport" tabindex="-1" aria-hidden="true"
+         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-4xl max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalReportLabel">
+                        {{ __('Thống kê') }}
+                    </h3>
+                    <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modalReport">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                             viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5">
+                    <!-- Your existing modal content -->
+                    <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
+                        <!-- Keep your existing content structure -->
+                        <div class="mt-6 bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                            <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
+                                <h4 class="text-base font-medium text-gray-900">{{ __('Bộ lọc') }}</h4>
+                            </div>
+                            <div class="p-6">
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Từ ngày') }}</label>
+                                        <div class="relative group">
+                                            <input type="text" id="datepicker-from"
+                                                   class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 group-hover:shadow-md"
+                                                   placeholder="{{ __('Chọn ngày bắt đầu') }}">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Đến ngày') }}</label>
+                                        <div class="relative group">
+                                            <input type="text" id="datepicker-to"
+                                                   class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 group-hover:shadow-md"
+                                                   placeholder="{{ __('Chọn ngày kết thúc') }}">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
+                                        <div class="relative group">
+                                            <select id="country-report"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                <option value="all">{{ __('Tất cả') }}</option>
+                                                @foreach ($listArrayCountry as $country)
+                                                    <option value="{{ $country }}">{{ $country }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
+                                        <div class="relative group">
+                                            <select id="platform-report"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                <option value="all">{{ __('Tất cả') }}</option>
+                                                @foreach ($listArrayPlatform as $platform)
+                                                    <option value="{{ $platform }}">{{ $platform }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
+                                        <div class="relative group">
+                                            <select id="app-name-report"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                <option value="all">{{ __('Tất cả') }}</option>
+                                                @foreach ($listArrayApp as $app)
+                                                    <option value="{{ $app }}">{{ $app }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label
+                                            class="block text-sm font-medium text-gray-700">{{ __('Từ khóa') }}</label>
+                                        <div class="relative group">
+                                            <select id="keyword-report"
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                <option value="all">{{ __('Tất cả') }}</option>
+                                                @foreach ($keywords as $keyword)
+                                                    <option value="{{ $keyword }}">{{ $keyword }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6">
+                                    <button type="button" onclick="getDataChart()"
+                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
+                                             viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                        </svg>
+                                        {{ __('Thống kê') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chart Results -->
+                        <div class="mt-8">
+                            <div id="pre-loader" class="flex justify-center">
+                                @include('components.pre-loader')
+                            </div>
+                            <div id="text-total-modal" class="hidden justify-center space-x-8 mt-6 mb-8">
+                                <div class="text-center">
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Tổng lượt cài') }}</dt>
+                                    <dd class="mt-1 text-3xl font-semibold text-indigo-600" id="sum-total"></dd>
+                                </div>
+                                <div class="text-center">
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Tổng thành công') }}</dt>
+                                    <dd class="mt-1 text-3xl font-semibold text-indigo-600" id="sum-success"></dd>
+                                </div>
+                            </div>
+                            <div class="chart-container bg-white rounded-lg border border-gray-200/80 p-6">
+                                <canvas id="countChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Modal -->
+    <div id="modalActivity" tabindex="-1" aria-hidden="true"
+         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-4xl max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white" id="modalActivityLabel">
+                        {{ __('Lịch sử hoạt động') }}
+                    </h3>
+                    <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modalActivity">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                             viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5">
+                    <!-- Your existing modal content -->
+                    <div class="mt-3 w-full text-center sm:mt-0 sm:text-left">
+                        <!-- Keep your existing content structure -->
+                        <div class="mt-6 bg-white rounded-lg border border-gray-200/80 overflow-hidden">
+                            <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex-1">
+                                        <input type="text" id="uid-activity"
+                                               placeholder="{{ __('Nhập id device') }}"
+                                               class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                                    </div>
+                                    <button type="button" onclick="searchActivity()"
+                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
+                                             viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                        </svg>
+                                        {{ __('Tìm kiếm') }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200/80">
+                                    <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col"
+                                            class="py-3.5 pl-4 pr-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            {{ __('Thời gian') }}</th>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            {{ __('Hoạt động') }}</th>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            {{ __('Dữ liệu (nếu có)') }}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200/80 bg-white" id="table-activity"></tbody>
+                                </table>
+                            </div>
+
+                            <div id="pre-loader-activity" class="flex justify-center p-6">
+                                @include('components.pre-loader')
+                            </div>
+
+                            <div id="empty-result" class="hidden p-6 text-center">
+                                <p class="text-sm font-medium text-red-600">{{ __('Không tìm thấy kết quả') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
-<script>
-    var backToTop = document.getElementById("back-to-top");
-    var chart = 'chart';
-    var app = '<?php echo $filter['app']; ?>';
-    var country = '<?php echo $filter['country']; ?>';
-    var platform = '<?php echo $filter['platform']; ?>';
-    var network = '<?php echo $filter['network']; ?>';
-    var install = '<?php echo $filter['install']; ?>';
-    var date = '<?php echo $filter['date']; ?>';
-    var today = '<?php echo $today; ?>';
-    var prevToday = '<?php echo $prevToday; ?>';
-    var urlParams = new URLSearchParams(window.location.search);
-    var strInPage = '';
-    var statusNowDate = true;
-    if (install) {
-        $("#install").val(install);
-        if (strInPage == '') {
-            strInPage += '?install=' + install;
-        } else {
-            strInPage += '&install=' + install;
+
+    <script>
+        var backToTop = document.getElementById("back-to-top");
+        var chart = 'chart';
+        var app = '<?php echo $filter['app']; ?>';
+        var country = '<?php echo $filter['country']; ?>';
+        var platform = '<?php echo $filter['platform']; ?>';
+        var network = '<?php echo $filter['network']; ?>';
+        var install = '<?php echo $filter['install']; ?>';
+        var date = '<?php echo $filter['date']; ?>';
+        var today = '<?php echo $today; ?>';
+        var prevToday = '<?php echo $prevToday; ?>';
+        var urlParams = new URLSearchParams(window.location.search);
+        var strInPage = '';
+        var statusNowDate = true;
+        if (install) {
+            $("#install").val(install);
+            if (strInPage == '') {
+                strInPage += '?install=' + install;
+            } else {
+                strInPage += '&install=' + install;
+            }
         }
-    }
-    $.fn.select2.defaults.set("theme", "bootstrap");
-</script>
-<script src="{{ asset('js/log-behavior.js') }}"></script>
+    </script>
+    <script src="{{ asset('js/log-behavior.js') }}"></script>
 @endsection

@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
     <link rel="stylesheet" href="{{ asset('/css/lib/font-awesome/css/font-awesome.min.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css" />
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('/css/custom.css') }}" />
     <link rel="stylesheet" href="{{ asset('/css/lib.css') }}" />
 
@@ -43,7 +44,7 @@
     <div x-data="mainState" :class="{ dark: isDarkMode }" x-on:resize.window="handleWindowResize" x-cloak>
         <div class="min-h-screen text-gray-900 bg-background dark:bg-dark-eval-0 dark:text-gray-200">
             <!-- Fixed Navbar -->
-            <div class="fixed top-0 left-0 right-0 z-50">
+            <div class="fixed top-0 left-0 right-0 z-10">
                 <x-navbar />
             </div>
 
@@ -74,6 +75,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="{{ asset('js/chart.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>

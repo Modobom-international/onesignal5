@@ -1,169 +1,260 @@
 @extends('layouts.app')
 
-@section('title')
-List Push System
-@endsection
-
-@section('styles')
-<link href="{{ asset('css/push-system.css') }}" rel="stylesheet">
-@endsection
+@section('title', 'List Push System')
 
 @section('content')
-<div class="container-fluid">
-    <div class="card">
-        <div class="card-header">
-            <p>Push System</p>
-            <a href="{{ route('push.system.config.link') }}" class="btn btn-primary btn-sm" title="Config links push">
-                <i class="fa fa-gear" aria-hidden="true"></i> Config links push
-            </a>
-        </div>
+    <div class=" py-8">
+        <div>
+            <!-- Page Header -->
+            <div class="mb-6 border-border border-b pb-6">
+                <div class="sm:flex sm:items-center sm:justify-between">
+                    <div class="sm:flex-auto">
+                        <h1 class="text-2xl font-semibold text-gray-900">{{ __('Hệ thống Push') }}</h1>
+                        <p class="mt-2 text-sm text-gray-700">
+                            {{ __('Quản lý và theo dõi thống kê hệ thống thông báo đẩy') }}</p>
+                    </div>
+                    <div class="mt-4 sm:mt-0 sm:flex-none">
+                        <a href="{{ route('push.system.config.link') }}"
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                            <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            {{ __('Cấu hình liên kết push') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-        <div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
-            <div class="h-screen flex-grow-1 overflow-y-lg-auto">
-                <main class="py-6 bg-surface-secondary">
-                    <div class="container-fluid">
-                        <div class="row g-6 mb-6">
-                            <div class="col-xl-3 col-sm-6 col-12">
-                                <div class="card shadow border-0">
-                                    <div class="card-body" id="count_total_user">
-                                        <div class="row">
-                                            <div class="col">
-                                                <span class="h6 font-semibold text-muted text-sm d-block mb-2">Tổng User </span>
-                                                <span class="h3 font-bold mb-0">{{ number_format($countUser) }}</span>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div class="icon icon-shape bg-primary text-white text-lg rounded-circle">
-                                                    <i class="bi bi-people"></i>
-                                                </div>
-                                            </div>
-                                        </div>
+            <!-- Main Content -->
+            <div >
+                <div class="py-6">
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+                        <!-- Total Users Card -->
+                        <div class="relative group">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg blur opacity-0 group-hover:opacity-25 transition duration-200">
+                            </div>
+                            <div class="relative bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer p-5"
+                                id="count_total_user">
+                                <div class="flex items-center">
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng User') }}</p>
+                                        <p class="mt-1 text-2xl font-semibold text-gray-900">{{ number_format($countUser) }}
+                                        </p>
+                                    </div>
+                                    <div
+                                        class="flex-shrink-0 p-3 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-full">
+                                        <svg class="w-6 h-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xl-3 col-sm-6 col-12">
-                                <div class="card shadow border-0">
-                                    <div class="card-body" id="count_total_user_active">
-                                        <div class="row">
-                                            <div class="col">
-                                                <span class="h6 font-semibold text-muted text-sm d-block mb-2">Tổng User hoạt động trong ngày</span>
-                                                <span id="users_active" class="h3 font-bold mb-0">{{ number_format($totalActive) }}</span>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div class="icon icon-shape bg-primary text-white text-lg rounded-circle">
-                                                    <i class="bi bi-people"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="mt-4 text-xs text-gray-500">
+                                    <span class="flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span>{{ __('Xem chi tiết') }}</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="loading">
-                            @include('components.pre-loader')
-                        </div>
-
-                        <div cl1ass="table-responsive">
-                            <div id="total_users">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Country</th>
-                                            <th>Number of users</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($activeByCountry as $country => $total)
-                                        <tr class="row-user">
-                                            <td> {{ $country }}</td>
-                                            <td> {{ number_format($total) }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                        <!-- Active Users Card -->
+                        <div class="relative group">
+                            <div
+                                class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg blur opacity-0 group-hover:opacity-25 transition duration-200">
                             </div>
-
-                            <div id="total_active_users" style="display: none;">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Country</th>
-                                            <th>Number of users</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($activeByCountry as $country => $total)
-                                        <tr class="row-user">
-                                            <td> {{ $country }}</td>
-                                            <td> {{ number_format($total) }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                            <div class="relative bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer p-5"
+                                id="count_total_user_active">
+                                <div class="flex items-center">
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng User hoạt động trong ngày') }}</p>
+                                        <p class="mt-1 text-2xl font-semibold text-gray-900" id="users_active">
+                                            {{ number_format($totalActive) }}</p>
+                                    </div>
+                                    <div
+                                        class="flex-shrink-0 p-3 bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-full">
+                                        <svg class="w-6 h-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="mt-4 text-xs text-gray-500">
+                                    <span class="flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <span>{{ __('Xem chi tiết') }}</span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </main>
+
+                    <!-- Loading Indicator -->
+                    <div class="loading hidden">
+                        <div
+                            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity flex items-center justify-center z-50">
+                            <div class="relative">
+                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+                                <div class="mt-4 text-white text-sm font-medium">{{ __('Đang tải...') }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table Section -->
+                    <div class="mt-8">
+                        <div class="sm:rounded-lg">
+                            <div id="total_users">
+                                <x-table>
+                                    <x-table.header class="border-t border-gray-200">
+                                        <x-table.row>
+                                            <x-table.head>{{ __('Quốc gia') }}</x-table.head>
+                                            <x-table.head>{{ __('Số lượng người dùng') }}</x-table.head>
+                                        </x-table.row>
+                                    </x-table.header>
+
+                                    <x-table.body>
+                                        @foreach ($activeByCountry as $country => $total)
+                                            <x-table.row>
+                                                <x-table.cell>{{ $country }}</x-table.cell>
+                                                <x-table.cell>{{ number_format($total) }}</x-table.cell>
+                                            </x-table.row>
+                                        @endforeach
+                                    </x-table.body>
+                                </x-table>
+                            </div>
+
+                            <div id="total_active_users" class="hidden">
+                                <x-table>
+                                    <x-table.header class="border-t border-gray-200">
+                                        <x-table.row>
+                                            <x-table.head>{{ __('Quốc gia') }}</x-table.head>
+                                            <x-table.head>{{ __('Số lượng người dùng') }}</x-table.head>
+                                        </x-table.row>
+                                    </x-table.header>
+
+                                    <x-table.body>
+                                        @foreach ($activeByCountry as $country => $total)
+                                            <x-table.row>
+                                                <x-table.cell>{{ $country }}</x-table.cell>
+                                                <x-table.cell>{{ number_format($total) }}</x-table.cell>
+                                            </x-table.row>
+                                        @endforeach
+                                    </x-table.body>
+                                </x-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @section('scripts')
-<script>
-    $(document).ready(function() {
-        $('#total_active_users').hide();
-        $(".loading").hide();
-
-        $(document).ajaxStart(function() {
-            $(".loading").show();
-        });
-
-        $(document).ajaxStop(function() {
+    <script>
+        $(document).ready(function() {
+            $('#total_active_users').hide();
             $(".loading").hide();
-        });
 
-        $(document).ajaxError(function() {
-            $(".loading").hide();
-        });
-        setInterval(loadUsersActive, 30000);
-        $("#count_total_user").click(function() {
-            $("#count_total_user").css("background-color", "#3bf937");
-            $("#count_total_user_active").css("background-color", "white");
-            location.reload();
-        });
+            // Show loading indicator during AJAX requests
+            $(document).ajaxStart(function() {
+                $(".loading").removeClass('hidden');
+            });
 
-        $("#count_total_user_active").click(function() {
-            $("#count_total_user_active").css("background-color", "#3bf937");
-            $("#count_total_user").css("background-color", "white");
-            $('#user-table tbody').empty();
-            $('#total_users').hide();
-            $('#total_active_users').show();
-            loadUsersActive();
+            $(document).ajaxStop(function() {
+                $(".loading").addClass('hidden');
+            });
+
+            $(document).ajaxError(function() {
+                $(".loading").addClass('hidden');
+            });
+
             setInterval(loadUsersActive, 30000);
+
+            // Tab switching functionality
+            $("#tab_total_users, #count_total_user").click(function() {
+                // Update tab styles
+                $("#tab_total_users").addClass('border-indigo-500 text-indigo-600')
+                    .removeClass(
+                        'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300');
+                $("#tab_active_users").removeClass('border-indigo-500 text-indigo-600')
+                    .addClass('border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300');
+
+                // Update card styles
+                $("#count_total_user").addClass('ring-2 ring-indigo-600').siblings().removeClass(
+                    'ring-2 ring-indigo-600');
+                $("#count_total_user_active").removeClass('ring-2 ring-indigo-600');
+
+                // Show/hide content
+                $('#total_users').removeClass('hidden');
+                $('#total_active_users').addClass('hidden');
+
+                if ($(this).attr('id') === 'count_total_user') {
+                    location.reload();
+                }
+            });
+
+            $("#tab_active_users, #count_total_user_active").click(function() {
+                // Update tab styles
+                $("#tab_active_users").addClass('border-indigo-500 text-indigo-600')
+                    .removeClass(
+                        'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300');
+                $("#tab_total_users").removeClass('border-indigo-500 text-indigo-600')
+                    .addClass('border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300');
+
+                // Update card styles
+                $("#count_total_user_active").addClass('ring-2 ring-indigo-600').siblings().removeClass(
+                    'ring-2 ring-indigo-600');
+                $("#count_total_user").removeClass('ring-2 ring-indigo-600');
+
+                // Show/hide content
+                $('#total_users').addClass('hidden');
+                $('#total_active_users').removeClass('hidden');
+
+                loadUsersActive();
+            });
         });
 
-    });
+        function loadUsersActive() {
+            $.ajax({
+                url: '{{ route('push.system.list.user.active.ajax') }}',
+                type: 'GET',
+                success: function(data) {
+                    $('#users_active').text(new Intl.NumberFormat().format(data.total));
+                    $('#total_active_users table tbody').empty();
 
-    function loadUsersActive() {
-        $.ajax({
-            url: '{{ route("push.system.list.user.active.ajax") }}',
-            type: 'GET',
-            success: function(data) {
-                $('#users_active').text(new Intl.NumberFormat().format(data.total));
-                $('#total_active_users table tbody').empty();
-                $.each(data.usersActiveCountry, function(key, record) {
-                    var split = record.key.split("_");
-                    var country = split[6];
-                    $('#total_active_users table tbody').append(`
-                            <tr class="row-user">
-                                  <td>` + country + `</td>
-                                  <td>` + new Intl.NumberFormat().format(record.total) + `</td>
-                            </tr>`);
-                });
-            }
-        });
-    }
-</script>
+                    $.each(data.usersActiveCountry, function(key, record) {
+                        var split = record.key.split("_");
+                        var country = split[6];
+                        $('#total_active_users table tbody').append(`
+                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            ${country}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${new Intl.NumberFormat().format(record.total)}
+                        </td>
+                    </tr>
+                `);
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

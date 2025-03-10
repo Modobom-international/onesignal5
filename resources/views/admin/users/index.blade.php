@@ -4,7 +4,7 @@
 
 @section('content')
 <div class=" py-8">
-    <div class="sm:flex sm:items-center sm:justify-between">
+    <div class="sm:flex sm:items-center sm:justify-between border-border border-b pb-6">
         <div>
             <h1 class="text-2xl font-semibold text-gray-900">{{ __('Nhân viên') }}</h1>
             <p class="mt-2 text-sm text-gray-700">{{ __('Quản lý nhân viên và quyền của họ') }}</p>
