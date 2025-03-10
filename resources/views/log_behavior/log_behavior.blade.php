@@ -38,10 +38,16 @@
                                     <div class="space-y-2">
                                         <label class="block text-sm font-medium text-gray-700">{{ __('Ngày') }}</label>
                                         <div class="relative group">
-                                            <input type="text" id="datepicker"
-                                                class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 group-hover:shadow-md"
-                                                placeholder="{{ __('Chọn ngày') }}">
-
+                                            <input type="date"
+                                                id="date-filter"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10"
+                                                placeholder="{{ __('Chọn ngày') }}"
+                                                value="{{ $filter['date'] ?? '' }}">
+                                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                                <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 peer-focus:text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -1055,5 +1061,5 @@
             }
         }
     </script>
-    <script src="{{ asset('js/log-behavior.js') }}"></script>
+    {{-- <script src="{{ asset('js/log-behavior.js') }}"></script> --}}
 @endsection
