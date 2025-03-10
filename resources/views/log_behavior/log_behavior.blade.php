@@ -295,50 +295,97 @@
                                 <x-table.head>{{ __('Ứng dụng') }}</x-table.head>
                                 <x-table.head>{{ __('Quốc gia') }}</x-table.head>
                                 <x-table.head>{{ __('Nền tảng') }}</x-table.head>
-                                <x-table.head>{{ __('Thiết bị') }}</x-table.head>
+                                <x-table.head>{{ __('UID') }}</x-table.head>
                                 <x-table.head>{{ __('Nhà mạng') }}</x-table.head>
-                                <x-table.head>{{ __('Phiên bản') }}</x-table.head>
+                                <x-table.head>{{ __('Time UTC') }}</x-table.head>
                                 <x-table.head>{{ __('Ngày tạo') }}</x-table.head>
-                                <x-table.head>{{ __('Loại') }}</x-table.head>
-                                <x-table.head class="relative">
-                                    <span class="sr-only">{{ __('Hành động') }}</span>
-                                </x-table.head>
+                                <x-table.head>{{ __('Hành vi') }}</x-table.head>
                             </x-table.row>
                         </x-table.header>
 
                         <x-table.body>
                             @foreach ($data as $item)
-                                <x-table.row>
-                                    <x-table.cell>{{ $item->id }}</x-table.cell>
-                                    <x-table.cell>{{ $item->app_name }}</x-table.cell>
-                                    <x-table.cell>{{ $item->country }}</x-table.cell>
-                                    <x-table.cell>{{ $item->platform }}</x-table.cell>
-                                    <x-table.cell>{{ $item->device_id }}</x-table.cell>
-                                    <x-table.cell>{{ $item->network }}</x-table.cell>
-                                    <x-table.cell>{{ $item->version }}</x-table.cell>
-                                    <x-table.cell>{{ $item->created_at }}</x-table.cell>
-                                    <x-table.cell>
-                                        @if ($item->is_install)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                {{ __('Cài đặt') }}
-                                            </span>
-                                        @endif
-                                        @if ($item->is_wrong_country)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                {{ __('Sai quốc gia') }}
-                                            </span>
-                                        @endif
-                                        @if ($item->is_wrong_network)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                {{ __('Sai nhà mạng') }}
-                                            </span>
-                                        @endif
+                                <x-table.row class="hover:bg-gray-50">
+                                    <x-table.cell class="font-mono text-xs">{{ $item->id ?? 'N/A' }}</x-table.cell>
+                                    <x-table.cell class="text-sm font-mono text-gray-900">
+                                        {{ $item->app ?? 'N/A' }}
                                     </x-table.cell>
-                                    <x-table.cell class="text-right">
-                                        <button type="button" data-id="{{ $item->id }}"
-                                            class="text-indigo-600 hover:text-indigo-900 details-btn">
-                                            {{ __('Chi tiết') }}
-                                        </button>
+                                    <x-table.cell class="text-sm font-mono text-gray-900">
+                                        {{ $item->country ?? 'N/A' }}
+                                    </x-table.cell>
+                                    <x-table.cell>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono bg-gray-100 text-gray-800">
+                                            {{ $item->platform ?? 'N/A' }}
+                                        </span>
+                                    </x-table.cell>
+                                    <x-table.cell class="font-mono text-xs">{{ $item->uid ?? 'N/A' }}</x-table.cell>
+                                    <x-table.cell class="text-sm font-mono text-gray-900">
+                                        {{ $item->network ?: 'KHONG_CO_SIM' }}
+                                    </x-table.cell>
+                                    <x-table.cell class="font-mono text-xs">{{ $item->timeutc ?? 'N/A' }}</x-table.cell>
+                                    <x-table.cell>
+                                        @php
+                                            $date = $item->date ?? null;
+                                            if ($date instanceof \MongoDB\BSON\UTCDateTime) {
+                                                $formattedDate = $date->toDateTime()->format('Y-m-d H:i:s');
+                                            } elseif ($date && is_string($date)) {
+                                                $formattedDate = date('Y-m-d H:i:s', strtotime($date));
+                                            } else {
+                                                $formattedDate = 'N/A';
+                                            }
+                                        @endphp
+                                        <span class="font-mono text-xs">{{ $formattedDate }}</span>
+                                    </x-table.cell>
+                                    <x-table.cell class="max-w-md whitespace-normal">
+                                        @php
+                                            $behavior = $item->behavior ?? '';
+                                            if (is_string($behavior)) {
+                                                $behaviorData = json_decode($behavior, true);
+                                                if (json_last_error() === JSON_ERROR_NONE && is_array($behaviorData)) {
+                                                    echo '<div class="space-y-1.5">';
+                                                    foreach ($behaviorData as $key => $value) {
+                                                        $bgColor = 'bg-gray-50';
+                                                        $textColor = 'text-gray-600';
+
+                                                        if (strpos($key, 'INSTALL') !== false) {
+                                                            $bgColor = 'bg-emerald-50';
+                                                            $textColor = 'text-emerald-700';
+                                                        } elseif (strpos($value, 'SUCCESS') !== false || strpos($key, 'SUB_OK') !== false) {
+                                                            $bgColor = 'bg-blue-50';
+                                                            $textColor = 'text-blue-700';
+                                                        } elseif (strpos($key, 'ERRO') !== false || strpos($value, 'ERRO') !== false || strpos($key, 'SAI_') !== false) {
+                                                            $bgColor = 'bg-red-50';
+                                                            $textColor = 'text-red-700';
+                                                        } elseif (strpos($key, 'PERMISSION') !== false) {
+                                                            $bgColor = 'bg-amber-50';
+                                                            $textColor = 'text-amber-700';
+                                                        }
+
+                                                        echo "<div class='text-xs p-1.5 rounded {$bgColor} break-words'>";
+                                                        echo "<span class='font-medium {$textColor}'>{$key}:</span> ";
+
+                                                        if (strpos($value, 'DEVICE:') !== false) {
+                                                            $parts = explode('DEVICE:', $value);
+                                                            echo "<span class='break-all'>" . e(trim($parts[0])) . "</span>";
+                                                            if (isset($parts[1])) {
+                                                                echo "<div class='mt-1 font-mono text-xs text-gray-500 break-all'>DEVICE: " . e(trim($parts[1])) . "</div>";
+                                                            }
+                                                        } elseif (filter_var($value, FILTER_VALIDATE_URL)) {
+                                                            echo "<span class='break-all text-blue-600 hover:text-blue-800'>" . e($value) . "</span>";
+                                                        } else {
+                                                            echo "<span class='break-all'>" . e($value) . "</span>";
+                                                        }
+
+                                                        echo "</div>";
+                                                    }
+                                                    echo '</div>';
+                                                } else {
+                                                    echo '<div class="text-xs text-gray-600 break-words">' . e($behavior) . '</div>';
+                                                }
+                                            } else {
+                                                echo '<span class="text-gray-400">N/A</span>';
+                                            }
+                                        @endphp
                                     </x-table.cell>
                                 </x-table.row>
                             @endforeach
@@ -365,7 +412,7 @@
             <!-- Pagination -->
             @if (count($data) > 0 && $statusPaginate)
                 <div class="mt-6">
-                    {{ $data->links() }}
+                    {{ $data->appends(request()->except('page'))->links() }}
                 </div>
             @endif
         </div>
@@ -652,7 +699,7 @@
                                                                          stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round"
                                                                               stroke-linejoin="round" stroke-width="2"
-                                                                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                                                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                                                     </svg>
                                                                 </button>
                                                             @endif
