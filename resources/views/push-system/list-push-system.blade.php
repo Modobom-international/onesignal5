@@ -30,7 +30,7 @@
             </div>
 
             <!-- Main Content -->
-            <div class=" overflow-hidden">
+            <div >
                 <div class="py-6">
                     <!-- Stats Grid -->
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
@@ -120,67 +120,43 @@
                     <div class="mt-8">
                         <div class="sm:rounded-lg">
                             <div id="total_users">
-                                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                                    <table class="min-w-full divide-y divide-gray-300">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th scope="col"
-                                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Quốc gia') }}
-                                                </th>
-                                                <th scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Số lượng người dùng') }}
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-gray-200 bg-white">
-                                            @foreach ($activeByCountry as $country => $total)
-                                                <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                                    <td
-                                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                                                        {{ $country }}
-                                                    </td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        {{ number_format($total) }}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <x-table>
+                                    <x-table.header class="border-t border-gray-200">
+                                        <x-table.row>
+                                            <x-table.head>{{ __('Quốc gia') }}</x-table.head>
+                                            <x-table.head>{{ __('Số lượng người dùng') }}</x-table.head>
+                                        </x-table.row>
+                                    </x-table.header>
+
+                                    <x-table.body>
+                                        @foreach ($activeByCountry as $country => $total)
+                                            <x-table.row>
+                                                <x-table.cell>{{ $country }}</x-table.cell>
+                                                <x-table.cell>{{ number_format($total) }}</x-table.cell>
+                                            </x-table.row>
+                                        @endforeach
+                                    </x-table.body>
+                                </x-table>
                             </div>
 
                             <div id="total_active_users" class="hidden">
-                                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                                    <table class="min-w-full divide-y divide-gray-300">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th scope="col"
-                                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Quốc gia') }}
-                                                </th>
-                                                <th scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Số lượng người dùng') }}
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-gray-200 bg-white">
-                                            @foreach ($activeByCountry as $country => $total)
-                                                <tr class="hover:bg-gray-50 transition-colors duration-150">
-                                                    <td
-                                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                                                        {{ $country }}
-                                                    </td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        {{ number_format($total) }}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <x-table>
+                                    <x-table.header class="border-t border-gray-200">
+                                        <x-table.row>
+                                            <x-table.head>{{ __('Quốc gia') }}</x-table.head>
+                                            <x-table.head>{{ __('Số lượng người dùng') }}</x-table.head>
+                                        </x-table.row>
+                                    </x-table.header>
+
+                                    <x-table.body>
+                                        @foreach ($activeByCountry as $country => $total)
+                                            <x-table.row>
+                                                <x-table.cell>{{ $country }}</x-table.cell>
+                                                <x-table.cell>{{ number_format($total) }}</x-table.cell>
+                                            </x-table.row>
+                                        @endforeach
+                                    </x-table.body>
+                                </x-table>
                             </div>
                         </div>
                     </div>
@@ -268,10 +244,10 @@
                         var country = split[6];
                         $('#total_active_users table tbody').append(`
                     <tr class="hover:bg-gray-50 transition-colors duration-150">
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                             ${country}
                         </td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             ${new Intl.NumberFormat().format(record.total)}
                         </td>
                     </tr>
