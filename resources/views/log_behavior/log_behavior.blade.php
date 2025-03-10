@@ -2,236 +2,30 @@
 
 @section('title', 'Log behavior')
 
-
 @section('content')
     <div class="py-8">
         <div class="">
+            <!-- Page Header -->
+            <div class="border-border border-b pb-6">
+                <h1 class="text-2xl font-semibold text-gray-900">{{ __('Hành vi người dùng') }}</h1>
+                <p class="mt-2 text-sm text-gray-700">{{ __('Xem và quản lý hành vi người dùng từ các ứng dụng') }}</p>
+            </div>
+
             <!-- Back to top button -->
             <button onclick="topFunction()" id="back-to-top"
-                class="fixed bottom-8 right-8 bg-indigo-600 text-white rounded-full p-3 shadow-lg hover:bg-indigo-700 transition-all duration-200 hover:shadow-xl hover:-translate-y-1">
+                    class="fixed bottom-8 right-8 bg-indigo-600 text-white rounded-full p-3 shadow-lg hover:bg-indigo-700 transition-all duration-200 hover:shadow-xl hover:-translate-y-1">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
                 </svg>
             </button>
 
-            <!-- Main Card -->
-            <div class="bg-white rounded-xl shadow-lg ring-1 ring-black/5">
-
-                <div class="p-8">
-                    <!-- Filters Section -->
-                    <div class="space-y-8">
-                        <div
-                            class="bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-200/80 overflow-hidden">
-                            <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
-                                <div class="flex items-center justify-between">
-                                    <h2 class="text-base font-semibold text-gray-900">{{ __('Bộ lọc') }}</h2>
-                                    <button type="button"
-                                        class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
-                                        {{ __('Đặt lại') }}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="px-6 py-5">
-                                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2 lg:grid-cols-6">
-                                    <!-- Date Filter -->
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">{{ __('Ngày') }}</label>
-                                        <div class="relative group">
-                                            <input type="date"
-                                                id="date-filter"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10"
-                                                placeholder="{{ __('Chọn ngày') }}"
-                                                value="{{ $filter['date'] ?? '' }}">
-                                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                                <svg class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 peer-focus:text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- App Filter -->
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
-                                        <div class="relative group">
-                                            <select id="app-name"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                                <option value="all">{{ __('Tất cả ứng dụng') }}</option>
-                                                @foreach ($listArrayApp as $app)
-                                                    <option value="{{ $app }}">{{ $app }}</option>
-                                                @endforeach
-                                            </select>
-
-                                        </div>
-                                    </div>
-
-
-                                    <!-- Country Filter -->
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
-                                        <div class="relative group">
-                                            <select id="country"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                                <option value="all">{{ __('Tất cả quốc gia') }}</option>
-                                                @foreach ($listArrayCountry as $country)
-                                                    <option value="{{ $country }}">{{ $country }}</option>
-                                                @endforeach
-                                            </select>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- Platform Filter -->
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
-                                        <div class="relative group">
-                                            <select id="platform"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                                <option value="all">{{ __('Tất cả nền tảng') }}</option>
-                                                @foreach ($listArrayPlatform as $platform)
-                                                    <option value="{{ $platform }}">{{ $platform }}</option>
-                                                @endforeach
-                                            </select>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- Network Filter -->
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">{{ __('Mạng') }}</label>
-                                        <div class="relative group">
-                                            <select id="network"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                                <option value="all">{{ __('Tất cả mạng') }}</option>
-                                                @foreach ($networks as $network)
-                                                    @if ($network != '')
-                                                        <option value="{{ $network }}">{{ $network }}</option>
-                                                    @endif
-                                                @endforeach
-                                                <option value="other">KHONG_CO_SIM</option>
-                                            </select>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- Install Type Filter -->
-                                    <div class="space-y-2">
-                                        <label class="block text-sm font-medium text-gray-700">{{ __('Tổng') }}</label>
-                                        <div class="relative group">
-                                            <select id="install"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                                <option value="all">{{ __('Tất cả loại') }}</option>
-                                                <option value="install">{{ __('Chỉ cài đặt') }}</option>
-                                                <option value="country">{{ __('Chỉ sai quốc gia') }}</option>
-                                                <option value="network">{{ __('Chỉ sai nhà mạng') }}</option>
-                                                <option value="test">{{ __('Chỉ thiết bị thử nghiệm') }}</option>
-                                                <option value="sub">{{ __('Chỉ người dùng đăng ký') }}</option>
-                                                <option value="real">{{ __('Chỉ thực cài') }}</option>
-                                            </select>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Search Button -->
-                                <div class="mt-8 flex items-center justify-between">
-                                    <button type="button" id="search-report"
-                                        class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
-                                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                        </svg>
-                                        {{ __('Tìm kiếm') }}
-                                    </button>
-
-                                    <div class="flex items-center space-x-4">
-                                        <button type="button"
-                                            class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
-                                            {{ __('Lưu bộ lọc') }}
-                                        </button>
-                                        <div class="h-4 w-px bg-gray-300"></div>
-                                        <button type="button"
-                                            class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
-                                            {{ __('Bộ lọc đã lưu') }}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="flex flex-wrap items-center gap-3" id="group-btn-filter">
-                            <button type="button" data-modal-target="modalListAppCheckInstall"
-                                data-modal-toggle="modalListAppCheckInstall"
-                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
-                                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                                {{ __('Danh sách lượt cài') }}
-                            </button>
-
-                            <button type="button" data-modal-target="modalChangeSelection"
-                                data-modal-toggle="modalChangeSelection"
-                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
-                                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                                {{ __('Chỉnh sửa lựa chọn') }}
-                            </button>
-
-                            <button type="button" data-modal-target="modalReport" data-modal-toggle="modalReport"
-                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
-                                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
-                                {{ __('Thống kê') }}
-                            </button>
-
-                            @php
-                                $pareDate = $filter['date'] ?? '';
-                                $canCompare = !empty($pareDate) && strtotime($today) >= strtotime($pareDate);
-                            @endphp
-
-                            @if ($canCompare)
-                                <button type="button" id="compare-date-btn"
-                                    class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
-                                    <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                    </svg>
-                                    {{ __('So sánh ngày') }}
-                                </button>
-                            @endif
-
-                            <button type="button" data-modal-target="modalActivity" data-modal-toggle="modalActivity"
-                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
-                                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                {{ __('Lịch sử hoạt động') }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Statistics Section -->
             <div class="mt-8">
-                <div class="bg-white rounded-xl shadow-lg ring-1 ring-black/5 p-6">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-6">{{ __('Thống kê') }}</h2>
+
+
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                         <div
-                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80 hover:shadow-md transition-all duration-200 group">
+                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
                             <div class="px-4 py-5 sm:p-6">
                                 <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng id') }}</dt>
                                 <dd
@@ -246,7 +40,7 @@
                         </div>
 
                         <div
-                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80 hover:shadow-md transition-all duration-200 group">
+                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
                             <div class="px-4 py-5 sm:p-6">
                                 <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng lượt cài') }}</dt>
                                 <dd
@@ -256,7 +50,7 @@
                         </div>
 
                         <div
-                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80 hover:shadow-md transition-all duration-200 group">
+                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
                             <div class="px-4 py-5 sm:p-6">
                                 <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai quốc gia') }}</dt>
                                 <dd
@@ -266,7 +60,7 @@
                         </div>
 
                         <div
-                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80 hover:shadow-md transition-all duration-200 group">
+                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
                             <div class="px-4 py-5 sm:p-6">
                                 <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai nhà mạng') }}</dt>
                                 <dd
@@ -275,8 +69,221 @@
                             </div>
                         </div>
                     </div>
+
+            </div>
+
+            <div class="mt-8">
+                <!-- Filters Section -->
+                <div class="space-y-8">
+                    <div
+                        class="bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-200/80 overflow-hidden">
+                        <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-base font-semibold text-gray-900">{{ __('Bộ lọc') }}</h2>
+                                <button type="button"
+                                        class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                                    {{ __('Đặt lại') }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="px-6 py-5">
+                            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2 lg:grid-cols-6">
+                                <!-- Date Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Ngày') }}</label>
+                                    <div class="relative group">
+                                        <input type="date"
+                                               id="date-filter"
+                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10"
+                                               placeholder="{{ __('Chọn ngày') }}"
+                                               value="{{ $filter['date'] ?? '' }}">
+                                        <div
+                                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <svg
+                                                class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 peer-focus:text-indigo-500"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- App Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
+                                    <div class="relative group">
+                                        <select id="app-name"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả ứng dụng') }}</option>
+                                            @foreach ($listArrayApp as $app)
+                                                <option value="{{ $app }}">{{ $app }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                </div>
+
+
+                                <!-- Country Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
+                                    <div class="relative group">
+                                        <select id="country"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả quốc gia') }}</option>
+                                            @foreach ($listArrayCountry as $country)
+                                                <option value="{{ $country }}">{{ $country }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <!-- Platform Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
+                                    <div class="relative group">
+                                        <select id="platform"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả nền tảng') }}</option>
+                                            @foreach ($listArrayPlatform as $platform)
+                                                <option value="{{ $platform }}">{{ $platform }}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <!-- Network Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Mạng') }}</label>
+                                    <div class="relative group">
+                                        <select id="network"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả mạng') }}</option>
+                                            @foreach ($networks as $network)
+                                                @if ($network != '')
+                                                    <option value="{{ $network }}">{{ $network }}</option>
+                                                @endif
+                                            @endforeach
+                                            <option value="other">KHONG_CO_SIM</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <!-- Install Type Filter -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Tổng') }}</label>
+                                    <div class="relative group">
+                                        <select id="install"
+                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                            <option value="all">{{ __('Tất cả loại') }}</option>
+                                            <option value="install">{{ __('Chỉ cài đặt') }}</option>
+                                            <option value="country">{{ __('Chỉ sai quốc gia') }}</option>
+                                            <option value="network">{{ __('Chỉ sai nhà mạng') }}</option>
+                                            <option value="test">{{ __('Chỉ thiết bị thử nghiệm') }}</option>
+                                            <option value="sub">{{ __('Chỉ người dùng đăng ký') }}</option>
+                                            <option value="real">{{ __('Chỉ thực cài') }}</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Search Button -->
+                            <div class="mt-8 flex items-center justify-between">
+                                <button type="button" id="search-report"
+                                        class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                    {{ __('Tìm kiếm') }}
+                                </button>
+
+                                <div class="flex items-center space-x-4">
+                                    <button type="button"
+                                            class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                                        {{ __('Lưu bộ lọc') }}
+                                    </button>
+                                    <div class="h-4 w-px bg-gray-300"></div>
+                                    <button type="button"
+                                            class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                                        {{ __('Bộ lọc đã lưu') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-wrap items-center gap-3" id="group-btn-filter">
+                        <button type="button" data-modal-target="modalListAppCheckInstall"
+                                data-modal-toggle="modalListAppCheckInstall"
+                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                            <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                            {{ __('Danh sách lượt cài') }}
+                        </button>
+
+                        <button type="button" data-modal-target="modalChangeSelection"
+                                data-modal-toggle="modalChangeSelection"
+                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                            <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            {{ __('Chỉnh sửa lựa chọn') }}
+                        </button>
+
+                        <button type="button" data-modal-target="modalReport" data-modal-toggle="modalReport"
+                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                            <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                            {{ __('Thống kê') }}
+                        </button>
+
+                        @php
+                            $pareDate = $filter['date'] ?? '';
+                            $canCompare = !empty($pareDate) && strtotime($today) >= strtotime($pareDate);
+                        @endphp
+
+                        @if ($canCompare)
+                            <button type="button" id="compare-date-btn"
+                                    class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                                <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                </svg>
+                                {{ __('So sánh ngày') }}
+                            </button>
+                        @endif
+
+                        <button type="button" data-modal-target="modalActivity" data-modal-toggle="modalActivity"
+                                class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                            <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            {{ __('Lịch sử hoạt động') }}
+                        </button>
+                    </div>
                 </div>
             </div>
+
 
             <!-- Data Table -->
             <div class="mt-8">
@@ -284,69 +291,70 @@
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200/80">
                             <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col"
-                                        class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Id</th>
-                                    <th scope="col"
-                                        class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Ngày Cài') }}</th>
-                                    <th scope="col"
-                                        class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Ngày') }}</th>
-                                    <th scope="col"
-                                        class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Ứng dụng') }}</th>
-                                    <th scope="col"
-                                        class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Quốc gia') }}</th>
-                                    <th scope="col"
-                                        class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Nền tảng') }}</th>
-                                    <th scope="col"
-                                        class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Mạng') }}</th>
-                                    <th scope="col"
-                                        class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ __('Hành vi') }}</th>
-                                </tr>
+                            <tr>
+                                <th scope="col"
+                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Id
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Ngày Cài') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Ngày') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Ứng dụng') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Quốc gia') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Nền tảng') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Mạng') }}</th>
+                                <th scope="col"
+                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Hành vi') }}</th>
+                            </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200/80">
-                                @foreach ($data as $record)
-                                    <tr class="hover:bg-gray-50/50 transition-colors duration-200">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            {{ $record->uid ?? '' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $record->date_install ?? '' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $record->date ?? '' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $record->app ?? '' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $record->country ?? '' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $record->platform ?? '' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ isset($record->network) ? $record->network : __('Không có sim') }}</td>
-                                        <td class="px-6 py-4 text-sm text-gray-500">
-                                            @if (isset($record->behavior))
-                                                @php
-                                                    $behavior = json_decode($record->behavior, true);
-                                                    if ($behavior == null) {
-                                                        $behavior = [];
-                                                    }
-                                                @endphp
-                                                <ul class="list-disc pl-5 space-y-1">
-                                                    @foreach ($behavior as $key => $value)
-                                                        <li>{{ $key }}: <span
-                                                                class="font-medium text-gray-900">{{ $value }}</span>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            @foreach ($data as $record)
+                                <tr class="hover:bg-gray-50/50 transition-colors duration-200">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {{ $record->uid ?? '' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $record->date_install ?? '' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $record->date ?? '' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $record->app ?? '' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $record->country ?? '' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $record->platform ?? '' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ isset($record->network) ? $record->network : __('Không có sim') }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">
+                                        @if (isset($record->behavior))
+                                            @php
+                                                $behavior = json_decode($record->behavior, true);
+                                                if ($behavior == null) {
+                                                    $behavior = [];
+                                                }
+                                            @endphp
+                                            <ul class="list-disc pl-5 space-y-1">
+                                                @foreach ($behavior as $key => $value)
+                                                    <li>{{ $key }}: <span
+                                                            class="font-medium text-gray-900">{{ $value }}</span>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -358,7 +366,7 @@
     <!-- Modals -->
     <!-- List App Check Install Modal -->
     <div id="modalListAppCheckInstall" tabindex="-1" aria-hidden="true"
-        class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-4xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <!-- Modal header -->
@@ -367,12 +375,12 @@
                         {{ __('Danh sách lượt cài ứng dụng') }}
                     </h3>
                     <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="modalListAppCheckInstall">
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modalListAppCheckInstall">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
+                             viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -393,7 +401,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
                                         <div class="relative group">
                                             <select id="app-name-modal"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 @foreach ($listArrayApp as $app)
                                                     <option value="{{ $app }}">{{ $app }}</option>
                                                 @endforeach
@@ -407,7 +415,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
                                         <div class="relative group">
                                             <select id="country-modal"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 @foreach ($listArrayCountry as $country)
                                                     <option value="{{ $country }}">{{ $country }}</option>
                                                 @endforeach
@@ -421,7 +429,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
                                         <div class="relative group">
                                             <select id="platform-modal"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 @foreach ($listArrayPlatform as $platform)
                                                     <option value="{{ $platform }}">{{ $platform }}</option>
                                                 @endforeach
@@ -435,7 +443,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Người theo dõi') }}</label>
                                         <div class="relative group">
                                             <select id="assigned-modal"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 @foreach ($listAssigned as $assigned)
                                                     <option value="{{ $assigned }}">{{ $assigned }}</option>
                                                 @endforeach
@@ -447,11 +455,11 @@
 
                                 <div class="mt-6">
                                     <button type="button" onclick="addAppToList()"
-                                        class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
                                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                         </svg>
                                         {{ __('Thêm') }}
                                     </button>
@@ -471,7 +479,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
                                         <div class="relative group">
                                             <select id="app-name-search-modal"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 <option value="all">{{ __('Tất cả') }}</option>
                                                 @foreach ($apps as $app)
                                                     @if ($app != '')
@@ -488,7 +496,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
                                         <div class="relative group">
                                             <select id="country-search-modal"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 <option value="all">{{ __('Tất cả') }}</option>
                                                 @foreach ($listArrayCountry as $country)
                                                     <option value="{{ $country }}">{{ $country }}</option>
@@ -503,7 +511,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
                                         <div class="relative group">
                                             <select id="platform-search-modal"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 <option value="all">{{ __('Tất cả') }}</option>
                                                 @foreach ($listArrayPlatform as $platform)
                                                     <option value="{{ $platform }}">{{ $platform }}</option>
@@ -518,7 +526,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Người theo dõi') }}</label>
                                         <div class="relative group">
                                             <select id="assigned-search-modal"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 <option value="all">{{ __('Tất cả') }}</option>
                                                 @foreach ($listAssigned as $assigned)
                                                     <option value="{{ $assigned }}">{{ $assigned }}</option>
@@ -531,11 +539,11 @@
 
                                 <div class="mt-6">
                                     <button type="button" onclick="searchAppInList()"
-                                        class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
                                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                         </svg>
                                         {{ __('Tìm') }}
                                     </button>
@@ -549,103 +557,104 @@
                                 <div class="overflow-x-auto">
                                     <table class="min-w-full divide-y divide-gray-200/80" id="table-list-check-install">
                                         <thead class="bg-gray-50">
-                                            <tr>
-                                                <th scope="col"
-                                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
-                                                    #</th>
-                                                <th scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Ứng dụng') }}</th>
-                                                <th scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Quốc gia') }}</th>
-                                                <th scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Nền tảng') }}</th>
-                                                <th scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Người theo dõi') }}</th>
-                                                <th scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Thời gian cài cuối cùng') }}</th>
-                                                <th scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                                    {{ __('Hành động') }}</th>
-                                            </tr>
+                                        <tr>
+                                            <th scope="col"
+                                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
+                                                #
+                                            </th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Ứng dụng') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Quốc gia') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Nền tảng') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Người theo dõi') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Thời gian cài cuối cùng') }}</th>
+                                            <th scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                {{ __('Hành động') }}</th>
+                                        </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 bg-white" id="tbody-modal">
-                                            @foreach ($listAppCheck as $keyCheck => $check)
-                                                <tr id="{{ $check->id }}"
-                                                    class="hover:bg-gray-50/50 transition-colors duration-200">
-                                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
-                                                        {{ $keyCheck + 1 }}</td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        {{ ucfirst($check->app) }}</td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        {{ ucfirst($check->country) }}</td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        {{ ucfirst($check->platform) }}</td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        {{ $check->assigned }}</td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        {{ !is_string($check->last_install) ? $check->last_install->toDateTime()->format('Y-m-d H:i:s') : __('Chưa có lượt cài mới') }}
-                                                    </td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        <div class="flex items-center space-x-3">
-                                                            <button data-id="{{ $check->id }}"
+                                        @foreach ($listAppCheck as $keyCheck => $check)
+                                            <tr id="{{ $check->id }}"
+                                                class="hover:bg-gray-50/50 transition-colors duration-200">
+                                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
+                                                    {{ $keyCheck + 1 }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ ucfirst($check->app) }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ ucfirst($check->country) }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ ucfirst($check->platform) }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ $check->assigned }}</td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    {{ !is_string($check->last_install) ? $check->last_install->toDateTime()->format('Y-m-d H:i:s') : __('Chưa có lượt cài mới') }}
+                                                </td>
+                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    <div class="flex items-center space-x-3">
+                                                        <button data-id="{{ $check->id }}"
                                                                 class="text-red-600 hover:text-red-900 transition-colors duration-200 delete-app-in-list-check">
-                                                                <svg class="h-5 w-5" fill="none" stroke="currentColor"
-                                                                    viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                                        stroke-width="2"
-                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                                </svg>
-                                                            </button>
-                                                            @if (!isset($check->lock))
-                                                                <button id="lock-{{ $check->id }}"
+                                                            <svg class="h-5 w-5" fill="none" stroke="currentColor"
+                                                                 viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                      stroke-width="2"
+                                                                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                            </svg>
+                                                        </button>
+                                                        @if (!isset($check->lock))
+                                                            <button id="lock-{{ $check->id }}"
                                                                     data-id="{{ $check->id }}" title="Unlock"
                                                                     data-lock="1"
                                                                     class="text-yellow-600 hover:text-yellow-900 transition-colors duration-200 lock-app-in-list-check">
-                                                                    <svg class="h-5 w-5" fill="none"
-                                                                        stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                                                                    </svg>
-                                                                </button>
-                                                            @else
-                                                                @if ($check->lock == 0)
-                                                                    <button id="lock-{{ $check->id }}"
+                                                                <svg class="h-5 w-5" fill="none"
+                                                                     stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round"
+                                                                          stroke-linejoin="round" stroke-width="2"
+                                                                          d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                                                </svg>
+                                                            </button>
+                                                        @else
+                                                            @if ($check->lock == 0)
+                                                                <button id="lock-{{ $check->id }}"
                                                                         data-id="{{ $check->id }}" title="Lock"
                                                                         data-lock="1"
                                                                         class="text-yellow-600 hover:text-yellow-900 transition-colors duration-200 lock-app-in-list-check">
-                                                                        <svg class="h-5 w-5" fill="none"
-                                                                            stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round"
-                                                                                stroke-linejoin="round" stroke-width="2"
-                                                                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                                                                        </svg>
-                                                                    </button>
-                                                                @else
-                                                                    <button id="lock-{{ $check->id }}"
+                                                                    <svg class="h-5 w-5" fill="none"
+                                                                         stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round"
+                                                                              stroke-linejoin="round" stroke-width="2"
+                                                                              d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                                                    </svg>
+                                                                </button>
+                                                            @else
+                                                                <button id="lock-{{ $check->id }}"
                                                                         data-id="{{ $check->id }}" title="Unlock"
                                                                         data-lock="0"
                                                                         class="text-green-600 hover:text-green-900 transition-colors duration-200 lock-app-in-list-check">
-                                                                        <svg class="h-5 w-5" fill="none"
-                                                                            stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round"
-                                                                                stroke-linejoin="round" stroke-width="2"
-                                                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                                                        </svg>
-                                                                    </button>
-                                                                @endif
+                                                                    <svg class="h-5 w-5" fill="none"
+                                                                         stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round"
+                                                                              stroke-linejoin="round" stroke-width="2"
+                                                                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                                                    </svg>
+                                                                </button>
                                                             @endif
-                                                            <div id="loader-{{ $check->id }}" class="loader hide">
-                                                            </div>
+                                                        @endif
+                                                        <div id="loader-{{ $check->id }}" class="loader hide">
                                                         </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -659,7 +668,7 @@
 
     <!-- Change Selection Modal -->
     <div id="modalChangeSelection" tabindex="-1" aria-hidden="true"
-        class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-4xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <!-- Modal header -->
@@ -668,12 +677,12 @@
                         {{ __('Chỉnh sửa lựa chọn') }}
                     </h3>
                     <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="modalChangeSelection">
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modalChangeSelection">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
+                             viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -697,12 +706,12 @@
                                                     <li class="flex items-center">
                                                         @if (in_array($country, $listDefaultCountry))
                                                             <input type="checkbox"
-                                                                class="check-box-country h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                                data-id="{{ $country }}" checked disabled>
+                                                                   class="check-box-country h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                   data-id="{{ $country }}" checked disabled>
                                                         @else
                                                             <input type="checkbox"
-                                                                class="check-box-country h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                                data-id="{{ $country }}"
+                                                                   class="check-box-country h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                   data-id="{{ $country }}"
                                                                 {{ in_array($country, $listArrayCountry) ? 'checked' : '' }}>
                                                         @endif
                                                         <label
@@ -728,12 +737,12 @@
                                                     <li class="flex items-center">
                                                         @if (in_array($platform, $listDefaultPlatform))
                                                             <input type="checkbox"
-                                                                class="check-box-platform h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                                data-id="{{ $platform }}" checked disabled>
+                                                                   class="check-box-platform h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                   data-id="{{ $platform }}" checked disabled>
                                                         @else
                                                             <input type="checkbox"
-                                                                class="check-box-platform h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                                data-id="{{ $platform }}"
+                                                                   class="check-box-platform h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                   data-id="{{ $platform }}"
                                                                 {{ in_array($platform, $listArrayPlatform) ? 'checked' : '' }}>
                                                         @endif
                                                         <label
@@ -754,14 +763,15 @@
                                 <div class="p-4">
                                     <div class="relative">
                                         <input type="text" id="search-in-filter-modal"
-                                            placeholder="{{ __('Nhập tên ứng dụng') }}"
-                                            class="block w-full rounded-lg border border-gray-300 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
-                                            onkeypress="search()" onkeydown="search()">
-                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                               placeholder="{{ __('Nhập tên ứng dụng') }}"
+                                               class="block w-full rounded-lg border border-gray-300 bg-white pl-4 pr-10 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                                               onkeypress="search()" onkeydown="search()">
+                                        <div
+                                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
+                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                             </svg>
                                         </div>
                                     </div>
@@ -771,8 +781,8 @@
                                                 @if ($app != null)
                                                     <li class="flex items-center">
                                                         <input type="checkbox"
-                                                            class="check-box-app h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                                            data-id="{{ $app }}"
+                                                               class="check-box-app h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                               data-id="{{ $app }}"
                                                             {{ in_array($app, $listArrayApp) ? 'checked' : '' }}>
                                                         <label
                                                             class="ml-2 text-sm text-gray-700">{{ $app }}</label>
@@ -787,10 +797,10 @@
 
                         <div class="mt-6">
                             <button type="button" id="save-change-option"
-                                class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                    class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
                                 <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
+                                          d="M5 13l4 4L19 7"/>
                                 </svg>
                                 {{ __('Lưu') }}
                             </button>
@@ -803,7 +813,7 @@
 
     <!-- Report Modal -->
     <div id="modalReport" tabindex="-1" aria-hidden="true"
-        class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-4xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <!-- Modal header -->
@@ -812,12 +822,12 @@
                         {{ __('Thống kê') }}
                     </h3>
                     <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="modalReport">
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modalReport">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
+                             viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -838,8 +848,8 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Từ ngày') }}</label>
                                         <div class="relative group">
                                             <input type="text" id="datepicker-from"
-                                                class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 group-hover:shadow-md"
-                                                placeholder="{{ __('Chọn ngày bắt đầu') }}">
+                                                   class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 group-hover:shadow-md"
+                                                   placeholder="{{ __('Chọn ngày bắt đầu') }}">
 
                                         </div>
                                     </div>
@@ -849,8 +859,8 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Đến ngày') }}</label>
                                         <div class="relative group">
                                             <input type="text" id="datepicker-to"
-                                                class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 group-hover:shadow-md"
-                                                placeholder="{{ __('Chọn ngày kết thúc') }}">
+                                                   class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-12 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 group-hover:shadow-md"
+                                                   placeholder="{{ __('Chọn ngày kết thúc') }}">
 
                                         </div>
                                     </div>
@@ -860,7 +870,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
                                         <div class="relative group">
                                             <select id="country-report"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 <option value="all">{{ __('Tất cả') }}</option>
                                                 @foreach ($listArrayCountry as $country)
                                                     <option value="{{ $country }}">{{ $country }}</option>
@@ -875,7 +885,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
                                         <div class="relative group">
                                             <select id="platform-report"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 <option value="all">{{ __('Tất cả') }}</option>
                                                 @foreach ($listArrayPlatform as $platform)
                                                     <option value="{{ $platform }}">{{ $platform }}</option>
@@ -890,7 +900,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
                                         <div class="relative group">
                                             <select id="app-name-report"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 <option value="all">{{ __('Tất cả') }}</option>
                                                 @foreach ($listArrayApp as $app)
                                                     <option value="{{ $app }}">{{ $app }}</option>
@@ -905,7 +915,7 @@
                                             class="block text-sm font-medium text-gray-700">{{ __('Từ khóa') }}</label>
                                         <div class="relative group">
                                             <select id="keyword-report"
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                                 <option value="all">{{ __('Tất cả') }}</option>
                                                 @foreach ($keywords as $keyword)
                                                     <option value="{{ $keyword }}">{{ $keyword }}</option>
@@ -918,11 +928,11 @@
 
                                 <div class="mt-6">
                                     <button type="button" onclick="getDataChart()"
-                                        class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
                                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                                         </svg>
                                         {{ __('Thống kê') }}
                                     </button>
@@ -957,7 +967,7 @@
 
     <!-- Activity Modal -->
     <div id="modalActivity" tabindex="-1" aria-hidden="true"
-        class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+         class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-4xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <!-- Modal header -->
@@ -966,12 +976,12 @@
                         {{ __('Lịch sử hoạt động') }}
                     </h3>
                     <button type="button"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="modalActivity">
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modalActivity">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
+                             viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -986,15 +996,15 @@
                                 <div class="flex items-center space-x-4">
                                     <div class="flex-1">
                                         <input type="text" id="uid-activity"
-                                            placeholder="{{ __('Nhập id device') }}"
-                                            class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
+                                               placeholder="{{ __('Nhập id device') }}"
+                                               class="block w-full appearance-none rounded-lg border border-gray-300 bg-white pl-4 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-500 shadow-sm transition-all duration-200 hover:border-indigo-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20">
                                     </div>
                                     <button type="button" onclick="searchActivity()"
-                                        class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                            class="inline-flex items-center px-4 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
                                         <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                         </svg>
                                         {{ __('Tìm kiếm') }}
                                     </button>
@@ -1004,17 +1014,17 @@
                             <div class="overflow-x-auto">
                                 <table class="min-w-full divide-y divide-gray-200/80">
                                     <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col"
-                                                class="py-3.5 pl-4 pr-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                {{ __('Thời gian') }}</th>
-                                            <th scope="col"
-                                                class="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                {{ __('Hoạt động') }}</th>
-                                            <th scope="col"
-                                                class="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                {{ __('Dữ liệu (nếu có)') }}</th>
-                                        </tr>
+                                    <tr>
+                                        <th scope="col"
+                                            class="py-3.5 pl-4 pr-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            {{ __('Thời gian') }}</th>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            {{ __('Hoạt động') }}</th>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            {{ __('Dữ liệu (nếu có)') }}</th>
+                                    </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200/80 bg-white" id="table-activity"></tbody>
                                 </table>
