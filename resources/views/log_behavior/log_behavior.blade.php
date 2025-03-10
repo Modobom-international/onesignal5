@@ -94,7 +94,7 @@
                                     <label class="block text-sm font-medium text-gray-700">{{ __('Ngày') }}</label>
                                     <div class="relative group">
                                         <input type="date"
-                                               id="date-filter"
+                                               id="datepicker"
                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10"
                                                placeholder="{{ __('Chọn ngày') }}"
                                                value="{{ $filter['date'] ?? '' }}">
@@ -286,80 +286,88 @@
 
 
             <!-- Data Table -->
-            <div class="mt-8">
-                <div class="bg-white rounded-xl shadow-lg ring-1 ring-black/5 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200/80">
-                            <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col"
-                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Id
-                                </th>
-                                <th scope="col"
-                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('Ngày Cài') }}</th>
-                                <th scope="col"
-                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('Ngày') }}</th>
-                                <th scope="col"
-                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('Ứng dụng') }}</th>
-                                <th scope="col"
-                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('Quốc gia') }}</th>
-                                <th scope="col"
-                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('Nền tảng') }}</th>
-                                <th scope="col"
-                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('Mạng') }}</th>
-                                <th scope="col"
-                                    class="px-6 py-3.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ __('Hành vi') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200/80">
-                            @foreach ($data as $record)
-                                <tr class="hover:bg-gray-50/50 transition-colors duration-200">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{ $record->uid ?? '' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $record->date_install ?? '' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $record->date ?? '' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $record->app ?? '' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $record->country ?? '' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $record->platform ?? '' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ isset($record->network) ? $record->network : __('Không có sim') }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-500">
-                                        @if (isset($record->behavior))
-                                            @php
-                                                $behavior = json_decode($record->behavior, true);
-                                                if ($behavior == null) {
-                                                    $behavior = [];
-                                                }
-                                            @endphp
-                                            <ul class="list-disc pl-5 space-y-1">
-                                                @foreach ($behavior as $key => $value)
-                                                    <li>{{ $key }}: <span
-                                                            class="font-medium text-gray-900">{{ $value }}</span>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
+            <div class="mt-4">
+                @if (count($data) > 0)
+                    <x-table>
+                        <x-table.header class="border-t border-gray-200">
+                            <x-table.row>
+                                <x-table.head>ID</x-table.head>
+                                <x-table.head>{{ __('Ứng dụng') }}</x-table.head>
+                                <x-table.head>{{ __('Quốc gia') }}</x-table.head>
+                                <x-table.head>{{ __('Nền tảng') }}</x-table.head>
+                                <x-table.head>{{ __('Thiết bị') }}</x-table.head>
+                                <x-table.head>{{ __('Nhà mạng') }}</x-table.head>
+                                <x-table.head>{{ __('Phiên bản') }}</x-table.head>
+                                <x-table.head>{{ __('Ngày tạo') }}</x-table.head>
+                                <x-table.head>{{ __('Loại') }}</x-table.head>
+                                <x-table.head class="relative">
+                                    <span class="sr-only">{{ __('Hành động') }}</span>
+                                </x-table.head>
+                            </x-table.row>
+                        </x-table.header>
+
+                        <x-table.body>
+                            @foreach ($data as $item)
+                                <x-table.row>
+                                    <x-table.cell>{{ $item->id }}</x-table.cell>
+                                    <x-table.cell>{{ $item->app_name }}</x-table.cell>
+                                    <x-table.cell>{{ $item->country }}</x-table.cell>
+                                    <x-table.cell>{{ $item->platform }}</x-table.cell>
+                                    <x-table.cell>{{ $item->device_id }}</x-table.cell>
+                                    <x-table.cell>{{ $item->network }}</x-table.cell>
+                                    <x-table.cell>{{ $item->version }}</x-table.cell>
+                                    <x-table.cell>{{ $item->created_at }}</x-table.cell>
+                                    <x-table.cell>
+                                        @if ($item->is_install)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                {{ __('Cài đặt') }}
+                                            </span>
                                         @endif
-                                    </td>
-                                </tr>
+                                        @if ($item->is_wrong_country)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                {{ __('Sai quốc gia') }}
+                                            </span>
+                                        @endif
+                                        @if ($item->is_wrong_network)
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                {{ __('Sai nhà mạng') }}
+                                            </span>
+                                        @endif
+                                    </x-table.cell>
+                                    <x-table.cell class="text-right">
+                                        <button type="button" data-id="{{ $item->id }}"
+                                            class="text-indigo-600 hover:text-indigo-900 details-btn">
+                                            {{ __('Chi tiết') }}
+                                        </button>
+                                    </x-table.cell>
+                                </x-table.row>
                             @endforeach
-                            </tbody>
-                        </table>
+                        </x-table.body>
+                    </x-table>
+                @else
+                <div class="bg-white px-6 py-8">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-gray-50">
+                            <svg class="w-6 h-6 text-gray-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z" />
+                                <path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <h3 class="mt-4 text-sm font-semibold text-gray-900">{{ __('Không tìm thấy dữ liệu') }}</h3>
+                        <p class="mt-2 text-sm text-gray-500">
+                            {{ __('Bạn có thể thay đổi bộ lọc hoặc tìm kiếm lại để mở rộng kết quả.') }}
+                        </p>
                     </div>
                 </div>
+                @endif
             </div>
+
+            <!-- Pagination -->
+            @if (count($data) > 0 && $statusPaginate)
+                <div class="mt-6">
+                    {{ $data->links() }}
+                </div>
+            @endif
         </div>
     </div>
 
@@ -1071,5 +1079,5 @@
             }
         }
     </script>
-    {{-- <script src="{{ asset('js/log-behavior.js') }}"></script> --}}
+    <script src="{{ asset('js/log-behavior.js') }}"></script>
 @endsection
