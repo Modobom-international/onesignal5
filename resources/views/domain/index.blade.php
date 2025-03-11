@@ -86,6 +86,7 @@
 
                                                 @if (Auth::user()->email == 'vutuan.modobom@gmail.com' or Auth::user()->email == 'tranlinh.modobom@gmail.com')
                                                     <button type="button" data-domain="{{ $domain->domain }}"
+                                                        data-modal-target="delete-modal" data-modal-toggle="delete-modal"
                                                         data-bs-toggle="modal" data-bs-target="#modalDeleteDomain"
                                                         class="text-red-600 hover:text-red-900">
                                                         {{ __('Xóa') }}
@@ -198,6 +199,12 @@
                         $('#table-domain').html(response.html);
                     }
                 });
+            });
+
+            $(document).on('click', '[data-modal-target="delete-modal"]', function(e) {
+                const domain = $(this).data('domain');
+                $('#domain-in-hidden').val(domain);
+                $('#domain-in-title').text(domain);
             });
         });
 
