@@ -61,10 +61,11 @@ class UsersTrackingController extends Controller
                 'path' => $validatedData['path'],
                 'width' => $validatedData['user']['screenWidth'],
                 'height' => $validatedData['user']['screenHeight'],
+                'url' => $validatedData['domain'] . $validatedData['path']
             ];
 
             StoreHeatMap::dispatch($dataHeatMap)->onQueue('create_heat_map');
-            // FetchFullPage::dispatch($dataFetch)->onQueue('fetch_full_page');
+            FetchFullPage::dispatch($dataFetch)->onQueue('fetch_full_page');
         }
 
         return response()->json(['message' => 'User behavior recorded successfully.']);
