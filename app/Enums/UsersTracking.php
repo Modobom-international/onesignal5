@@ -10,7 +10,8 @@ final class UsersTracking
         'https://vnifood.com',
         'https://vnitourist.com',
         'https://lifecompass365.com',
-        'http://localhost/lifecompass'
+        'http://localhost/lifecompass',
+        'https://gamezaphub.com',
     ];
 
     const DEFAULT_DOMAIN = 'apkafe.com';
