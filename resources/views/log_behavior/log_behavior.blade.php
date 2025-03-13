@@ -11,7 +11,444 @@
             <p class="mt-2 text-sm text-gray-700">{{ __('Xem và quản lý hành vi người dùng từ các ứng dụng') }}</p>
         </div>
 
-        
+        <!-- Back to top button -->
+        <button onclick="topFunction()" id="back-to-top"
+            class="fixed bottom-8 z-50 right-8 bg-indigo-600 text-white rounded-full p-3 shadow-lg hover:bg-indigo-700 transition-all duration-200 hover:shadow-xl hover:-translate-y-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+            </svg>
+        </button>
+
+        <!-- Statistics Section -->
+
+
+        <div class="mt-8">
+            <!-- Filters Section -->
+            <div class="space-y-8">
+                <div class="bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-200/80 overflow-hidden">
+                    <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-base font-semibold text-gray-900">{{ __('Bộ lọc') }}</h2>
+                            <button type="button"
+                                class="text-sm text-gray-500 hover:text-indigo-600 transition-colors duration-200">
+                                {{ __('Đặt lại') }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="px-6 py-5">
+                        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2 lg:grid-cols-6">
+                            <!-- Date Filter -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">{{ __('Ngày') }}</label>
+                                <div class="relative group">
+                                    <input type="date"
+                                        id="datepicker"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10"
+                                        placeholder="{{ __('Chọn ngày') }}"
+                                        value="{{ $filter['date'] ?? '' }}">
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                        <svg
+                                            class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 peer-focus:text-indigo-500"
+                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- App Filter -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">{{ __('Ứng dụng') }}</label>
+                                <div class="relative group">
+                                    <select id="app-name"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option value="all">{{ __('Tất cả ứng dụng') }}</option>
+                                        @foreach ($listArrayApp as $app)
+                                        <option value="{{ $app }}">{{ $app }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Country Filter -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">{{ __('Quốc gia') }}</label>
+                                <div class="relative group">
+                                    <select id="country"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option value="all">{{ __('Tất cả quốc gia') }}</option>
+                                        @foreach ($listArrayCountry as $country)
+                                        <option value="{{ $country }}">{{ $country }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Platform Filter -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">{{ __('Nền tảng') }}</label>
+                                <div class="relative group">
+                                    <select id="platform"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option value="all">{{ __('Tất cả nền tảng') }}</option>
+                                        @foreach ($listArrayPlatform as $platform)
+                                        <option value="{{ $platform }}">{{ $platform }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Network Filter -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">{{ __('Mạng') }}</label>
+                                <div class="relative group">
+                                    <select id="network"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option value="all">{{ __('Tất cả mạng') }}</option>
+                                        @foreach ($networks as $network)
+                                        @if ($network != '')
+                                        <option value="{{ $network }}">{{ $network }}</option>
+                                        @endif
+                                        @endforeach
+                                        <option value="other">KHONG_CO_SIM</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Install Type Filter -->
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">{{ __('Tổng') }}</label>
+                                <div class="relative group">
+                                    <select id="install"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <option value="all">{{ __('Tất cả loại') }}</option>
+                                        <option value="install">{{ __('Chỉ cài đặt') }}</option>
+                                        <option value="country">{{ __('Chỉ sai quốc gia') }}</option>
+                                        <option value="network">{{ __('Chỉ sai nhà mạng') }}</option>
+                                        <option value="test">{{ __('Chỉ thiết bị thử nghiệm') }}</option>
+                                        <option value="sub">{{ __('Chỉ người dùng đăng ký') }}</option>
+                                        <option value="real">{{ __('Chỉ thực cài') }}</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Search Button -->
+                        <div class="mt-8 flex items-center justify-between">
+                            <button type="button" id="search-report"
+                                class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 shadow-sm hover:shadow-md">
+                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                {{ __('Tìm kiếm') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center gap-3" id="group-btn-filter">
+                    <button type="button" data-modal-target="modalListAppCheckInstall"
+                        data-modal-toggle="modalListAppCheckInstall"
+                        class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                        <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                        {{ __('Danh sách lượt cài') }}
+                    </button>
+
+                    <button type="button" data-modal-target="modalChangeSelection"
+                        data-modal-toggle="modalChangeSelection"
+                        class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                        <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        {{ __('Chỉnh sửa lựa chọn') }}
+                    </button>
+
+                    <button type="button" data-modal-target="modalReport" data-modal-toggle="modalReport"
+                        class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                        <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        {{ __('Thống kê') }}
+                    </button>
+
+                    @php
+                    $pareDate = $filter['date'] ?? '';
+                    $canCompare = !empty($pareDate) && strtotime($today) >= strtotime($pareDate);
+                    @endphp
+
+                    @if ($canCompare)
+                    <button type="button" id="compare-date-btn"
+                        class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                        <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {{ __('So sánh ngày') }}
+                    </button>
+                    @endif
+
+                    <button type="button" data-modal-target="modalActivity" data-modal-toggle="modalActivity"
+                        class="inline-flex items-center px-4 py-2.5 border border-gray-200 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 hover:shadow-sm">
+                        <svg class="h-4 w-4 mr-2 text-gray-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {{ __('Lịch sử hoạt động') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Date Comparison Modal -->
+        <div id="modalDateComparison" tabindex="-1" aria-hidden="true"
+            class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative w-full max-w-4xl max-h-full">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                            {{ __('So sánh dữ liệu') }}
+                        </h3>
+                        <button type="button"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="modalDateComparison">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">{{ __('Đóng') }}</span>
+                        </button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="p-4 md:p-5">
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <!-- Current Date Section -->
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <h5 class="text-sm font-medium text-gray-700">{{ __('Ngày hiện tại') }}</h5>
+                                    <span id="current-date-display" class="text-sm text-gray-500"></span>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <dl class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <dt class="text-xs text-gray-500">{{ __('Tổng lượt cài') }}</dt>
+                                            <dd id="current-total-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-xs text-gray-500">{{ __('Thành công') }}</dt>
+                                            <dd id="current-success-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-xs text-gray-500">{{ __('Sai quốc gia') }}</dt>
+                                            <dd id="current-wrong-country" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-xs text-gray-500">{{ __('Sai mạng') }}</dt>
+                                            <dd id="current-wrong-network" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+
+                            <!-- Comparison Date Section -->
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <h5 class="text-sm font-medium text-gray-700">{{ __('Ngày so sánh') }}</h5>
+                                    <div class="relative">
+                                        <input type="text" id="comparison-date"
+                                            class="block w-40 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                            placeholder="{{ __('Chọn ngày') }}">
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <dl class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <dt class="text-xs text-gray-500">{{ __('Tổng lượt cài') }}</dt>
+                                            <dd id="comparison-total-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-xs text-gray-500">{{ __('Thành công') }}</dt>
+                                            <dd id="comparison-success-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-xs text-gray-500">{{ __('Sai quốc gia') }}</dt>
+                                            <dd id="comparison-wrong-country" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                        </div>
+                                        <div>
+                                            <dt class="text-xs text-gray-500">{{ __('Sai mạng') }}</dt>
+                                            <dd id="comparison-wrong-network" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
+                                        </div>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Comparison Actions -->
+                        <div class="mt-6 flex items-center justify-end space-x-4">
+                            <div id="comparison-loader" class="hidden">
+                                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-indigo-600"></div>
+                            </div>
+                            <button type="button" id="compare-dates"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                                {{ __('So sánh') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="mt-4">
+            @if (count($data) > 0)
+            <x-table>
+                <x-table.header class="border-t border-gray-200">
+                    <x-table.row>
+                        <x-table.head>ID</x-table.head>
+                        <x-table.head>{{ __('Ứng dụng') }}</x-table.head>
+                        <x-table.head>{{ __('Quốc gia') }}</x-table.head>
+                        <x-table.head>{{ __('Nền tảng') }}</x-table.head>
+                        <x-table.head>{{ __('Nhà mạng') }}</x-table.head>
+                        <x-table.head>{{ __('Time UTC') }}</x-table.head>
+                        <x-table.head>{{ __('Ngày tạo') }}</x-table.head>
+                        <x-table.head>{{ __('Hành vi') }}</x-table.head>
+                    </x-table.row>
+                </x-table.header>
+
+                <x-table.body>
+                    @foreach ($data as $item)
+                    <x-table.row class="hover:bg-gray-50">
+                        <x-table.cell class="font-mono text-xs">{{ $item->uid ?? 'N/A' }}</x-table.cell>
+                        <x-table.cell class="text-sm font-mono text-gray-900">
+                            {{ $item->app ?? 'N/A' }}
+                        </x-table.cell>
+                        <x-table.cell class="text-sm font-mono text-gray-900">
+                            {{ $item->country ?? 'N/A' }}
+                        </x-table.cell>
+                        <x-table.cell>
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono bg-gray-100 text-gray-800">
+                                {{ $item->platform ?? 'N/A' }}
+                            </span>
+                        </x-table.cell>
+                        <x-table.cell class="text-sm font-mono text-gray-900">
+                            {{ $item->network ?: 'KHONG_CO_SIM' }}
+                        </x-table.cell>
+                        <x-table.cell class="font-mono text-xs">{{ $item->timeutc ?? 'N/A' }}</x-table.cell>
+                        <x-table.cell>
+                            @php
+                            $date = $item->date ?? null;
+                            if ($date instanceof \MongoDB\BSON\UTCDateTime) {
+                            $formattedDate = $date->toDateTime()->format('Y-m-d H:i:s');
+                            } elseif ($date && is_string($date)) {
+                            $formattedDate = date('Y-m-d H:i:s', strtotime($date));
+                            } else {
+                            $formattedDate = 'N/A';
+                            }
+                            @endphp
+                            <span class="font-mono text-xs">{{ $formattedDate }}</span>
+                        </x-table.cell>
+                        <x-table.cell class="max-w-md whitespace-normal">
+                            @php
+                            $behavior = $item->behavior ?? '';
+                            if (is_string($behavior)) {
+                            $behaviorData = json_decode($behavior, true);
+                            if (json_last_error() === JSON_ERROR_NONE && is_array($behaviorData)) {
+                            echo '<div class="space-y-1.5">';
+                                foreach ($behaviorData as $key => $value) {
+                                $bgColor = 'bg-gray-50';
+                                $textColor = 'text-gray-600';
+
+                                if (strpos($key, 'INSTALL') !== false) {
+                                $bgColor = 'bg-emerald-50';
+                                $textColor = 'text-emerald-700';
+                                } elseif (strpos($value, 'SUCCESS') !== false || strpos($key, 'SUB_OK') !== false) {
+                                $bgColor = 'bg-blue-50';
+                                $textColor = 'text-blue-700';
+                                } elseif (strpos($key, 'ERRO') !== false || strpos($value, 'ERRO') !== false || strpos($key, 'SAI_') !== false) {
+                                $bgColor = 'bg-red-50';
+                                $textColor = 'text-red-700';
+                                } elseif (strpos($key, 'PERMISSION') !== false) {
+                                $bgColor = 'bg-amber-50';
+                                $textColor = 'text-amber-700';
+                                }
+
+                                echo "<div class='text-xs p-1.5 rounded {$bgColor} break-words'>";
+                                    echo "<span class='font-medium {$textColor}'>{$key}:</span> ";
+
+                                    if (strpos($value, 'DEVICE:') !== false) {
+                                    $parts = explode('DEVICE:', $value);
+                                    echo "<span class='break-all'>" . e(trim($parts[0])) . "</span>";
+                                    if (isset($parts[1])) {
+                                    echo "<div class='mt-1 font-mono text-xs text-gray-500 break-all'>DEVICE: " . e(trim($parts[1])) . "</div>";
+                                    }
+                                    } elseif (filter_var($value, FILTER_VALIDATE_URL)) {
+                                    echo "<span class='break-all text-blue-600 hover:text-blue-800'>" . e($value) . "</span>";
+                                    } else {
+                                    echo "<span class='break-all'>" . e($value) . "</span>";
+                                    }
+
+                                    echo "</div>";
+                                }
+                                echo '</div>';
+                            } else {
+                            echo '<div class="text-xs text-gray-600 break-words">' . e($behavior) . '</div>';
+                            }
+                            } else {
+                            echo '<span class="text-gray-400">N/A</span>';
+                            }
+                            @endphp
+                        </x-table.cell>
+                    </x-table.row>
+                    @endforeach
+                </x-table.body>
+            </x-table>
+            @else
+            <div class="bg-white px-6 py-8">
+                <div class="text-center">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-lg bg-gray-50">
+                        <svg class="w-6 h-6 text-gray-400" viewBox="0 0 24 24" fill="currentColor"
+                            aria-hidden="true">
+                            <path
+                                d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z" />
+                            <path fill-rule="evenodd"
+                                d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <h3 class="mt-4 text-sm font-semibold text-gray-900">{{ __('Không tìm thấy dữ liệu') }}</h3>
+                    <p class="mt-2 text-sm text-gray-500">
+                        {{ __('Bạn có thể thay đổi bộ lọc hoặc tìm kiếm lại để mở rộng kết quả.') }}
+                    </p>
+                </div>
+            </div>
+            @endif
+        </div>
+
+        <!-- Pagination -->
+        @if (count($data) > 0 && $statusPaginate)
+        <div class="mt-6">
+            {{ $data->appends(request()->except('page'))->links() }}
+        </div>
+        @endif
     </div>
 </div>
 
