@@ -22,12 +22,10 @@
         <!-- Statistics Section -->
         <div class="mt-8">
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                <div
-                    class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
                     <div class="px-4 py-5 sm:p-6">
                         <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng id') }}</dt>
-                        <dd
-                            class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                        <dd class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
                             @if ($statusPaginate)
                             {{ $data->total() }}
                             @else
@@ -37,23 +35,19 @@
                     </div>
                 </div>
 
-                <div
-                    class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
                     <div class="px-4 py-5 sm:p-6">
                         <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng lượt cài') }}</dt>
-                        <dd
-                            class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                        <dd class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
                             {{ $totalInstall ?? 0 }}
                         </dd>
                     </div>
                 </div>
 
-                <div
-                    class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
                     <div class="px-4 py-5 sm:p-6">
                         <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai quốc gia') }}</dt>
-                        <dd
-                            class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                        <dd class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
                             {{ $totalWrongCountry ?? 0 }}
                         </dd>
                     </div>
@@ -63,21 +57,18 @@
                     class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
                     <div class="px-4 py-5 sm:p-6">
                         <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai nhà mạng') }}</dt>
-                        <dd
-                            class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                        <dd class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
                             {{ $totalWrongNetWork ?? 0 }}
                         </dd>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="mt-8">
             <!-- Filters Section -->
             <div class="space-y-8">
-                <div
-                    class="bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-200/80 overflow-hidden">
+                <div class="bg-gradient-to-b from-gray-50 to-white rounded-xl border border-gray-200/80 overflow-hidden">
                     <div class="border-b border-gray-200/80 bg-gray-50/80 px-6 py-4">
                         <div class="flex items-center justify-between">
                             <h2 class="text-base font-semibold text-gray-900">{{ __('Bộ lọc') }}</h2>
@@ -99,8 +90,7 @@
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-10"
                                         placeholder="{{ __('Chọn ngày') }}"
                                         value="{{ $filter['date'] ?? '' }}">
-                                    <div
-                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                                         <svg
                                             class="h-5 w-5 text-gray-400 group-hover:text-indigo-500 peer-focus:text-indigo-500"
                                             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -123,10 +113,8 @@
                                         <option value="{{ $app }}">{{ $app }}</option>
                                         @endforeach
                                     </select>
-
                                 </div>
                             </div>
-
 
                             <!-- Country Filter -->
                             <div class="space-y-2">
@@ -139,7 +127,6 @@
                                         <option value="{{ $country }}">{{ $country }}</option>
                                         @endforeach
                                     </select>
-
                                 </div>
                             </div>
 
@@ -154,7 +141,6 @@
                                         <option value="{{ $platform }}">{{ $platform }}</option>
                                         @endforeach
                                     </select>
-
                                 </div>
                             </div>
 
@@ -172,7 +158,6 @@
                                         @endforeach
                                         <option value="other">KHONG_CO_SIM</option>
                                     </select>
-
                                 </div>
                             </div>
 
@@ -205,8 +190,6 @@
                                 </svg>
                                 {{ __('Tìm kiếm') }}
                             </button>
-
-
                         </div>
                     </div>
                 </div>
@@ -426,57 +409,7 @@
                             @endphp
                             <span class="font-mono text-xs">{{ $formattedDate }}</span>
                         </x-table.cell>
-                        <x-table.cell class="max-w-md whitespace-normal">
-                            @php
-                            $behavior = $item->behavior ?? '';
-                            if (is_string($behavior)) {
-                            $behaviorData = json_decode($behavior, true);
-                            if (json_last_error() === JSON_ERROR_NONE && is_array($behaviorData)) {
-                            echo '<div class="space-y-1.5">';
-                                foreach ($behaviorData as $key => $value) {
-                                $bgColor = 'bg-gray-50';
-                                $textColor = 'text-gray-600';
-
-                                if (strpos($key, 'INSTALL') !== false) {
-                                $bgColor = 'bg-emerald-50';
-                                $textColor = 'text-emerald-700';
-                                } elseif (strpos($value, 'SUCCESS') !== false || strpos($key, 'SUB_OK') !== false) {
-                                $bgColor = 'bg-blue-50';
-                                $textColor = 'text-blue-700';
-                                } elseif (strpos($key, 'ERRO') !== false || strpos($value, 'ERRO') !== false || strpos($key, 'SAI_') !== false) {
-                                $bgColor = 'bg-red-50';
-                                $textColor = 'text-red-700';
-                                } elseif (strpos($key, 'PERMISSION') !== false) {
-                                $bgColor = 'bg-amber-50';
-                                $textColor = 'text-amber-700';
-                                }
-
-                                echo "<div class='text-xs p-1.5 rounded {$bgColor} break-words'>";
-                                    echo "<span class='font-medium {$textColor}'>{$key}:</span> ";
-
-                                    if (strpos($value, 'DEVICE:') !== false) {
-                                    $parts = explode('DEVICE:', $value);
-                                    echo "<span class='break-all'>" . e(trim($parts[0])) . "</span>";
-                                    if (isset($parts[1])) {
-                                    echo "<div class='mt-1 font-mono text-xs text-gray-500 break-all'>DEVICE: " . e(trim($parts[1])) . "</div>";
-                                    }
-                                    } elseif (filter_var($value, FILTER_VALIDATE_URL)) {
-                                    echo "<span class='break-all text-blue-600 hover:text-blue-800'>" . e($value) . "</span>";
-                                    } else {
-                                    echo "<span class='break-all'>" . e($value) . "</span>";
-                                    }
-
-                                    echo "</div>";
-                                }
-                                echo '</div>';
-                            } else {
-                            echo '<div class="text-xs text-gray-600 break-words">' . e($behavior) . '</div>';
-                            }
-                            } else {
-                            echo '<span class="text-gray-400">N/A</span>';
-                            }
-                            @endphp
-                        </x-table.cell>
+                        
                     </x-table.row>
                     @endforeach
                 </x-table.body>
