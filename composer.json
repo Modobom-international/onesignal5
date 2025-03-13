@@ -28,6 +28,7 @@
         "laravel/tinker": "^2.10",
         "league/flysystem-aws-s3-v3": "^3.29",
         "league/flysystem-sftp-v3": "^3.29",
+        "livewire/livewire": "^3.6",
         "mobiledetect/mobiledetectlib": "^4.8",
         "mongodb/laravel-mongodb": "^5.1",
         "mongodb/mongodb": "^1.20",
