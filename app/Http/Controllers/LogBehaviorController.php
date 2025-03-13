@@ -584,9 +584,6 @@ class LogBehaviorController extends Controller
             $dataPaginate = Common::paginate($query, 50);
         }
 
-        $listAppCheck = DB::connection('mongodb')
-            ->table('app_install')
-            ->get();
         $listAssigned = ListAssigned::ASSIGNED;
         $filter = [
             'app' => $app,
@@ -618,8 +615,6 @@ class LogBehaviorController extends Controller
             'listArrayCountry' => $listArrayCountry,
             'listDefaultCountry' => $listDefaultCountry,
             'listArrayApp' => $listArrayApp,
-            'listAppCheck' => $listAppCheck,
-            'listAssigned' => $listAssigned,
             'textShowContent' => $textShowContent,
             'today' => $today,
             'prevToday' => $prevToday,

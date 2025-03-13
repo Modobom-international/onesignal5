@@ -39,12 +39,7 @@ class StoreLogBehaviorJob implements ShouldQueue
                 $keyCacheMenuApp = LogBehavior::CACHE_MENU . '_apps';
                 $keyCacheMenuNetwork = LogBehavior::CACHE_MENU . '_networks';
                 $isUpdateCache = false;
-                $getCheckInListApp = DB::connection('mongodb')
-                    ->table('app_install')
-                    ->where('app', strtolower($this->data['app']))
-                    ->where('country', strtolower($this->data['country']))
-                    ->where('platform', strtolower($this->data['platform']))
-                    ->first();
+
                 $getCache = DB::connection('mongodb')
                     ->table('log_behavior_cache')
                     ->where('key', $keyCacheMenuApp)
@@ -73,15 +68,7 @@ class StoreLogBehaviorJob implements ShouldQueue
                             ->update($dataUpdateCache);
                     }
                 }
-                if (!empty($getCheckInListApp)) {
-                    $dataUpdate = [
-                        'last_install' => $this->data['date']
-                    ];
-                    DB::connection('mongodb')
-                        ->table('app_install')
-                        ->where('id', $getCheckInListApp->id)
-                        ->update($dataUpdate);
-                }
+
                 DB::connection('mongodb')
                     ->table('log_behavior')
                     ->insert($this->data);
