@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Log behavior')
+@section('title', __('Hành vi người dùng'))
 
 @section('content')
 <div class="py-8">
