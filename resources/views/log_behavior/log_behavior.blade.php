@@ -3,6 +3,7 @@
 @section('title', 'Log behavior')
 
 @section('content')
+@dd(1)
 <div class="py-8">
     <div class="">
         <!-- Page Header -->

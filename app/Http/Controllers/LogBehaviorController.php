@@ -584,7 +584,6 @@ class LogBehaviorController extends Controller
             $dataPaginate = Common::paginate($query, 50);
         }
 
-        $listAssigned = ListAssigned::ASSIGNED;
         $filter = [
             'app' => $app,
             'date' => $dateFormat,
