@@ -20,7 +20,50 @@
         </button>
 
         <!-- Statistics Section -->
+        <div class="mt-8">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                    <div class="px-4 py-5 sm:p-6">
+                        <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng id') }}</dt>
+                        <dd class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                            @if ($statusPaginate)
+                            {{ $data->total() }}
+                            @else
+                            {{ count($data) }}
+                            @endif
+                        </dd>
+                    </div>
+                </div>
 
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                    <div class="px-4 py-5 sm:p-6">
+                        <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng lượt cài') }}</dt>
+                        <dd class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                            {{ $totalInstall ?? 0 }}
+                        </dd>
+                    </div>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                    <div class="px-4 py-5 sm:p-6">
+                        <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai quốc gia') }}</dt>
+                        <dd class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                            {{ $totalWrongCountry ?? 0 }}
+                        </dd>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200/80  transition-all duration-200 group">
+                    <div class="px-4 py-5 sm:p-6">
+                        <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Tổng sai nhà mạng') }}</dt>
+                        <dd class="mt-2 text-3xl font-semibold text-indigo-600 group-hover:text-indigo-500 transition-colors duration-200">
+                            {{ $totalWrongNetWork ?? 0 }}
+                        </dd>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="mt-8">
             <!-- Filters Section -->
@@ -215,106 +258,7 @@
             </div>
         </div>
 
-        <!-- Date Comparison Modal -->
-        <div id="modalDateComparison" tabindex="-1" aria-hidden="true"
-            class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative w-full max-w-4xl max-h-full">
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                            {{ __('So sánh dữ liệu') }}
-                        </h3>
-                        <button type="button"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="modalDateComparison">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">{{ __('Đóng') }}</span>
-                        </button>
-                    </div>
-
-                    <!-- Modal body -->
-                    <div class="p-4 md:p-5">
-                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            <!-- Current Date Section -->
-                            <div class="space-y-4">
-                                <div class="flex items-center justify-between">
-                                    <h5 class="text-sm font-medium text-gray-700">{{ __('Ngày hiện tại') }}</h5>
-                                    <span id="current-date-display" class="text-sm text-gray-500"></span>
-                                </div>
-                                <div class="bg-gray-50 rounded-lg p-4">
-                                    <dl class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <dt class="text-xs text-gray-500">{{ __('Tổng lượt cài') }}</dt>
-                                            <dd id="current-total-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
-                                        </div>
-                                        <div>
-                                            <dt class="text-xs text-gray-500">{{ __('Thành công') }}</dt>
-                                            <dd id="current-success-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
-                                        </div>
-                                        <div>
-                                            <dt class="text-xs text-gray-500">{{ __('Sai quốc gia') }}</dt>
-                                            <dd id="current-wrong-country" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
-                                        </div>
-                                        <div>
-                                            <dt class="text-xs text-gray-500">{{ __('Sai mạng') }}</dt>
-                                            <dd id="current-wrong-network" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
-                                        </div>
-                                    </dl>
-                                </div>
-                            </div>
-
-                            <!-- Comparison Date Section -->
-                            <div class="space-y-4">
-                                <div class="flex items-center justify-between">
-                                    <h5 class="text-sm font-medium text-gray-700">{{ __('Ngày so sánh') }}</h5>
-                                    <div class="relative">
-                                        <input type="text" id="comparison-date"
-                                            class="block w-40 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                            placeholder="{{ __('Chọn ngày') }}">
-                                    </div>
-                                </div>
-                                <div class="bg-gray-50 rounded-lg p-4">
-                                    <dl class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <dt class="text-xs text-gray-500">{{ __('Tổng lượt cài') }}</dt>
-                                            <dd id="comparison-total-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
-                                        </div>
-                                        <div>
-                                            <dt class="text-xs text-gray-500">{{ __('Thành công') }}</dt>
-                                            <dd id="comparison-success-installs" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
-                                        </div>
-                                        <div>
-                                            <dt class="text-xs text-gray-500">{{ __('Sai quốc gia') }}</dt>
-                                            <dd id="comparison-wrong-country" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
-                                        </div>
-                                        <div>
-                                            <dt class="text-xs text-gray-500">{{ __('Sai mạng') }}</dt>
-                                            <dd id="comparison-wrong-network" class="mt-1 text-lg font-semibold text-gray-900">-</dd>
-                                        </div>
-                                    </dl>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Comparison Actions -->
-                        <div class="mt-6 flex items-center justify-end space-x-4">
-                            <div id="comparison-loader" class="hidden">
-                                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-indigo-600"></div>
-                            </div>
-                            <button type="button" id="compare-dates"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
-                                {{ __('So sánh') }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- Data Table -->
         <div class="mt-4">
