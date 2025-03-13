@@ -3,7 +3,7 @@
 @section('title', 'Log behavior')
 
 @section('content')
-@dd(1)
+
 <div class="py-8">
     <div class="">
         <!-- Page Header -->
@@ -411,55 +411,7 @@
                             <span class="font-mono text-xs">{{ $formattedDate }}</span>
                         </x-table.cell>
                         <x-table.cell class="max-w-md whitespace-normal">
-                            @php
-                            $behavior = $item->behavior ?? '';
-                            if (is_string($behavior)) {
-                            $behaviorData = json_decode($behavior, true);
-                            if (json_last_error() === JSON_ERROR_NONE && is_array($behaviorData)) {
-                            echo '<div class="space-y-1.5">';
-                                foreach ($behaviorData as $key => $value) {
-                                $bgColor = 'bg-gray-50';
-                                $textColor = 'text-gray-600';
-
-                                if (strpos($key, 'INSTALL') !== false) {
-                                $bgColor = 'bg-emerald-50';
-                                $textColor = 'text-emerald-700';
-                                } elseif (strpos($value, 'SUCCESS') !== false || strpos($key, 'SUB_OK') !== false) {
-                                $bgColor = 'bg-blue-50';
-                                $textColor = 'text-blue-700';
-                                } elseif (strpos($key, 'ERRO') !== false || strpos($value, 'ERRO') !== false || strpos($key, 'SAI_') !== false) {
-                                $bgColor = 'bg-red-50';
-                                $textColor = 'text-red-700';
-                                } elseif (strpos($key, 'PERMISSION') !== false) {
-                                $bgColor = 'bg-amber-50';
-                                $textColor = 'text-amber-700';
-                                }
-
-                                echo "<div class='text-xs p-1.5 rounded {$bgColor} break-words'>";
-                                    echo "<span class='font-medium {$textColor}'>{$key}:</span> ";
-
-                                    if (strpos($value, 'DEVICE:') !== false) {
-                                    $parts = explode('DEVICE:', $value);
-                                    echo "<span class='break-all'>" . e(trim($parts[0])) . "</span>";
-                                    if (isset($parts[1])) {
-                                    echo "<div class='mt-1 font-mono text-xs text-gray-500 break-all'>DEVICE: " . e(trim($parts[1])) . "</div>";
-                                    }
-                                    } elseif (filter_var($value, FILTER_VALIDATE_URL)) {
-                                    echo "<span class='break-all text-blue-600 hover:text-blue-800'>" . e($value) . "</span>";
-                                    } else {
-                                    echo "<span class='break-all'>" . e($value) . "</span>";
-                                    }
-
-                                    echo "</div>";
-                                }
-                                echo '</div>';
-                            } else {
-                            echo '<div class="text-xs text-gray-600 break-words">' . e($behavior) . '</div>';
-                            }
-                            } else {
-                            echo '<span class="text-gray-400">N/A</span>';
-                            }
-                            @endphp
+                            
                         </x-table.cell>
                     </x-table.row>
                     @endforeach
