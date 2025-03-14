@@ -1,14 +1,17 @@
-import { Input } from "@/components/ui/input";
-import AppLayout from "@/Layouts/AppLayout";
+import ApplicationLogo from "@/components/Global/ApplicationLogo";
+import FeaturesSection from "@/components/Home/FeaturesSection";
+import Footer from "@/components/Home/Footer";
+import Header from "@/components/Home/Header";
+import HeroSection from "@/components/Home/HeroSection";
+import GuestLayout from "@/layouts/GuestLayout";
 
 export default function Home() {
     return (
-        <AppLayout title="Home">
-            <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div className="p-6 text-gray-900">
-                    Welcome to your React-powered Laravel application!
-                </div>
-            </div>
-        </AppLayout>
+        <GuestLayout title="Home">
+            <Header />
+            <HeroSection />
+            <FeaturesSection />
+            <Footer />
+        </GuestLayout>
     );
 }
