@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import AppLayout from "@/Layouts/AppLayout";
 
 export default function Home() {
