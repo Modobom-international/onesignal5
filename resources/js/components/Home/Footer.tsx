@@ -1,7 +1,9 @@
 import React from "react";
+import { useLaravelReactI18n } from "laravel-react-i18n";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
+    const { t } = useLaravelReactI18n();
 
     return (
         <footer className="bg-gray-900 text-white mt-20">
@@ -15,31 +17,31 @@ export default function Footer() {
                             />
                         </a>
                         <p className="mt-4 text-gray-400 text-sm">
-                            Hệ thống quản lý và giám sát nội bộ Modobom, cung
-                            cấp các công cụ theo dõi, phân tích và tối ưu hóa
-                            hoạt động.
+                            {t(
+                                "Hệ thống quản lý và giám sát nội bộ Modobom, cung cấp các công cụ theo dõi, phân tích và tối ưu hóa hoạt động."
+                            )}
                         </p>
                     </div>
 
                     <div>
                         <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                            Hệ thống
+                            {t("Hệ thống")}
                         </h3>
                         <ul className="mt-4 space-y-3">
-                            <FooterLink href="#" text="Bảng điều khiển" />
-                            <FooterLink href="#" text="Cấu hình" />
-                            <FooterLink href="#" text="Giám sát" />
+                            <FooterLink href="#" text={t("Bảng điều khiển")} />
+                            <FooterLink href="#" text={t("Cấu hình")} />
+                            <FooterLink href="#" text={t("Giám sát")} />
                         </ul>
                     </div>
 
                     <div>
                         <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">
-                            Hỗ trợ
+                            {t("Hỗ trợ")}
                         </h3>
                         <ul className="mt-4 space-y-3">
-                            <FooterLink href="#" text="Tài liệu" />
-                            <FooterLink href="#" text="Hướng dẫn" />
-                            <FooterLink href="#" text="Liên hệ" />
+                            <FooterLink href="#" text={t("Tài liệu")} />
+                            <FooterLink href="#" text={t("Hướng dẫn")} />
+                            <FooterLink href="#" text={t("Liên hệ")} />
                         </ul>
                     </div>
                 </div>
@@ -49,12 +51,12 @@ export default function Footer() {
                         <div className="flex space-x-6">
                             <FooterLink
                                 href="#"
-                                text="Điều khoản nội bộ"
+                                text={t("Điều khoản nội bộ")}
                                 className="text-gray-400 hover:text-gray-300 text-sm"
                             />
                             <FooterLink
                                 href="#"
-                                text="Chính sách bảo mật"
+                                text={t("Chính sách bảo mật")}
                                 className="text-gray-400 hover:text-gray-300 text-sm"
                             />
                         </div>
@@ -79,9 +81,9 @@ interface FooterLinkProps {
 const FooterLink = ({
     href,
     text,
-    className = "text-gray-300 hover:text-white text-sm transition-colors",
+    className = "text-gray-300 hover:text-white text-sm transition-colors list-none",
 }: FooterLinkProps) => (
-    <li>
+    <li className="list-none">
         <a href={href} className={className}>
             {text}
         </a>
