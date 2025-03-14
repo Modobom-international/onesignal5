@@ -66,7 +66,7 @@
     "Giám sát hệ thống thông minh": "Smart system monitoring",
     "Kiểm soát toàn diện hệ thống Modobom": "Comprehensive control of Modobom system",
     "Hệ thống giám sát và quản lý nội bộ giúp theo dõi, phân tích và tối ưu hóa hoạt động của Modobom một cách hiệu quả.": "Internal monitoring and management system helps monitor, analyze and optimize the operation of Modobom effectively.",
-    "Giám sát thời gian thực": "Real -time monitoring",
+    "Giám sát thời gian thực": "Real-time monitoring",
     "Theo dõi hoạt động hệ thống, trạng thái domain và hiệu suất server theo thời gian thực với các chỉ số chi tiết.": "Monitor system operations, domain status and server performance in real time with detailed indicators.",
     "Nhật ký hoạt động": "Operational Diary",
     "Ghi lại và phân tích chi tiết mọi hoạt động của hệ thống, từ truy cập người dùng đến các thay đổi cấu hình quan trọng.": "Record and analyze in detail all activities of the system, from accessing users to important configuration changes.",
@@ -130,7 +130,7 @@
     "Remember me": "Remember me",
     "Forgot your password?": "Forgot Your Password?",
     "Log in": "Log in",
-    "Don’t have an account?": "Don’t has an account?",
+    "Don't have an account?": "Don't has an account?",
     "Register": "Register",
     "Tên miền": "Domain name",
     "Máy chủ": "Server",
@@ -326,5 +326,6 @@
     "Xóa nhân viên thành công!": "Delete successful employees!",
     "Thêm phòng ban thành công!": "Add a successful department!",
     "Cập nhật thông tin phòng ban thành công!": "Update the Department of Department successfully!",
-    "Xóa phòng ban thành công!": "Delete the Department successfully!"
+    "Xóa phòng ban thành công!": "Delete the Department successfully!",
+    "modobom-system-monitor": "modobom-system-monitor"
 }

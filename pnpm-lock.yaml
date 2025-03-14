@@ -17,6 +17,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      laravel-react-i18n:
+        specifier: ^2.0.5
+        version: 2.0.5
       lucide-react:
         specifier: ^0.479.0
         version: 0.479.0(react@18.3.1)
@@ -1342,6 +1345,10 @@ packages:
     resolution: {integrity: sha512-o/X4XH8BIRwij66PSjtotZfM88Z8g/4P3gzxQf2BTcZBKmGqucvI5JYYLprR2OZQ9XlGsmJ2v+hDpPGEbXwUWw==}
     engines: {node: '>=10'}
 
+  laravel-react-i18n@2.0.5:
+    resolution: {integrity: sha512-o6dHjKJlY1gZZAJba4TVGJ/QHOCIeGoDWl8M+NczW+M4IJ4JhroaxkkiphGH/GMEWL3zJbOtDM3tk0GcXl1ydQ==}
+    engines: {node: '>=16.0.0', npm: '>=9.0.0'}
+
   laravel-vite-plugin@1.2.0:
     resolution: {integrity: sha512-R0pJ+IcTVeqEMoKz/B2Ij57QVq3sFTABiFmb06gAwFdivbOgsUtuhX6N2MGLEArajrS3U5JbberzwOe7uXHMHQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
@@ -1560,6 +1567,12 @@ packages:
 
   perfect-scrollbar@1.5.6:
     resolution: {integrity: sha512-rixgxw3SxyJbCaSpo1n35A/fwI1r2rdwMKOTCg/AcG+xOEyZcE8UHVjpZMFCVImzsFoCZeJTT+M/rdEIQYO2nw==}
+
+  php-array-reader@2.1.2:
+    resolution: {integrity: sha512-bev2MQhNmxlGiAQwi41z7J242jAEopCs5bT515Er/d4uiFl1z09SWQcr1VnycRJ0EA9ARlm8zDBvM40/y+l9/Q==}
+
+  php-parser@3.2.2:
+    resolution: {integrity: sha512-voj3rzCJmEbwHwH3QteON28wA6K+JbcaJEofyUZkUXmcViiXofjbSbcE5PtqtjX6nstnnAEYCFoRq0mkjP5/cg==}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -3142,6 +3155,11 @@ snapshots:
 
   laravel-echo@1.19.0: {}
 
+  laravel-react-i18n@2.0.5:
+    dependencies:
+      php-array-reader: 2.1.2
+      react: 18.3.1
+
   laravel-vite-plugin@1.2.0(vite@6.2.1(@types/node@18.19.80)(jiti@2.4.2)(lightningcss@1.29.2)(sass@1.85.1)(yaml@2.7.0)):
     dependencies:
       picocolors: 1.1.1
@@ -3316,6 +3334,12 @@ snapshots:
   pend@1.2.0: {}
 
   perfect-scrollbar@1.5.6: {}
+
+  php-array-reader@2.1.2:
+    dependencies:
+      php-parser: 3.2.2
+
+  php-parser@3.2.2: {}
 
   picocolors@1.1.1: {}
 

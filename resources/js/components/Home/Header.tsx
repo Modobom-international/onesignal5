@@ -1,9 +1,17 @@
+import { useLaravelReactI18n } from "laravel-react-i18n";
 import React, { useState, useEffect } from "react";
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [showShadow, setShowShadow] = useState(false);
     const [systemMenuOpen, setSystemMenuOpen] = useState(false);
+    const { t, currentLocale, setLocale } = useLaravelReactI18n();
+
+    const toggleLanguage = () => {
+        const newLocale = currentLocale() === "vi" ? "en" : "vi";
+        window.localStorage.setItem("locale", newLocale);
+        setLocale(newLocale);
+    };
 
     // Handle scroll effect
     useEffect(() => {
@@ -44,7 +52,7 @@ export default function Header() {
                                 onMouseLeave={() => setSystemMenuOpen(false)}
                             >
                                 <button className="group inline-flex items-center text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
-                                    Hệ thống
+                                    {t("Hệ thống")}
                                     <svg
                                         className={`ml-1.5 h-4 w-4 transition-transform duration-200 ${
                                             systemMenuOpen ? "rotate-180" : ""
@@ -89,13 +97,36 @@ export default function Header() {
                                 )}
                             </div>
 
-                            <NavLink href="#" text="Giám sát" />
-                            <NavLink href="#" text="Nhật ký" />
-                            <NavLink href="#" text="Hỗ trợ" />
+                            <NavLink href="#" text={t("Giám sát")} />
+                            <NavLink href="#" text={t("Nhật ký")} />
+                            <NavLink href="#" text={t("Hỗ trợ")} />
                         </div>
 
                         {/* Right Navigation */}
                         <div className="hidden lg:flex lg:items-center lg:space-x-6">
+                            {/* Language Switcher */}
+                            <button
+                                onClick={toggleLanguage}
+                                className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                            >
+                                <svg
+                                    className="h-5 w-5 mr-2"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+                                    />
+                                </svg>
+                                {currentLocale() === "vi"
+                                    ? "English"
+                                    : "Tiếng Việt"}
+                            </button>
+
                             <a
                                 href="/login"
                                 className="group inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all duration-200 shadow-sm hover:shadow"
@@ -143,6 +174,28 @@ export default function Header() {
                         </div>
                         <div className="pt-4 pb-3 border-t border-gray-200">
                             <div className="space-y-1">
+                                {/* Mobile Language Switcher */}
+                                <button
+                                    onClick={toggleLanguage}
+                                    className="flex w-full px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                                >
+                                    <svg
+                                        className="h-6 w-6 mr-3"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+                                        />
+                                    </svg>
+                                    {currentLocale() === "vi"
+                                        ? "English"
+                                        : "Tiếng Việt"}
+                                </button>
                                 <MobileNavLink href="/login" text="Đăng nhập" />
                                 <MobileNavLink
                                     href="#"
