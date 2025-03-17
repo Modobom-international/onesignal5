@@ -8,6 +8,7 @@ import {
     Send,
     Settings2,
     SquareTerminal,
+    User,
 } from "lucide-react";
 import * as React from "react";
 
@@ -53,67 +54,26 @@ const data = {
                 },
             ],
         },
+
         {
-            title: "Models",
+            title: "Users & Teams",
             url: "#",
-            icon: Bot,
+            icon: User,
             items: [
                 {
-                    title: "Genesis",
+                    title: "Users List",
                     url: "#",
                 },
                 {
-                    title: "Explorer",
+                    title: "Create new user",
                     url: "#",
                 },
                 {
-                    title: "Quantum",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "Documentation",
-            url: "#",
-            icon: BookOpen,
-            items: [
-                {
-                    title: "Introduction",
+                    title: "Teams List",
                     url: "#",
                 },
                 {
-                    title: "Get Started",
-                    url: "#",
-                },
-                {
-                    title: "Tutorials",
-                    url: "#",
-                },
-                {
-                    title: "Changelog",
-                    url: "#",
-                },
-            ],
-        },
-        {
-            title: "Settings",
-            url: "#",
-            icon: Settings2,
-            items: [
-                {
-                    title: "General",
-                    url: "#",
-                },
-                {
-                    title: "Team",
-                    url: "#",
-                },
-                {
-                    title: "Billing",
-                    url: "#",
-                },
-                {
-                    title: "Limits",
+                    title: "Create new team",
                     url: "#",
                 },
             ],
