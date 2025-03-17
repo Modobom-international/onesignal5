@@ -41,7 +41,7 @@ export default function DashboardPage() {
 
     return (
         <AuthenticatedLayout title="Dashboard">
-            <div className="container mx-auto px-6 py-10 max-w-[1440px]">
+            <div className="container mx-auto py-10">
                 {/* Queue Metrics Section */}
                 <div className="mb-16">
                     <h2 className="text-xl font-bold text-gray-900 mb-10 pb-4 border-b border-border">
@@ -257,11 +257,6 @@ export default function DashboardPage() {
                             </AreaChart>
                         </ResponsiveContainer>
                     </div>
-                </div>
-
-                {/* Footer */}
-                <div className="mt-16 text-sm text-gray-400  pt-6">
-                    © 2025 Modobom.inc
                 </div>
             </div>
         </AuthenticatedLayout>

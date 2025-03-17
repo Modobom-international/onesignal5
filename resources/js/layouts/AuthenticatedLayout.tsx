@@ -1,3 +1,4 @@
+import Footer from "@/components/Layout/Footer";
 import { AppSidebar } from "@/components/Layout/Sidebar/app-sidebar";
 import { SiteHeader } from "@/components/Layout/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -24,6 +25,7 @@ export default function AuthenticatedLayout({
                     <SidebarInset>
                         <div className="flex flex-1 flex-col gap-4 p-4">
                             {children}
+                            <Footer />
                         </div>
                     </SidebarInset>
                 </div>
