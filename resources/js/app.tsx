@@ -6,7 +6,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createRoot } from "react-dom/client";
 import { LaravelReactI18nProvider } from "laravel-react-i18n";
 
-const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+const appName = import.meta.env.VITE_APP_NAME || "Modobom Platform";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
