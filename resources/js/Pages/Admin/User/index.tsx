@@ -1,4 +1,3 @@
-import Component from "@/components/comp-480";
 import { SearchInput } from "@/components/Inputs/SearchInput";
 import { buttonVariants } from "@/components/ui/button";
 import UserDataTable from "@/components/Users/DataTable";
@@ -77,11 +76,6 @@ export default function UsersPage({ users }: UsersPageProps) {
 
                 {/* Table Section */}
                 <UserDataTable />
-
-                {/* Pagination */}
-                <div className="px-4 py-3 border-t border-gray-200">
-                    {/* Implement pagination component here */}
-                </div>
             </div>
         </AuthenticatedLayout>
     );
