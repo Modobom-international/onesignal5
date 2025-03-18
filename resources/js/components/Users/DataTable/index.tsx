@@ -31,6 +31,10 @@ import {
     PinOffIcon,
     ChevronUpIcon,
     ChevronDownIcon,
+    MoreHorizontalIcon,
+    PencilIcon,
+    TrashIcon,
+    UserIcon,
 } from "lucide-react";
 import { CSSProperties, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -52,55 +56,72 @@ const getPinningStyles = (column: Column<Item>): CSSProperties => {
         position: isPinned ? "sticky" : "relative",
         width: column.getSize(),
         zIndex: isPinned ? 1 : 0,
+        backgroundColor: isPinned ? "#fff" : "transparent",
     };
 };
 
 const columns: ColumnDef<Item>[] = [
+    {
+        header: "ID",
+        accessorKey: "id",
+        cell: ({ row }) => (
+            <div className="truncate font-medium text-muted-foreground">
+                {row.getValue("id")}
+            </div>
+        ),
+    },
     {
         header: "Name",
         accessorKey: "name",
         cell: ({ row }) => (
             <div className="truncate font-medium">{row.getValue("name")}</div>
         ),
-        enableSorting: true,
+        sortUndefined: "last",
+        sortDescFirst: false,
     },
     {
         header: "Email",
         accessorKey: "email",
-        enableSorting: true,
+        cell: ({ row }) => (
+            <div className="truncate">{row.getValue("email")}</div>
+        ),
     },
     {
         header: "Team",
         accessorKey: "team",
-        enableSorting: true,
+        cell: ({ row }) => (
+            <div className="truncate">{row.getValue("team")}</div>
+        ),
     },
     {
-        header: "Actions",
         id: "actions",
-        enableSorting: false,
+        header: "Actions",
         cell: ({ row }) => {
+            const user = row.original;
+
             return (
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex justify-end">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                                <EllipsisIcon className="h-4 w-4" />
+                            <Button
+                                variant="ghost"
+                                className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                            >
+                                <MoreHorizontalIcon className="h-4 w-4" />
+                                <span className="sr-only">Open menu</span>
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                                onClick={() =>
-                                    console.log("Edit", row.original.id)
-                                }
-                            >
+                        <DropdownMenuContent align="end" className="w-[160px]">
+                            <DropdownMenuItem>
+                                <PencilIcon className="mr-2 h-4 w-4" />
                                 Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="text-red-600"
-                                onClick={() =>
-                                    console.log("Delete", row.original.id)
-                                }
-                            >
+                            <DropdownMenuItem>
+                                <UserIcon className="mr-2 h-4 w-4" />
+                                View Profile
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive focus:text-destructive">
+                                <TrashIcon className="mr-2 h-4 w-4" />
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -112,39 +133,49 @@ const columns: ColumnDef<Item>[] = [
 ];
 
 export default function UserDataTable() {
-    const [data] = useState<Item[]>([
+    const [data, setData] = useState<Item[]>([]);
+    const [sorting, setSorting] = useState<SortingState>([
         {
-            id: "1",
-            name: "John Doe",
-            email: "john.doe@example.com",
-            team: "Engineering",
-        },
-        {
-            id: "2",
-            name: "Jane Smith",
-            email: "jane.smith@example.com",
-            team: "Design",
-        },
-        {
-            id: "3",
-            name: "Michael Johnson",
-            email: "michael.j@example.com",
-            team: "Marketing",
-        },
-        {
-            id: "4",
-            name: "Sarah Williams",
-            email: "sarah.w@example.com",
-            team: "Sales",
-        },
-        {
-            id: "5",
-            name: "David Chen",
-            email: "david.chen@example.com",
-            team: "Finance",
+            id: "name",
+            desc: false,
         },
     ]);
-    const [sorting, setSorting] = useState<SortingState>([]);
+
+    useEffect(() => {
+        // For demonstration, using static data instead of fetching
+        setData([
+            {
+                id: "1",
+                name: "John Doe",
+                email: "john@example.com",
+                team: "Engineering",
+            },
+            {
+                id: "2",
+                name: "Jane Smith",
+                email: "jane@example.com",
+                team: "Design",
+            },
+            {
+                id: "3",
+                name: "Bob Johnson",
+                email: "bob@example.com",
+                team: "Marketing",
+            },
+            {
+                id: "4",
+                name: "Alice Brown",
+                email: "alice@example.com",
+                team: "Engineering",
+            },
+            {
+                id: "5",
+                name: "Charlie Wilson",
+                email: "charlie@example.com",
+                team: "Product",
+            },
+        ]);
+    }, []);
 
     const table = useReactTable({
         data,
@@ -161,7 +192,12 @@ export default function UserDataTable() {
 
     return (
         <div className="w-full">
-            <Table className="w-full [&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b">
+            <Table
+                className="w-full [&_td]:border-border [&_th]:border-border table-fixed border-separate border-spacing-0 [&_tfoot_td]:border-t [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b"
+                style={{
+                    minWidth: "100%",
+                }}
+            >
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id} className="bg-muted/50">
@@ -199,60 +235,59 @@ export default function UserDataTable() {
                                                 : "none"
                                         }
                                     >
-                                        <div className="flex items-center justify-between gap-2">
-                                            {!header.isPlaceholder && (
-                                                <div
-                                                    className={cn(
-                                                        "flex items-center gap-2",
-                                                        header.column.getCanSort() &&
-                                                            "cursor-pointer select-none"
-                                                    )}
-                                                    onClick={header.column.getToggleSortingHandler()}
-                                                    onKeyDown={(e) => {
-                                                        if (
-                                                            header.column.getCanSort() &&
-                                                            (e.key ===
-                                                                "Enter" ||
-                                                                e.key === " ")
-                                                        ) {
-                                                            e.preventDefault();
-                                                            header.column.getToggleSortingHandler()?.(
-                                                                e
-                                                            );
-                                                        }
-                                                    }}
-                                                    tabIndex={
-                                                        header.column.getCanSort()
-                                                            ? 0
-                                                            : undefined
-                                                    }
-                                                >
-                                                    <span className="truncate">
-                                                        {flexRender(
-                                                            header.column
-                                                                .columnDef
-                                                                .header,
-                                                            header.getContext()
-                                                        )}
-                                                    </span>
-                                                    {{
-                                                        asc: (
-                                                            <ChevronUpIcon
-                                                                className="shrink-0 opacity-60"
-                                                                size={16}
-                                                            />
-                                                        ),
-                                                        desc: (
-                                                            <ChevronDownIcon
-                                                                className="shrink-0 opacity-60"
-                                                                size={16}
-                                                            />
-                                                        ),
-                                                    }[
-                                                        header.column.getIsSorted() as string
-                                                    ] ?? null}
-                                                </div>
+                                        <div
+                                            className={cn(
+                                                "flex items-center justify-between gap-2",
+                                                header.column.getCanSort() &&
+                                                    "cursor-pointer select-none"
                                             )}
+                                            onClick={
+                                                header.column.getCanSort()
+                                                    ? header.column.getToggleSortingHandler()
+                                                    : undefined
+                                            }
+                                            onKeyDown={(e) => {
+                                                if (
+                                                    header.column.getCanSort() &&
+                                                    (e.key === "Enter" ||
+                                                        e.key === " ")
+                                                ) {
+                                                    e.preventDefault();
+                                                    header.column.getToggleSortingHandler()?.(
+                                                        e
+                                                    );
+                                                }
+                                            }}
+                                            tabIndex={
+                                                header.column.getCanSort()
+                                                    ? 0
+                                                    : undefined
+                                            }
+                                        >
+                                            <div className="flex items-center gap-1">
+                                                <span className="truncate">
+                                                    {header.isPlaceholder
+                                                        ? null
+                                                        : flexRender(
+                                                              header.column
+                                                                  .columnDef
+                                                                  .header,
+                                                              header.getContext()
+                                                          )}
+                                                </span>
+                                                {header.column.getCanSort() && (
+                                                    <div className="flex items-center">
+                                                        {header.column.getIsSorted() ===
+                                                        "asc" ? (
+                                                            <ChevronUpIcon className="size-4 shrink-0 opacity-60" />
+                                                        ) : header.column.getIsSorted() ===
+                                                          "desc" ? (
+                                                            <ChevronDownIcon className="size-4 shrink-0 opacity-60" />
+                                                        ) : null}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* Pin/Unpin column controls with enhanced accessibility */}
                                             {!header.isPlaceholder &&
                                                 header.column.getCanPin() &&
                                                 (header.column.getIsPinned() ? (

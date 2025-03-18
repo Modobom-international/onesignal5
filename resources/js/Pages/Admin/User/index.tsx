@@ -1,10 +1,11 @@
-import AuthenticatedLayout from "@/layouts/AuthenticatedLayout";
-import React, { useState } from "react";
-import { Link } from "@inertiajs/react";
-import { PlusIcon } from "lucide-react";
+import Component from "@/components/comp-480";
 import { SearchInput } from "@/components/Inputs/SearchInput";
 import { buttonVariants } from "@/components/ui/button";
 import UserDataTable from "@/components/Users/DataTable";
+import AuthenticatedLayout from "@/layouts/AuthenticatedLayout";
+import { Link } from "@inertiajs/react";
+import { PlusIcon } from "lucide-react";
+import React, { useState } from "react";
 
 interface User {
     id: number;
