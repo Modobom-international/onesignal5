@@ -2,23 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout";
 import { useForm } from "@inertiajs/react";
 import { ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
-
-interface Team {
-    id: number;
-    name: string;
-    permissions?: string[];
-}
 
 interface PermissionRoute {
     id: number;
@@ -30,22 +17,11 @@ interface Permission {
     [key: string]: PermissionRoute[];
 }
 
-export default function CreatUserPage() {
+export default function CreateTeamPage() {
     const { data, setData, post, processing, errors } = useForm({
         name: "",
-        email: "",
-        password: "",
-        address: "",
-        phone_number: "",
-        team: "",
         permissions: {} as { [key: string]: boolean },
     });
-
-    const [teams, setTeams] = useState<Team[]>([
-        { id: 1, name: "Development Team" },
-        { id: 2, name: "Marketing Team" },
-        { id: 3, name: "Sales Team" },
-    ]);
 
     const [permissions, setPermissions] = useState<Permission>({
         "push-system": [
@@ -102,8 +78,13 @@ export default function CreatUserPage() {
         team: false,
     });
 
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post("/admin/teams");
+    };
+
     return (
-        <AuthenticatedLayout title="Thêm nhân viên">
+        <AuthenticatedLayout title="Thêm phòng ban">
             <div>
                 <div>
                     {/* Header Section */}
@@ -112,17 +93,17 @@ export default function CreatUserPage() {
                             <div className="flex items-center justify-between">
                                 <div>
                                     <h1 className="text-2xl font-semibold text-gray-900">
-                                        Tạo nhân viên
+                                        Tạo phòng ban
                                     </h1>
                                     <p className="mt-1 text-sm text-gray-500">
-                                        Thêm nhân viên mới vào hệ thống và phân
-                                        quyền truy cập
+                                        Thêm phòng ban mới và thiết lập quyền
+                                        truy cập
                                     </p>
                                 </div>
                                 <Button
                                     variant="outline"
                                     onClick={() =>
-                                        (window.location.href = "/admin/users")
+                                        (window.location.href = "/admin/teams")
                                     }
                                     className="flex items-center space-x-2 hover:bg-gray-50"
                                 >
@@ -132,31 +113,31 @@ export default function CreatUserPage() {
                             </div>
                         </div>
 
-                        <form className="p-6">
+                        <form onSubmit={handleSubmit} className="p-6">
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                {/* Left Column - User Information */}
-                                <div className="lg:col-span-2 space-y-6">
+                                {/* Left Column - Team Information */}
+                                <div className="lg:col-span-1 space-y-6">
                                     <div className="bg-white rounded-lg">
                                         <div className="flex items-center justify-between mb-6">
                                             <div>
                                                 <h2 className="font-medium text-gray-800">
-                                                    Thông tin cá nhân
+                                                    Thông tin phòng ban
                                                 </h2>
                                                 <p className="text-xs text-gray-500">
                                                     Nhập thông tin cơ bản của
-                                                    nhân viên
+                                                    phòng ban
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            {/* Name Field */}
+                                        <div className="space-y-4">
+                                            {/* Team Name Field */}
                                             <div className="space-y-1.5">
                                                 <Label
                                                     htmlFor="name"
                                                     className="block text-sm font-medium text-gray-700"
                                                 >
-                                                    Tên
+                                                    Tên phòng ban
                                                 </Label>
                                                 <Input
                                                     type="text"
@@ -170,7 +151,7 @@ export default function CreatUserPage() {
                                                         )
                                                     }
                                                     disabled={processing}
-                                                    placeholder="Nhập tên nhân viên"
+                                                    placeholder="Nhập tên phòng ban"
                                                     className="w-full"
                                                 />
                                                 {errors.name && (
@@ -179,168 +160,12 @@ export default function CreatUserPage() {
                                                     </p>
                                                 )}
                                             </div>
-
-                                            {/* Email Field */}
-                                            <div className="space-y-1.5">
-                                                <Label
-                                                    htmlFor="email"
-                                                    className="block text-sm font-medium text-gray-700"
-                                                >
-                                                    Hòm thư
-                                                </Label>
-                                                <Input
-                                                    type="email"
-                                                    id="email"
-                                                    name="email"
-                                                    value={data.email}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "email",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    disabled={processing}
-                                                    placeholder="example@company.com"
-                                                    className="w-full"
-                                                />
-                                                {errors.email && (
-                                                    <p className="text-sm text-red-500">
-                                                        {errors.email}
-                                                    </p>
-                                                )}
-                                            </div>
-
-                                            {/* Password Field */}
-                                            <div className="space-y-1.5">
-                                                <Label
-                                                    htmlFor="password"
-                                                    className="block text-sm font-medium text-gray-700"
-                                                >
-                                                    Mật khẩu
-                                                </Label>
-                                                <Input
-                                                    type="password"
-                                                    id="password"
-                                                    name="password"
-                                                    value={data.password}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "password",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    disabled={processing}
-                                                    placeholder="••••••••"
-                                                    className="w-full"
-                                                />
-                                                {errors.password && (
-                                                    <p className="text-sm text-red-500">
-                                                        {errors.password}
-                                                    </p>
-                                                )}
-                                            </div>
-
-                                            {/* Phone Number Field */}
-                                            <div className="space-y-1.5">
-                                                <Label
-                                                    htmlFor="phone_number"
-                                                    className="block text-sm font-medium text-gray-700"
-                                                >
-                                                    Số điện thoại
-                                                </Label>
-                                                <Input
-                                                    type="text"
-                                                    id="phone_number"
-                                                    name="phone_number"
-                                                    value={data.phone_number}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "phone_number",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    disabled={processing}
-                                                    placeholder="Nhập số điện thoại"
-                                                    className="w-full"
-                                                />
-                                                {errors.phone_number && (
-                                                    <p className="text-sm text-red-500">
-                                                        {errors.phone_number}
-                                                    </p>
-                                                )}
-                                            </div>
-
-                                            {/* Address Field - Full Width */}
-                                            <div className="space-y-1.5 md:col-span-2">
-                                                <Label
-                                                    htmlFor="address"
-                                                    className="block text-sm font-medium text-gray-700"
-                                                >
-                                                    Địa chỉ
-                                                </Label>
-                                                <Input
-                                                    type="text"
-                                                    id="address"
-                                                    name="address"
-                                                    value={data.address}
-                                                    onChange={(e) =>
-                                                        setData(
-                                                            "address",
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    disabled={processing}
-                                                    placeholder="Nhập địa chỉ"
-                                                    className="w-full"
-                                                />
-                                                {errors.address && (
-                                                    <p className="text-sm text-red-500">
-                                                        {errors.address}
-                                                    </p>
-                                                )}
-                                            </div>
-
-                                            {/* Team Selection - Full Width */}
-                                            <div className="space-y-1.5 md:col-span-2">
-                                                <Label
-                                                    htmlFor="team"
-                                                    className="block text-sm font-medium text-gray-700"
-                                                >
-                                                    Phòng ban
-                                                </Label>
-                                                <Select
-                                                    value={data.team}
-                                                    onValueChange={(value) =>
-                                                        setData("team", value)
-                                                    }
-                                                    disabled={processing}
-                                                >
-                                                    <SelectTrigger className="w-full">
-                                                        <SelectValue placeholder="Chọn phòng ban" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {teams.map((team) => (
-                                                            <SelectItem
-                                                                key={team.id}
-                                                                value={team.id.toString()}
-                                                            >
-                                                                {team.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
-                                                {errors.team && (
-                                                    <p className="text-sm text-red-500">
-                                                        {errors.team}
-                                                    </p>
-                                                )}
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Right Column - Permissions */}
-                                <div className="space-y-6">
+                                <div className="lg:col-span-2 space-y-6">
                                     <div className="bg-white rounded-lg">
                                         <div className="flex items-center justify-between mb-6">
                                             <div>
@@ -349,12 +174,12 @@ export default function CreatUserPage() {
                                                 </h2>
                                                 <p className="text-xs text-gray-500">
                                                     Thiết lập quyền truy cập cho
-                                                    nhân viên
+                                                    phòng ban
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div className="mt-6 space-y-4">
+                                        <div className="space-y-4">
                                             {Object.entries(permissions).map(
                                                 ([permission, routes]) => (
                                                     <div
@@ -546,7 +371,7 @@ export default function CreatUserPage() {
                                 >
                                     {processing
                                         ? "Đang xử lý..."
-                                        : "Tạo nhân viên"}
+                                        : "Tạo phòng ban"}
                                 </Button>
                             </div>
                         </form>
