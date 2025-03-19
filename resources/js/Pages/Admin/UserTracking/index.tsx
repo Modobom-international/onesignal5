@@ -1,5 +1,3 @@
-"use client";
-
 import UserTrackingDataTable from "@/components/UserTracking/DataTable";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout";
 import { ChevronRight, Home } from "lucide-react";
@@ -8,7 +6,7 @@ export default function UserTrackingPage() {
     return (
         <AuthenticatedLayout title="User Tracking">
             {/* Header Section */}
-            <div className="mb-8">
+            <div className="mb-8 border-b border-border pb-6">
                 {/* Breadcrumbs */}
                 <div className="flex items-center text-sm text-muted-foreground mb-4">
                     <Home className="w-4 h-4" />
