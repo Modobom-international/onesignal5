@@ -36,19 +36,6 @@ export function SiteHeader() {
                         <SidebarIcon />
                     </Button>
                     <Separator orientation="vertical" className="mr-2 h-4" />
-                    <Breadcrumb className="hidden sm:block">
-                        <BreadcrumbList>
-                            <BreadcrumbItem>
-                                <BreadcrumbLink href="#">
-                                    Dashboard
-                                </BreadcrumbLink>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator />
-                            <BreadcrumbItem>
-                                <BreadcrumbPage>Test Page</BreadcrumbPage>
-                            </BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
                 </div>
 
                 <div className="flex items-center gap-3">
