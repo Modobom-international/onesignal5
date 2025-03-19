@@ -3,7 +3,7 @@ import { buttonVariants } from "@/components/ui/button";
 import UserDataTable from "@/components/Users/DataTable";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout";
 import { Link } from "@inertiajs/react";
-import { PlusIcon } from "lucide-react";
+import { ChevronRight, Home, PlusIcon } from "lucide-react";
 import React, { useState } from "react";
 
 interface User {
@@ -29,31 +29,46 @@ export default function UsersPage({ users }: UsersPageProps) {
 
     return (
         <AuthenticatedLayout title="Users">
-            <div className="py-8">
+            <div>
                 {/* Header Section */}
-                <div className="sm:flex sm:items-center sm:justify-between border-border border-b pb-6">
-                    <div>
-                        <h1 className="text-2xl font-semibold text-gray-900">
-                            Nhân viên
-                        </h1>
-                        <p className="mt-2 text-sm text-gray-700">
-                            Quản lý nhân viên và quyền của họ
-                        </p>
+                <div className="mb-8 border-b border-border pb-6">
+                    {/* Breadcrumbs */}
+                    <div className="flex items-center text-sm text-muted-foreground mb-4">
+                        <Home className="w-4 h-4" />
+                        <ChevronRight className="w-4 h-4 mx-2" />
+                        <span>Quản lý nhân viên</span>
                     </div>
-                    <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none space-x-2">
-                        <Link
-                            href="/admin/team"
-                            className={buttonVariants({ variant: "outline" })}
-                        >
-                            Phòng ban
-                        </Link>
-                        <Link
-                            href="/admin/users/create"
-                            className={buttonVariants({ variant: "default" })}
-                        >
-                            <PlusIcon className="w-4 h-4 mr-2" />
-                            Thêm nhân viên
-                        </Link>
+
+                    {/* Welcome Message */}
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-3xl font-bold tracking-tight">
+                                Nhân viên
+                            </h1>
+                            <p className="text-muted-foreground mt-1">
+                                Quản lý nhân viên và quyền của họ
+                            </p>
+                        </div>
+
+                        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none space-x-2">
+                            <Link
+                                href="/admin/team"
+                                className={buttonVariants({
+                                    variant: "outline",
+                                })}
+                            >
+                                Phòng ban
+                            </Link>
+                            <Link
+                                href="/admin/users/create"
+                                className={buttonVariants({
+                                    variant: "default",
+                                })}
+                            >
+                                <PlusIcon className="w-4 h-4 mr-2" />
+                                Thêm nhân viên
+                            </Link>
+                        </div>
                     </div>
                 </div>
 

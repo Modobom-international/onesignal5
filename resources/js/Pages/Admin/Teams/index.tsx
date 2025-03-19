@@ -1,8 +1,9 @@
 import TeamsDataTable from "@/components/Teams/DataTable";
 import { buttonVariants } from "@/components/ui/button";
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout";
+
 import { Link } from "@inertiajs/react";
-import { Plus, Search } from "lucide-react";
+import { ChevronRight, Home, Plus, PlusIcon, Search } from "lucide-react";
 import { useState } from "react";
 
 interface Team {
@@ -23,31 +24,46 @@ export default function TeamsPage({ teams: serverTeams }: TeamsPageProps) {
 
     return (
         <AuthenticatedLayout title="Phòng ban">
-            <div className="py-8">
+            <div>
                 {/* Header Section */}
-                <div className="sm:flex sm:items-center sm:justify-between border-b border-gray-200 pb-8">
-                    <div className="">
-                        <h1 className="text-2xl font-semibold text-gray-900">
-                            Phòng ban
-                        </h1>
-                        <p className="mt-2 text-sm text-gray-700">
-                            Quản lý các phòng ban trong công ty
-                        </p>
+                <div className="mb-8 border-b border-border pb-6">
+                    {/* Breadcrumbs */}
+                    <div className="flex items-center text-sm text-muted-foreground mb-4">
+                        <Home className="w-4 h-4" />
+                        <ChevronRight className="w-4 h-4 mx-2" />
+                        <span>Quản lý phòng ban</span>
                     </div>
-                    <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none space-x-2">
-                        <Link
-                            href="/admin/users"
-                            className={buttonVariants({ variant: "outline" })}
-                        >
-                            Nhân viên
-                        </Link>
-                        <Link
-                            href="/admin/team/create"
-                            className={buttonVariants({ variant: "default" })}
-                        >
-                            <Plus className="w-4 h-4 mr-2" />
-                            Thêm phòng ban
-                        </Link>
+
+                    {/* Welcome Message */}
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-3xl font-bold tracking-tight">
+                                Phòng ban
+                            </h1>
+                            <p className="text-muted-foreground mt-1">
+                                Quản lý phòng ban
+                            </p>
+                        </div>
+
+                        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none space-x-2">
+                            <Link
+                                href="/admin/team"
+                                className={buttonVariants({
+                                    variant: "outline",
+                                })}
+                            >
+                                Nhân viên
+                            </Link>
+                            <Link
+                                href="/admin/users/create"
+                                className={buttonVariants({
+                                    variant: "default",
+                                })}
+                            >
+                                <PlusIcon className="w-4 h-4 mr-2" />
+                                Thêm phòng ban
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
