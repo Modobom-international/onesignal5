@@ -1,4 +1,5 @@
 import Footer from "@/components/Layout/Footer";
+import ScrollToTop from "@/components/Layout/scroll-to-top";
 import { AppSidebar } from "@/components/Layout/Sidebar/app-sidebar";
 import { SiteHeader } from "@/components/Layout/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -27,6 +28,7 @@ export default function AuthenticatedLayout({
                             <main className="container mx-auto py-10">
                                 {children}
                                 <Footer />
+                                <ScrollToTop />
                             </main>
                         </div>
                     </SidebarInset>
