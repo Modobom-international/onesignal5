@@ -87,7 +87,7 @@ export default function NotificationsButton() {
             <PopoverTrigger asChild>
                 <Button
                     size="icon"
-                    variant="outline"
+                    variant="ghost"
                     className="relative"
                     aria-label="Open notifications"
                 >

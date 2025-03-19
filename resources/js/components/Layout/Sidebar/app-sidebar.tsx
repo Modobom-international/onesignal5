@@ -1,25 +1,19 @@
 import {
-    BookOpen,
-    Bot,
     Frame,
     LifeBuoy,
     Map,
     PieChart,
     Send,
-    Settings2,
     SquareTerminal,
     User,
 } from "lucide-react";
 import * as React from "react";
 
 import { NavMain } from "@/components/Layout/Sidebar/nav-main";
-import { NavProjects } from "@/components/Layout/Sidebar/nav-projects";
 import { NavSecondary } from "@/components/Layout/Sidebar/nav-secondary";
-import { NavUser } from "@/components/Layout/Sidebar/nav-user";
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -146,9 +140,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {/* <NavProjects projects={data.projects} /> */}
                 <NavSecondary items={data.navSecondary} className="mt-auto" />
             </SidebarContent>
-            <SidebarFooter>
-                <NavUser user={data.user} />
-            </SidebarFooter>
         </Sidebar>
     );
 }

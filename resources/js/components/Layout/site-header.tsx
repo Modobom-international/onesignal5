@@ -1,24 +1,11 @@
-import {
-    BellIcon,
-    GridIcon,
-    HelpCircleIcon,
-    Settings2Icon,
-    SidebarIcon,
-} from "lucide-react";
+import { Calendar, Settings2Icon, SidebarIcon } from "lucide-react";
 
+import AvatarButton from "@/components/Avatar/AvatarButton";
 import { SearchForm } from "@/components/Layout/search-form";
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import NotificationsButton from "@/components/Notifications";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useSidebar } from "@/components/ui/sidebar";
-import NotificationsButton from "@/components/Notifications";
 
 export function SiteHeader() {
     const { toggleSidebar } = useSidebar();
@@ -42,13 +29,8 @@ export function SiteHeader() {
                     <SearchForm className="w-[500px]" />
 
                     <div className="flex items-center gap-1">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-9 w-9"
-                            onClick={toggleSidebar}
-                        >
-                            <GridIcon className="h-[18px] w-[18px] text-muted-foreground" />
+                        <Button variant="ghost" size="icon" className="h-9 w-9">
+                            <Calendar className="h-[18px] w-[18px] text-muted-foreground" />
                         </Button>
 
                         <NotificationsButton />
@@ -56,6 +38,8 @@ export function SiteHeader() {
                         <Button variant="ghost" size="icon" className="h-9 w-9">
                             <Settings2Icon className="h-[18px] w-[18px] text-muted-foreground" />
                         </Button>
+
+                        <AvatarButton />
                     </div>
                 </div>
             </div>
