@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('workspaces', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', 100);
             $table->text('description')->nullable();
             $table->foreignId('owner_id')->constrained('users')->cascadeOnDelete();
             $table->enum('visibility', ['private', 'public']);
