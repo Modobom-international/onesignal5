@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('checklists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('card_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
+            $table->string('title', 100);
             $table->timestamps();
 
             $table->index('card_id');

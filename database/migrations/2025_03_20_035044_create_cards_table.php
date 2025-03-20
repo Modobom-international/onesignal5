@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title', 100);
             $table->text('description')->nullable();
             $table->foreignId('list_id')->constrained()->cascadeOnDelete();
             $table->float('position');
