@@ -1,10 +1,6 @@
 $(function () {
-    // Remove custom modal implementation since we're using Flowbite
 
-    $("#datepicker").datepicker({
-        dateFormat: "yy-m-dd",
-        maxDate: 0
-    });
+
     $("#datepicker-from").datepicker({
         dateFormat: "yy-m-dd",
         maxDate: 0
@@ -506,9 +502,9 @@ function searchActivity() {
 $(function () {
     // Initialize variables
     const comparisonModal = document.getElementById('modalDateComparison');
+    const currentDatePicker = $('#current-date-picker');
     const comparisonDate = $('#comparison-date');
     const comparisonLoader = $('#comparison-loader');
-    const currentDateDisplay = $('#current-date-display');
     const compareBtn = $('#compare-date-btn');
     const closeModalBtn = $('[data-modal-hide="modalDateComparison"]');
 
@@ -523,29 +519,42 @@ $(function () {
         }
     });
 
-    // Initialize datepicker for comparison with proper formatting
-    comparisonDate.datepicker({
-        dateFormat: "yy-mm-dd",
-        maxDate: 0,
-        beforeShowDay: function (date) {
-            const currentDate = $('#datepicker').val();
-            const dateString = $.datepicker.formatDate('yy-mm-dd', date);
-            return [dateString !== currentDate, '', 'Không thể chọn ngày này'];
+    // Watch for changes on date inputs to handle validation
+    currentDatePicker.on('change', function () {
+        const currDate = $(this).val();
+        const compDate = comparisonDate.val();
+
+        // If both dates are selected and they're the same, clear the comparison date
+        if (currDate && compDate && currDate === compDate) {
+            comparisonDate.val('');
+        }
+    });
+
+    comparisonDate.on('change', function () {
+        const compDate = $(this).val();
+        const currDate = currentDatePicker.val();
+
+        // If both dates are selected and they're the same, clear the current date
+        if (compDate && currDate && compDate === currDate) {
+            currentDatePicker.val('');
         }
     });
 
     // Show modal when clicking compare button
     compareBtn.on('click', function (e) {
         e.preventDefault();
-        const currentDate = $('#datepicker').val();
-        if (!currentDate) {
+        const filterDate = $('#datepicker').val();
+        if (!filterDate) {
             showError('{{ __("Vui lòng chọn ngày để so sánh") }}');
             return;
         }
 
-        // Format and display current date
-        const formattedDate = formatDate(currentDate);
-        currentDateDisplay.text(formattedDate);
+        // Set the filter date as the initial current date
+        // For native date input, we can use the same format
+        currentDatePicker.val(filterDate);
+
+        // Clear comparison date to ensure a fresh selection
+        comparisonDate.val('');
 
         // Show modal
         modal.show();
@@ -558,10 +567,19 @@ $(function () {
 
     // Handle date comparison
     $('#compare-dates').on('click', function () {
+        const currentDate = currentDatePicker.val();
         const selectedDate = comparisonDate.val();
-        const currentDate = $('#datepicker').val();
 
         // Validate dates
+        if (!currentDate) {
+            currentDatePicker.addClass('border-red-500');
+            showError('{{ __("Vui lòng chọn ngày hiện tại") }}');
+            setTimeout(() => {
+                currentDatePicker.removeClass('border-red-500');
+            }, 3000);
+            return;
+        }
+
         if (!selectedDate) {
             comparisonDate.addClass('border-red-500');
             showError('{{ __("Vui lòng chọn ngày để so sánh") }}');
@@ -605,16 +623,6 @@ $(function () {
         });
     });
 
-    // Helper function to format date
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('vi-VN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        });
-    }
-
     // Helper function to get current time
     function getCurrentTime() {
         const now = new Date();
@@ -642,7 +650,11 @@ $(function () {
 
     // Reset comparison data
     function resetComparisonData() {
+        // Clear date inputs
+        currentDatePicker.val('');
         comparisonDate.val('');
+
+        // Reset statistics display
         const elements = [
             'current-total-installs', 'current-success-installs', 'current-wrong-country', 'current-wrong-network',
             'comparison-total-installs', 'comparison-success-installs', 'comparison-wrong-country', 'comparison-wrong-network'
