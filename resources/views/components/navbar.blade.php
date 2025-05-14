@@ -27,11 +27,6 @@
                 <x-heroicon-o-search aria-hidden="true" class="w-4 h-4 " />
             </x-button>
 
-            <!-- Notification Component -->
-            <x-notifications.index :notificationSystem="$notificationSystem" />
-
-
-
             <!-- Theme Toggle -->
             <x-button type="button"
                 class="h-8 w-8 justify-center hover:bg-slate-100 dark:hover:bg-[#161b22] transition-colors duration-200"

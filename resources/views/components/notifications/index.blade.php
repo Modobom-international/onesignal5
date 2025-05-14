@@ -1,6 +1,5 @@
-@props(['notificationSystem'])
 
-<div class="relative" x-data="{ unreadCount: {{ count($notificationSystem->where('status_read', 0)) }}, notificationOpen: false, selected: 'unread' }"
+<div class="relative"
     @click.outside="if (!$event.target.closest('.notification-dropdown')) notificationOpen = false">
     <x-button type="button"
         class="h-8 w-8 justify-center hover:bg-slate-100 dark:hover:bg-[#161b22] transition-colors duration-200"
@@ -54,50 +53,8 @@
                 </div>
             </div>
 
-            <!-- Notification List -->
-            <div class="overflow-y-auto" style="max-height: calc(100vh - 200px)">
-                <div class="divide-y divide-gray-100 dark:divide-[#30363d]">
-                    @forelse ($notificationSystem as $notification)
-                        <div class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#1f242c] cursor-pointer {{ $notification->status_read == 0 ? 'bg-gray-50 dark:bg-[#161b22]' : '' }}"
-                            x-show="selected === 'all' || (selected === 'unread' && {{ $notification->status_read }} === 0)"
-                            data-notification data-read="{{ $notification->status_read === 1 ? 'true' : 'false' }}">
-                            <div class="flex items-start justify-between gap-4">
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm text-gray-900 dark:text-[#c9d1d9] leading-5">
-                                        {{ $notification->message }}
-                                    </p>
-                                    <p class="mt-1 text-xs text-gray-500 dark:text-[#8b949e]">
-                                        {{ $notification->created_at->locale('vi')->diffForHumans() }}
-                                    </p>
-                                </div>
-                                <button @click.stop
-                                    class="text-gray-400 dark:text-[#8b949e] hover:text-gray-500 dark:hover:text-[#c9d1d9]">
-                                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 16 16">
-                                        <path
-                                            d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="px-4 py-16 text-center">
-                            <h3 class="text-base font-medium text-gray-900 dark:text-[#c9d1d9] mb-1">{{ __('Bạn đã cập nhật tất cả') }}</h3>
-                            <p class="text-sm text-gray-500 dark:text-[#8b949e]">{{ __('Không có thông báo mới vào lúc này') }}</p>
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-
             <!-- Footer -->
-            <div class="px-4 py-3 sm:px-6 flex justify-between items-center bg-gray-50 dark:bg-[#161b22]">
-                <span class="text-xs text-gray-500 dark:text-[#8b949e]">
-                    {{ count($notificationSystem) }} {{ __('trong tổng số') }} {{ count($notificationSystem) }} {{ __('thông báo') }}
-                </span>
-                <a href="#" @click.stop
-                    class="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
-                    {{ __('Xem tất cả') }}
-                </a>
-            </div>
+            
         </div>
     </div>
 </div>
