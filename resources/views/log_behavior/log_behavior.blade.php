@@ -10,26 +10,26 @@
 
     .bg-emerald-50 {
         --tw-bg-opacity: 1;
-        background-color: rgb(152 247 202);
+        background-color: rgb(152 247 202) !important;
     }
 
     .bg-red-50 {
         --tw-bg-opacity: 1;
-        background-color: rgb(255 188 188);
+        background-color: rgb(255 188 188) !important;
     }
 
     .bg-blue-50 {
         --tw-bg-opacity: 1;
-        background-color: rgb(175 209 254);
+        background-color: rgb(175 209 254) !important;
     }
 
     .bg-gray-50 {
         --tw-bg-opacity: 1;
-        background-color: rgb(249 250 251);
+        background-color: rgb(249 250 251) !important;
     }
 
     .font-medium {
-        font-weight: bold;
+        font-weight: bold !important;
     }
 </style>
 @endsection
