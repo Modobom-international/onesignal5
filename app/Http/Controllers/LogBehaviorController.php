@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\EUCountry;
-use App\Enums\ListAssigned;
 use App\Enums\LogBehavior;
 use App\Jobs\BehaviorStoreLogJob;
 use Illuminate\Http\Request;
